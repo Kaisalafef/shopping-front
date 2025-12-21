@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="/Market/Wedgit/style_header.css">
+        <link rel="stylesheet" href="style.css">
+        <script src="/Market/Wedgit/script_header.js"></script>
+        <title>Document</title>
+    </head>
+    <body>
+
+        <header class="main-header">
+            <div class="header-container">
+                <a href="/Market/Home/client_dashboard.html" class="logo-link">
+                    <img src="/Market/images/logo.png" class="logo" alt="Logo">
+                </a>
+
+                <div class="profile-menu">
+                    <button class="icon-btn" id="profileBtn" type="button"
+                        title="فتح القائمة">
+                        <i class="fas fa-user"></i>
+                    </button>
+
+                    <ul class="dropdown" id="desktopDropdown">
+                        <li><a href="#"><i class="fas fa-user-circle"></i>
+                                حسابي</a></li>
+                        <li><a href="#"><i class="fas fa-shopping-cart"></i>
+                                سلتي</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i>
+                                الإعدادات</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>
+                                خروج</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <input type="text" placeholder="ابحث عن منتجات...">
+                    <button class="search-btn" type="submit" title="بحث"><i
+                            class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#">الرئيسية</a>
+            <a href="#">حسابي</a>
+            <a href="#">سلتي</a>
+            <a href="#">الإعدادات</a>
+            <a href="#">تسجيل خروج</a>
+        </div>
+
+        <div class="dashboard-container">
+            <main class="main-content">
+                <div class="section-header">
+                    <h2>سلتي </h2>
+                    <select class="sort-select" title="ترتيب المنتجات">
+                        <option>ترتيب حسب: </option>
+                        <option>التاريخ: من الأحدث للاقدم</option>
+                        <option>التاريخ: من الاقدم للأحدث</option>
+                    </select>
+                </div>
+
+                <div class="products-grid">
+                    <div class="product-card">
+                        <img
+                            src="https://via.placeholder.com/300x300?text=Headphones"
+                            alt="Product" class="product-image">
+                        <div class="product-title">سماعات رأس لاسلكية عازلة
+                            للضوضاء بتقنية بلوتوث 5.0 - أسود</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="far fa-star"></i> (1,240)
+                        </div>
+                        <div class="product-price">199.00 <small>$</small></div>
+                        <div class="product-actions">
+                            <button class="btn-cart"> شراء</button>
+                            <button class="btn-cart">حذف</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img
+                            src="https://via.placeholder.com/300x300?text=Monitor"
+                            alt="Product" class="product-image">
+                        <div class="product-title">شاشة ألعاب منحنية 27 بوصة
+                            144Hz استجابة 1ms</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i> (500)
+                        </div>
+                        <div class="product-price">350.00 <small>$</small></div>
+                        <div class="product-actions">
+                            <button class="btn-cart"> شراء</button>
+                            <button class="btn-cart">حذف</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img
+                            src="https://via.placeholder.com/300x300?text=Coffee"
+                            alt="Product" class="product-image">
+                        <div class="product-title">ماكينة تحضير قهوة إسبريسو
+                            أوتوماتيكية للمنزل والمطبخ</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="far fa-star"></i><i
+                                class="far fa-star"></i> (85)
+                        </div>
+                        <div class="product-price">120.50 <small>$</small></div>
+                        <div class="product-actions">
+                            <button class="btn-cart"> شراء</button>
+                            <button class="btn-cart">حذف</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img
+                            src="https://via.placeholder.com/300x300?text=T-Shirt"
+                            alt="Product" class="product-image">
+                        <div class="product-title">تيشيرت قطني رجالي كلاسيك -
+                            ألوان متعددة</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i
+                                class="fas fa-star-half-alt"></i> (320)
+                        </div>
+                        <div class="product-price">25.00 <small>$</small></div>
+                        <div class="product-actions">
+                            <button class="btn-cart"> شراء</button>
+                            <button class="btn-cart">حذف</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+    <script>
+    function loadCart() {
+    const cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
+    const container = document.querySelector('.products-grid');
+    
+    if (cartItems.length === 0) {
+        container.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-shopping-basket" style="font-size: 3rem; display: block; margin-bottom: 15px;"></i>
+                السلة فارغة حالياً.. ابدأ بالتسوق الآن!
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = cartItems.map((item, index) => `
+        <div class="product-card">
+            <div>
+                <img src="${item.img}" alt="${item.name}" class="product-image">
+                <div class="product-title">${item.name}</div>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="product-price">${item.price} <small>${item.currency || '$'}</small></div>
+            </div>
+            
+            <div class="product-actions">
+                <button class="btn-buy" onclick="checkoutItem(${index})">
+                    <i class="fas fa-bolt"></i> شراء الآن
+                </button>
+                <button class="btn-delete" onclick="removeFromCart(${index})" title="حذف">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+    function removeFromCart(index) {
+        let cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
+        cartItems.splice(index, 1);
+        localStorage.setItem('marketCart', JSON.stringify(cartItems));
+        loadCart(); // إعادة تحميل العرض
+    }
+
+    window.onload = loadCart;
+</script>
+</html>

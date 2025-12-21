@@ -1,0 +1,594 @@
+/* style_dashboard.css */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-body: #eaeded;       
+    --white: #ffffff;
+    --dark-blue: #232f3e;     
+    --light-blue: #405670d8;   
+    --accent-gold: #f0c14b;   
+    --accent-hover: #ddb347;
+    --text-main: #0F1111;
+    --text-gray: #565959;
+    --price-red: #B12704;
+    --border-color: #ddd;
+    --success: #27ae60;
+    --danger: #d63031;
+    --blue-btn: #007185;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-body);
+    margin: 0;
+    padding: 0;
+    color: var(--text-main);
+    direction: rtl;
+    overflow-x: hidden;
+}
+
+.categories-nav {
+    background-color: var(--light-blue);
+    color: white;
+    padding: 8px 0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.categories-list {
+    display: flex;
+    justify-content: flex-start;
+    gap: 25px;
+    list-style: none;
+    padding: 0 20px;
+    margin: 0 auto;
+    max-width: 1500px;
+    overflow-x: auto; 
+    white-space: nowrap;
+}
+
+.categories-list li a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.categories-list li a:hover {
+    color: var(--accent-gold);
+    border-bottom: 2px solid var(--accent-gold);
+}
+
+/* =========================================
+   تخطيط الصفحة (Layout)
+   ========================================= */
+.dashboard-container {
+    display: flex;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    gap: 25px;
+    align-items: flex-start; 
+}
+
+/* القائمة الجانبية (Sidebar) */
+.sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--white);
+    padding: 20px;
+    border-right: 1px solid var(--border-color); 
+    min-height: 500px;
+}
+
+.filter-section {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.filter-section h3 { font-size: 1rem; margin-bottom: 10px; font-weight: 700; }
+.filter-section label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+.filter-section label:hover { color: #d35400; }
+
+/* المحتوى الرئيسي */
+.main-content { flex-grow: 1; width: 100%; }
+
+.section-header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* =========================================
+   شبكة المنتجات (Products Grid)
+   ========================================= */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 2fr)); 
+    gap: 20px;
+    
+}
+
+.product-card {
+    background: var(--white);
+    border: 2px solid var(--border-color);
+    border-radius: 5%; 
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+
+.product-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.373);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    mix-blend-mode: multiply; /* دمج خلفية الصورة البيضاء مع الكارد */
+}
+
+.product-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-main);
+    margin-bottom: 5px;
+    height: 44px; /* تحديد ارتفاع لسطرين */
+    overflow: hidden;
+}
+
+.product-rating {
+    font-size: 0.85rem;
+    color: #ffa41c;
+    margin-bottom: 8px;
+}
+
+.product-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--price-red);
+    margin-bottom: 15px;
+}
+.product-price small { font-size: 0.8rem; font-weight: 400; color: var(--text-main); }
+
+/* الأزرار (Buttons) */
+.product-actions { margin-top: auto; }
+
+.btn-cart {
+    width: 100%;
+    background: var(--accent-gold);
+    border: 1px solid #a88734;
+    border-radius: 20px;
+    padding: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.btn-cart:hover { background: var(--accent-hover); }
+
+/* أزرار الأدمن */
+.admin-actions { display: flex; gap: 10px; }
+.btn-edit, .btn-delete {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 0.9rem;
+}
+.btn-edit { background-color: var(--blue-btn); }
+.btn-delete { background-color: var(--danger); }
+
+/* شريط أدوات الأدمن */
+.admin-toolbar {
+    background: var(--white);
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-add {
+    background-color: var(--success);
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.btn-add:hover { background-color: #219150; }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-container { flex-direction: column; }
+    .sidebar { width: 100%; min-height: auto; margin-bottom: 20px; }
+.dashboard-container *,
+.dashboard-container {
+    box-sizing: border-box;
+}
+
+/* منع أي تأثير على الهيدر */
+.dashboard-container .header-container,
+.dashboard-container .main-header {
+    all: unset;
+}
+}
+/* =========================================
+   تنسيقات مطابقة لملف PDF (3.pdf)
+   ========================================= */
+
+/* الشبكة الجديدة للكروت */
+.pdf-categories-grid {
+    display: grid;
+  
+    grid-template-columns: repeat(5, minmax(100px, 1fr));
+    gap: 30px;
+    padding: 10px;
+}
+
+/* الكارت الأساسي (الإطار الأحمر) */
+.pdf-card {
+    background:  linear-gradient(90deg, #f0c14bcb , #f0c14b 100% );
+    border-radius: 40px;       /* حواف دائرية كبيرة */
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px #00000075;
+}
+
+.pdf-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(70, 65, 65, 0.714);
+}
+
+/* الحاوية الداخلية للصورة (اللون الأبيض) */
+.pdf-card-inner {
+    background-color: #ffffff;
+    border-radius: 30px;       /* حواف دائرية للصورة */
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1 / 1;       /* جعل الصورة مربعة */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pdf-card-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;         /* ملء المساحة بالكامل */
+    transition: transform 0.5s ease;
+}
+
+.pdf-card:hover .pdf-card-inner img {
+    transform: scale(1.05);    /* تكبير بسيط عند التحويم */
+}
+
+/* عنوان القسم (النص الأبيض أسفل الكارت) */
+.pdf-card-title {
+    color: #ffffff;
+    font-size: 1.8rem;         /* خط كبير وواضح */
+    font-weight: 700;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    font-family: 'Cairo', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* تحسين التجاوب */
+@media (max-width: 600px) {
+    .pdf-categories-grid {
+        grid-template-columns: 1fr; /* عمود واحد في الموبايل */
+        padding: 0;
+    }
+    .pdf-card {
+        margin-bottom: 15px;
+    }
+}
+/* =========================================
+   تنسيق قسم العروض اليومية (المربع الذهبي)
+   ========================================= */
+
+.daily-offers-section {
+    margin-bottom: 40px;
+    direction: rtl;
+}
+
+/* عنوان القسم */
+.offers-title {
+    color: #e74c3c; /* لون أحمر/وردي مشابه للصورة */
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-align: right;
+    font-family: 'Cairo', sans-serif;
+}
+
+/* الصندوق البرتقالي/الذهبي الكبير */
+.offers-gold-box {
+    background:  linear-gradient(90deg, #f0c14bcb , #f0c14b 100% );/* اللون الأحمر المرجاني من الـ PDF */
+    border-radius: 35px;       /* زوايا دائرية كبيرة */
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(241, 172, 61, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* الشبكة الداخلية للمربعات البيضاء */
+.offers-inner-grid {
+    display: grid;
+    /* جعلها 4 أعمدة، أو تتكيف حسب الشاشة */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    gap: 20px;
+    width: 100%;
+    margin-right: 40px; /* مساحة لزر السهم */
+}
+
+/* الكارت الأبيض الصغير */
+.offer-white-card {
+    background-color: #ffffff;
+    border-radius: 25px; /* انحناء الكارت الأبيض */
+    aspect-ratio: 1 / 1; /* يضمن أن يكون مربعاً تماماً */
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.offer-white-card:hover {
+    transform: scale(1.03);
+}
+
+.offer-white-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* لاظهار كامل المنتج */
+    mix-blend-mode: multiply; /* لدمج خلفية الصورة البيضاء (اختياري) */
+}
+
+/* دائرة الخصم الحمراء */
+.discount-circle {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* في الزاوية اليسرى */
+    width: 35px;
+    height: 35px;
+    background-color: #ff4757; /* أحمر فاقع */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+/* زر السهم الأبيض على اليمين */
+.offers-nav-arrow {
+    position: absolute;
+    right: -10px; /* يخرج قليلاً أو يثبت على الطرف */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    color: #f1ac3d;
+    width: 40px;
+    height: 50px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    z-index: 5;
+}
+
+.offers-nav-arrow:hover {
+    background-color: #f9f9f9;
+}
+
+/* ============================================================
+   MOBILE DASHBOARD FIX (Professional)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .dashboard-container {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    min-height: auto;
+  }
+
+  .filter-section {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+  }
+
+  .filter-section h3 {
+    font-size: 0.95rem;
+  }
+
+  .filter-section label {
+    font-size: 0.85rem;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .section-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    
+  }
+
+  .product-card {
+    
+    padding: 10px;
+  }
+
+  .product-image {
+    height: 140px;
+    margin-bottom: 8px;
+  }
+
+  .product-title {
+    font-size: 0.85rem;
+    height: 38px;
+  }
+
+  .product-rating {
+    font-size: 0.75rem;
+  }
+
+  .product-price {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+
+  /* ===== Buttons ===== */
+  .btn-cart {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .btn-edit,
+  .btn-delete {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+
+  /* ===== Admin Toolbar ===== */
+  .admin-toolbar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  /* ===== Categories Nav ===== */
+  .categories-list {
+    gap: 15px;
+    padding: 0 10px;
+  }
+
+  .categories-list li a {
+    font-size: 0.8rem;
+  }
+
+  .pdf-categories-grid {
+    grid-template-columns: repeat(2, 140px);
+    gap: 12px;
+    padding: 5px;
+  }
+
+  .pdf-card {
+    border-radius: 18px;
+    padding: 8px;
+  }
+
+  .pdf-card-title {
+    font-size: 0.9rem;
+  }
+
+  /* ===== Daily Offers ===== */
+  .offers-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .offers-gold-box {
+    padding: 15px;
+    border-radius: 20px;
+  }
+
+  .offers-inner-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-right: 0;
+  }
+
+  .offer-white-card {
+    border-radius: 15px;
+    padding: 6px;
+  }
+
+  .discount-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.65rem;
+  }
+
+  .offers-nav-arrow {
+    display: none;
+  }
+}
