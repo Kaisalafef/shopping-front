@@ -5,17 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="stylesheet" href="/Market/Wedgit/style_header.css">
+        <link rel="stylesheet" href="/Wedgit/style_header.css">
         <link rel="stylesheet" href="style.css">
-        <script src="/Market/Wedgit/script_header.js"></script>
+        <script src="/Wedgit/script_header.js"></script>
         <title>Document</title>
     </head>
     <body>
 
         <header class="main-header">
             <div class="header-container">
-                <a href="/Market/Home/client_dashboard.html" class="logo-link">
-                    <img src="/Market/images/logo.png" class="logo" alt="Logo">
+                <a href="/Home/client_dashboard.html" class="logo-link">
+                    <img src="/images/logo.png" class="logo" alt="Logo">
                 </a>
 
                 <div class="profile-menu">
@@ -57,141 +57,97 @@
 
         <div class="dashboard-container">
             <main class="main-content">
-                <div class="section-header">
-                    <h2>سلتي </h2>
-                    <select class="sort-select" title="ترتيب المنتجات">
-                        <option>ترتيب حسب: </option>
-                        <option>التاريخ: من الأحدث للاقدم</option>
-                        <option>التاريخ: من الاقدم للأحدث</option>
-                    </select>
-                </div>
+    <div class="section-header">
+        <h2>سلتي</h2>
+        
+        <div class="header-controls">
+            <button id="buyAllBtn" onclick="checkoutAll()" class="btn-buy-all" style="display: none;">
+                <i class="fas fa-check-double"></i> إتمام شراء الكل
+            </button>
 
-                <div class="products-grid">
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=Headphones"
-                            alt="Product" class="product-image">
-                        <div class="product-title">سماعات رأس لاسلكية عازلة
-                            للضوضاء بتقنية بلوتوث 5.0 - أسود</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="far fa-star"></i> (1,240)
-                        </div>
-                        <div class="product-price">199.00 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
+            <select class="sort-select" title="ترتيب المنتجات">
+                <option>ترتيب حسب: </option>
+                <option>التاريخ: من الأحدث للاقدم</option>
+                <option>التاريخ: من الاقدم للأحدث</option>
+            </select>
+        </div>
+    </div>
 
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=Monitor"
-                            alt="Product" class="product-image">
-                        <div class="product-title">شاشة ألعاب منحنية 27 بوصة
-                            144Hz استجابة 1ms</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i> (500)
-                        </div>
-                        <div class="product-price">350.00 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=Coffee"
-                            alt="Product" class="product-image">
-                        <div class="product-title">ماكينة تحضير قهوة إسبريسو
-                            أوتوماتيكية للمنزل والمطبخ</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="far fa-star"></i><i
-                                class="far fa-star"></i> (85)
-                        </div>
-                        <div class="product-price">120.50 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=T-Shirt"
-                            alt="Product" class="product-image">
-                        <div class="product-title">تيشيرت قطني رجالي كلاسيك -
-                            ألوان متعددة</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star-half-alt"></i> (320)
-                        </div>
-                        <div class="product-price">25.00 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
-                </div>
-            </main>
+    <div class="products-grid">
+        </div>
+</main>
         </div>
     </body>
-    <script>
+   <script>
     function loadCart() {
-    const cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
-    const container = document.querySelector('.products-grid');
-    
-    if (cartItems.length === 0) {
-        container.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-shopping-basket" style="font-size: 3rem; display: block; margin-bottom: 15px;"></i>
-                السلة فارغة حالياً.. ابدأ بالتسوق الآن!
-            </div>`;
-        return;
-    }
+        const cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
+        const container = document.querySelector('.products-grid');
+        const buyAllBtn = document.getElementById('buyAllBtn'); // إمساك زر شراء الكل
+        
+        if (cartItems.length === 0) {
+            container.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-shopping-basket" style="font-size: 3rem; display: block; margin-bottom: 15px; color: #ccc;"></i>
+                    السلة فارغة حالياً.. ابدأ بالتسوق الآن!
+                </div>`;
+            // إخفاء زر شراء الكل إذا كانت السلة فارغة
+            if(buyAllBtn) buyAllBtn.style.display = 'none';
+            return;
+        }
 
-    container.innerHTML = cartItems.map((item, index) => `
-        <div class="product-card">
-            <div>
-                <img src="${item.img}" alt="${item.name}" class="product-image">
-                <div class="product-title">${item.name}</div>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        // إظهار زر شراء الكل عند وجود منتجات
+        if(buyAllBtn) buyAllBtn.style.display = 'flex';
+
+        container.innerHTML = cartItems.map((item, index) => `
+            <div class="product-card">
+                <div>
+                    <img src="${item.img}" alt="${item.name}" class="product-image">
+                    <div class="product-title">${item.name}</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star" style="color: gold;"></i>
+                        <i class="fas fa-star" style="color: gold;"></i>
+                        <i class="fas fa-star" style="color: gold;"></i>
+                        <i class="fas fa-star" style="color: gold;"></i>
+                        <i class="fas fa-star-half-alt" style="color: gold;"></i>
+                    </div>
+                    <div class="product-price" style="font-size: 1.2rem; color: #b12704; font-weight: bold;">
+                        ${item.price} <small>${item.currency || '$'}</small>
+                    </div>
                 </div>
-                <div class="product-price">${item.price} <small>${item.currency || '$'}</small></div>
+                
+                <div class="product-actions">
+                    <button class="btn-buy" onclick="checkoutItem(${index})">
+                        <i class="fas fa-bolt"></i> شراء
+                    </button>
+                    <button class="btn-delete" onclick="removeFromCart(${index})" title="حذف">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
             </div>
-            
-            <div class="product-actions">
-                <button class="btn-buy" onclick="checkoutItem(${index})">
-                    <i class="fas fa-bolt"></i> شراء الآن
-                </button>
-                <button class="btn-delete" onclick="removeFromCart(${index})" title="حذف">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
+        `).join('');
+    }
 
     function removeFromCart(index) {
         let cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
         cartItems.splice(index, 1);
         localStorage.setItem('marketCart', JSON.stringify(cartItems));
-        loadCart(); // إعادة تحميل العرض
+        loadCart(); 
+    }
+
+    // دالة جديدة لشراء عنصر واحد (كمثال)
+    function checkoutItem(index) {
+        alert('تم الانتقال لصفحة الدفع لهذا المنتج!');
+    }
+
+    // دالة زر شراء الكل الجديدة
+    function checkoutAll() {
+        const cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
+        if (cartItems.length > 0) {
+            alert(`سيتم الآن دفع قيمة ${cartItems.length} منتجات.`);
+            // هنا يمكنك إضافة كود الانتقال لصفحة الدفع أو تفريغ السلة
+            // localStorage.removeItem('marketCart'); // لتفريغ السلة بعد الشراء
+            // loadCart();
+        }
     }
 
     window.onload = loadCart;

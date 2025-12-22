@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض الإعلان</title>
+    <link rel="stylesheet" href="style_dashboard.css">
+    <link rel="stylesheet" href="style_AddADS.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .display-container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header-nav {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        
+        .btn-back {
+            text-decoration: none;
+            color: white;
+            background-color: #2c3e50;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="display-container">
+        <div class="header-nav">
+            <a href="Add_ADS.html" class="btn-back">عودة للإضافة</a>
+        </div>
+
+        <div id="adDisplayArea">
+            <p style="text-align: center; color: #777;">جاري تحميل الإعلان...</p>
+        </div>
+    </div>
+
+    <script>
+        // استرجاع البيانات المحفوظة من LocalStorage
+        const savedAd = localStorage.getItem('singleAd');
+        const displayArea = document.getElementById('adDisplayArea');
+
+        if (savedAd) {
+            const data = JSON.parse(savedAd);
+            
+            // إنشاء كود الـ HTML للإعلان
+            displayArea.innerHTML = `
+                <div class="ad-banner" style="background-image: ${data.image}">
+                    <div class="ad-overlay"></div>
+                    <div class="ad-content">
+                        <h3>${data.title}</h3>
+                        <p>${data.desc}</p>
+                        <button onclick="alert('تم النقر على الزر!')">${data.btnText}</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            displayArea.innerHTML = '<h3 style="text-align:center">لا يوجد إعلان حالياً. قم بإضافة إعلان من لوحة الإدارة.</h3>';
+        }
+    </script>
+
+</body>
+</html>

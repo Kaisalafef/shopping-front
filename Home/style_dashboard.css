@@ -111,6 +111,33 @@ body {
 }
 
 /* =========================================
+   تحديث: نظام التمرير الأفقي الموحد (Scroll System)
+   ========================================= */
+/* كلاس عام لأي حاوية تحتاج سكرول أفقي */
+.horizontal-scroll-wrapper {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 50px;
+    padding: 15px 10px;
+    scroll-behavior: smooth;
+    /* إخفاء شريط التمرير للمظهر الجمالي مع السماح بالتمرير */
+    scrollbar-width: thin; 
+    scrollbar-color: var(--accent-gold) #f1f1f1;
+    -webkit-overflow-scrolling: touch; /* نعومة التمرير في الموبايل */
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--accent-gold);
+    border-radius: 10px;
+}
+.horizontal-scroll-wrapper::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+/* =========================================
    شبكة المنتجات (Products Grid)
    ========================================= */
 .products-grid {
@@ -155,7 +182,7 @@ body {
 
 .product-rating {
     font-size: 0.85rem;
-    color: #ffa41c;
+    color: #db890e;
     margin-bottom: 8px;
 }
 
@@ -172,7 +199,7 @@ body {
 
 .btn-cart {
     width: 100%;
-    background: var(--accent-gold);
+    background: rgb(1, 26, 17);
     border: 1px solid #a88734;
     border-radius: 20px;
     padding: 8px;
@@ -243,74 +270,325 @@ body {
 
 /* الشبكة الجديدة للكروت */
 .pdf-categories-grid {
-    display: grid;
-  
-    grid-template-columns: repeat(5, minmax(100px, 1fr));
-    gap: 30px;
-    padding: 10px;
+    display: flex; /* تحويل من grid إلى flex ليكون سطراً واحداً */
+    flex-wrap: nowrap; /* منع النزول لسطر جديد */
+    align-items: center;
 }
-
-/* الكارت الأساسي (الإطار الأحمر) */
 .pdf-card {
-    background:  linear-gradient(90deg, #f0c14bcb , #f0c14b 100% );
-    border-radius: 40px;       /* حواف دائرية كبيرة */
-    padding: 15px;
+    background: transparent;
+    min-width: 90px; /* عرض ثابت لضمان عدم انكماش الكارت */
     text-align: center;
     text-decoration: none;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 10px #00000075;
+    align-items: center;
+    transition: transform 0.3s ease;
 }
 
 .pdf-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(70, 65, 65, 0.714);
 }
 
-/* الحاوية الداخلية للصورة (اللون الأبيض) */
 .pdf-card-inner {
-    background-color: #ffffff;
-    border-radius: 30px;       /* حواف دائرية للصورة */
-    overflow: hidden;
-    width: 100%;
-    aspect-ratio: 1 / 1;       /* جعل الصورة مربعة */
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 2px solid var(--accent-gold);
+    transition: all 0.3s ease;
+}
+
+.pdf-card:hover .pdf-card-inner {
+    background: var(--accent-gold);
+    color: white;
+}
+
+
+/* تنسيق الأيقونات (Vector Icons) */
+.pdf-card-inner i {
+    font-size: 1.8rem;
+    color: var(--dark-blue);
+    transition: color 0.3s ease;
+}
+
+.pdf-card:hover .pdf-card-inner i {
+    color: var(--white);
+}
+
+.pdf-card-title {
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+/* =========================================
+   2. قسم الإعلانات الجديد (Ads Section)
+   ========================================= */
+.ads-section {
+    margin: 30px 0;
+}.ads-section.horizontal-scroll-wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 15px 5px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* إخفاء شريط التمرير في فايرفوكس */
+}
+
+.ads-section::-webkit-scrollbar {
+    display: none; /* إخفاء شريط التمرير في كروم وسفاري */
+}
+
+/* ستايل البنر المطور */
+.ad-banner {
+    position: relative;
+    min-width: 85%; /* للموبايل: يأخذ معظم الشاشة */
+    height: 180px;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    scroll-snap-align: center;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+}
+/* حاوية العروض */
+.offers-grid {
+    
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* للموبايل: عنصرين في الصف */
+    gap: 12px;
+    padding: 10px;
+}
+
+.offer-white-card {
+    background: white;
+    border-radius: 15px;
+    padding: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.offer-img-box {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 10px;
 }
 
-.pdf-card-inner img {
+.offer-img-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.offer-title {
+    font-size: 0.85rem;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    color: var(--text-main);
+}
+
+.new-price {
+    color: var(--price-red);
+    font-weight: bold;
+    font-size: 1rem;
+}
+/* طبقة التعتيم المتدرجة لظهور النص بوضوح */
+.ad-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to left, rgba(0,0,0,0.7), transparent);
+    z-index: 1;
+}
+
+.ad-content {
+    position: relative;
+    z-index: 2;
+    padding: 25px;
+    color: white;
+    max-width: 70%;
+}
+
+.ad-content h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.ad-content p {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.ad-content button {
+    background: var(--accent-gold);
+    color: var(--dark-blue);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+/* =========================================
+   3. تحديث العروض اليومية (للسكرول)
+   ========================================= */
+.offers-gold-box {
+    /* إزالة الـ Grid القديم إذا كان يتعارض */
+    display: block; 
+    padding: 15px;
+}
+
+.offers-inner-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 10px;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+}
+
+.offers-inner-grid::-webkit-scrollbar {
+    display: none;
+}
+
+/* تعديل ارتفاع الكارت ليستوعب النصوص */
+.offer-white-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    width: 200px;
+    height: 300px;
+    flex-shrink: 0;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    transition: transform 0.2s;
+}
+
+.offer-white-card:hover {
+    transform: translateY(-5px);
+}
+
+.discount-circle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.offer-img-box {
+    width: 100%;
+    height: 140px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.offer-img-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover;         /* ملء المساحة بالكامل */
-    transition: transform 0.5s ease;
+    object-fit: cover;
 }
 
-.pdf-card:hover .pdf-card-inner img {
-    transform: scale(1.05);    /* تكبير بسيط عند التحويم */
+.offer-details {
+    text-align: right;
 }
 
-/* عنوان القسم (النص الأبيض أسفل الكارت) */
-.pdf-card-title {
-    color: #ffffff;
-    font-size: 1.8rem;         /* خط كبير وواضح */
-    font-weight: 700;
-    margin-top: 5px;
-    padding-bottom: 5px;
-    font-family: 'Cairo', sans-serif;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+.offer-title {
+    font-size: 0.95rem;
+    margin: 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+.offer-prices {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.new-price {
+    color: #ef4444;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.add-cart-btn-mini {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    width: 100%;
+    margin-top: 8px;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.add-cart-btn-mini:hover { background: #2563eb; }
 /* تحسين التجاوب */
 @media (max-width: 600px) {
+  .ad-banner {
+        min-width: 450px; /* حجم ثابت للابتوب */
+        height: 220px;
+    }
+    .ad-banner:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+    .ad-content h3 {
+        font-size: 1.8rem;
+    }
     .pdf-categories-grid {
         grid-template-columns: 1fr; /* عمود واحد في الموبايل */
         padding: 0;
     }
     .pdf-card {
-        margin-bottom: 15px;
+        min-width: 80px;
+    }
+    .pdf-card-inner {
+        width: 60px;
+        height: 60px;
+    }
+    .pdf-card-inner i {
+        font-size: 1.5rem;
+    }
+    .pdf-card-title {
+      
+      flex-wrap: nowrap;
+        font-size: 0.2%;
     }
 }
 /* =========================================
@@ -318,6 +596,7 @@ body {
    ========================================= */
 
 .daily-offers-section {
+    overflow-y: hidden;
     margin-bottom: 40px;
     direction: rtl;
 }
@@ -334,21 +613,17 @@ body {
 
 /* الصندوق البرتقالي/الذهبي الكبير */
 .offers-gold-box {
-    background:  linear-gradient(90deg, #f0c14bcb , #f0c14b 100% );/* اللون الأحمر المرجاني من الـ PDF */
-    border-radius: 35px;       /* زوايا دائرية كبيرة */
     padding: 25px;
     position: relative;
-    box-shadow: 0 4px 15px rgba(241, 172, 61, 0.4);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 /* الشبكة الداخلية للمربعات البيضاء */
 .offers-inner-grid {
-    display: grid;
-    /* جعلها 4 أعمدة، أو تتكيف حسب الشاشة */
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 10fr)); 
     gap: 20px;
     width: 100%;
     margin-right: 40px; /* مساحة لزر السهم */
@@ -428,7 +703,16 @@ body {
    MOBILE DASHBOARD FIX (Professional)
    ============================================================ */
 @media (max-width: 768px) {
-
+.offers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* لابتوب: توزيع تلقائي */
+        gap: 20px;
+    }
+    .offer-img-box {
+        height: 180px;
+    }
+    .offer-title {
+        font-size: 1rem;
+    }
   body {
     overflow-x: hidden;
   }
@@ -557,7 +841,9 @@ body {
   }
 
   .pdf-card-title {
-    font-size: 0.9rem;
+    font-weight: 500;
+    font-size: 0.7rem;
+    flex-wrap: nowrap;
   }
 
   /* ===== Daily Offers ===== */
@@ -572,7 +858,7 @@ body {
   }
 
   .offers-inner-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(21, 150px);
     gap: 10px;
     margin-right: 0;
   }

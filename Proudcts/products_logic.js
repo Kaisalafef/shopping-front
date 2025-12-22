@@ -1,13 +1,13 @@
 // 1. Configuration & Data
 const STORAGE_KEY = 'marketProducts';
 const defaultProducts = [
-    { id: "1", name: "سماعات بلوتوث", price: "50", currency: "ر.س", img: "/Market/images/ELC.png", category: "electronics" },
-    { id: "2", name: "ساعة ذكية", price: "120", currency: "ر.س", img: "/Market/images/ELC.png", category: "electronics" },
-    { id: "3", name: "أرز بسمتي 5كيلو", price: "45", currency: "ر.س", img: "/Market/images/FOOD.png", category: "food" },
-    { id: "4", name: "زيت طهي", price: "20", currency: "ر.س", img: "/Market/images/FOOD.png", category: "food" },
-    { id: "5", name: "أحمر شفاه", price: "35", currency: "ر.س", img: "/Market/images/MAKEUP.png", category: "makeup" },
-    { id: "6", name: "تيشيرت رجالي", price: "60", currency: "ر.س", img: "/Market/images/CLOS.png", category: "men" },
-    { id: "7", name: "فستان صيفي", price: "150", currency: "ر.س", img: "/Market/images/CLOSW.jpg", category: "women" },
+    { id: "1", name: "سماعات بلوتوث", price: "50", currency: "ر.س", img: "/images/ELC.png", category: "electronics" },
+    { id: "2", name: "ساعة ذكية", price: "120", currency: "ر.س", img: "/images/ELC.png", category: "electronics" },
+    { id: "3", name: "أرز بسمتي 5كيلو", price: "45", currency: "ر.س", img: "/images/FOOD.png", category: "food" },
+    { id: "4", name: "زيت طهي", price: "20", currency: "ر.س", img: "/images/FOOD.png", category: "food" },
+    { id: "5", name: "أحمر شفاه", price: "35", currency: "ر.س", img: "/images/MAKEUP.png", category: "makeup" },
+    { id: "6", name: "تيشيرت رجالي", price: "60", currency: "ر.س", img: "/images/CLOS.png", category: "men" },
+    { id: "7", name: "فستان صيفي", price: "150", currency: "ر.س", img: "/images/CLOSW.jpg", category: "women" },
 ];
 
 const categoryTitles = {
@@ -106,9 +106,9 @@ function createProductCard(product, isAdmin) {
     // جعل الكارت قابلاً للضغط للانتقال لصفحة المنتج
     return `
     <div class="product-card">
-        <a href="/Market/Product/Product.html?id=${product.id}" style="text-decoration:none; color:inherit;">
+        <a href="/Product/Product.html?id=${product.id}" style="text-decoration:none; color:inherit;">
             <div class="product-img-wrapper">
-                <img src="${product.img || '/Market/images/logo.png'}" alt="${product.name}" class="product-image">
+                <img src="${product.img || '/images/logo.png'}" alt="${product.name}" class="product-image">
             </div>
             <div class="product-info">
                 <div class="product-title">${product.name}</div>

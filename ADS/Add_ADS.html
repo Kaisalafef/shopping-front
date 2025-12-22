@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة إعلان جديد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/Wedgit/style_header.css"> 
+    <link rel="stylesheet" href="style_dashboard.css">
+    <link rel="stylesheet" href="style_AddADS.css">
+</head>
+
+<body>
+   <header class="main-header">
+      <div class="header-container">
+        <a href="#" class="logo-link">
+          <img src="/images/logo.png" class="logo" alt="Logo">
+        </a>
+
+        <div class="profile-menu">
+          <button class="icon-btn" id="profileBtn" type="button"
+            title="فتح القائمة">
+            <i class="fas fa-user"></i>
+          </button>
+
+          <ul class="dropdown" id="desktopDropdown">
+            <li><a href="#"><i class="fas fa-user-circle"></i> حسابي</a></li>
+            <li><a href="#"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
+           
+           <li><a href="/ADS/Add_ADS.html"><i class="fas fa-bullhorn"></i> اضافة إعلانات</a></li> <li><a href="/Discount/Add_Discount.html"><i class="fas fa-tags"></i> اضافة خصومات</a></li> <li><a href="/Add Proudct/add_Proudct.html"><i class="fas fa-add"></i> اضافة منتجات</a></li>
+            <li><a href="Discount/Add_Discount.html"><i class="fas fa-add"></i> اضافة خصومات</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> الإعدادات</a></li>
+
+            <li class="divider"></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="search-wrapper">
+        <div class="search-box">
+          <input type="text" placeholder="ابحث عن منتجات...">
+          <button class="search-btn" type="submit" title="بحث"><i
+              class="fas fa-search"></i></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#">الرئيسية</a>
+      <a href="#">حسابي</a>
+      <a href="#">اضافة منتجات</a>
+      <a href="#">اضافة خصومات</a>
+      <a href="#">الإعدادات</a>
+      <a href="#">تسجيل خروج</a>
+    </div>
+
+    <div class="dashboard-container">
+        <main class="main-content">
+            <div class="section-header">
+                <h2><i class="fas fa-bullhorn"></i> إضافة إعلان جديد</h2>
+            </div>
+
+            <form class="form-container" id="adsForm"> 
+                <div class="form-group">
+                    <label>عنوان الإعلان الرئيسي</label>
+                    <input type="text" id="titleInput" placeholder="مثال: خصومات الصيف الكبرى" required>
+                </div>
+
+                <div class="form-group">
+                    <label>وصف الإعلان (سطر صغير)</label>
+                    <input type="text" id="descInput" placeholder="مثال: خصم يصل إلى 50% على جميع المنتجات">
+                </div>
+
+                <div class="form-group">
+                    <label>نص الزر</label>
+                    <input type="text" id="btnInput" placeholder="مثال: تسوق الآن" value="تسوق الآن">
+                </div>
+
+                <div class="form-group">
+                    <label>صورة خلفية الإعلان</label>
+                    <input type="file" id="imageInput" accept="image/*" required title="اختر صورة خلفية للإعلان">
+                    <small style="color: #666;">يفضل استخدام صورة عريضة عالية الدقة.</small>
+                </div>
+
+                <div class="preview-box">
+                    <p class="preview-title">معاينة شكل الإعلان</p>
+                    <div class="ads-section">
+                        <div class="ad-banner ad-with-image" id="livePreview">
+
+
+                            <div class="ad-overlay"></div> <div class="ad-content">
+                                <h3 id="prevTitle">عنوان الإعلان</h3>
+                                <p id="prevDesc">وصف الإعلان سيظهر هنا</p>
+                                <button id="prevBtn">تسوق الآن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save"><i class="fas fa-save"></i> نشر الإعلان</button>
+                    <a href="ADS.html" class="btn-cancel">إلغاء</a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        // عناصر الإدخال
+        const titleInput = document.getElementById('titleInput');
+        const descInput = document.getElementById('descInput');
+        const btnInput = document.getElementById('btnInput');
+        const imageInput = document.getElementById('imageInput');
+        
+        // عناصر المعاينة
+        const previewBox = document.getElementById('livePreview');
+        const prevTitle = document.getElementById('prevTitle');
+        const prevDesc = document.getElementById('prevDesc');
+        const prevBtn = document.getElementById('prevBtn');
+
+        // تحديث النصوص
+        function updateText() {
+            if(titleInput.value) prevTitle.textContent = titleInput.value;
+            if(descInput.value) prevDesc.textContent = descInput.value;
+            if(btnInput.value) prevBtn.textContent = btnInput.value;
+        }
+
+        titleInput.addEventListener('input', updateText);
+        descInput.addEventListener('input', updateText);
+        btnInput.addEventListener('input', updateText);
+
+        // تحديث الصورة (FileReader)
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // تعيين الصورة كخلفية للمعاينة
+                    previewBox.style.backgroundImage = `url(${e.target.result})`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // التعامل مع زر الحفظ (نحفظ البيانات في LocalStorage لنقلها لصفحة ADS.html)
+        document.getElementById('adsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // تجهيز البيانات
+            const adData = {
+                title: titleInput.value,
+                desc: descInput.value,
+                btnText: btnInput.value,
+                // ملاحظة: حفظ الصورة كنص Base64 في LocalStorage قد يكون ثقيلاً لكنه يعمل للتجربة
+                image: previewBox.style.backgroundImage 
+            };
+
+            localStorage.setItem('singleAd', JSON.stringify(adData));
+            alert('تم نشر الإعلان بنجاح!');
+            window.location.href = 'ADS.html'; // الانتقال لصفحة العرض
+        });
+    </script>
+</body>
+</html>

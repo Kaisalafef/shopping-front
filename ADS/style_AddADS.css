@@ -1,0 +1,190 @@
+:root {
+    --bg-body: #eaeded;       
+    --white: #ffffff;
+    --dark-blue: #232f3e;     
+    --light-blue: #405670d8;   
+    --accent-gold: #f0c14b;   
+    --accent-hover: #ddb347;
+    --text-main: #0F1111;
+    --text-gray: #565959;
+    --price-red: #B12704;
+    --border-color: #ddd;
+    --success: #27ae60;
+    --danger: #d63031;
+    --blue-btn: #007185;
+}
+
+/* تنسيقات خاصة بصفحة الإضافة */
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--dark-blue);
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: var(--accent-gold);
+            outline: none;
+        }
+
+        /* معاينة الألوان */
+        .color-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .color-radio {
+            display: none;
+        }
+
+        .color-label {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-radio:checked + .color-label {
+            border-color: var(--dark-blue);
+            transform: scale(1.1);
+        }
+
+        /* أزرار الحفظ والإلغاء */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-save {
+            background: darkblue;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            flex: 2;
+        }
+
+        .btn-cancel {
+            background: #e74c3c;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+        }
+
+        /* Preview Box */
+        .preview-box {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #eee;
+        }
+        .preview-title {
+            text-align: center;
+            color: #777;
+            margin-bottom: 15px;
+        }
+        /* تنسيق البنر ليدعم الصورة */
+.ad-banner {
+    position: relative;
+    width: 100%;
+    min-height: 250px; /* ارتفاع مناسب للصورة */
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #ddd; /* لون احتياطي */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* طبقة تعتيم سوداء خفيفة فوق الصورة ليظهر النص بوضوح */
+.ad-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* شفافية سوداء 50% */
+    z-index: 1;
+}
+
+/* المحتوى ليكون فوق الطبقة السوداء */
+.ad-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+.ad-content h3 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.ad-content p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.ad-content button {
+    background: white;
+    color: #333;
+    border: none;
+    padding: 10px 25px;
+    font-size: 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.ad-content button:hover {
+    transform: scale(1.05);
+    background: var(--accent-gold, #f1c40f);
+}
