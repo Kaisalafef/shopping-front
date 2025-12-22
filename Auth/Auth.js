@@ -19,7 +19,7 @@ if (passwordInput && strengthBar) {
         if (val.match(/[^a-zA-Z\d]/)) strength += 25;
 
         strengthBar.style.width = strength + '%';
-        
+
         // تغيير الألوان بناءً على القوة
         if (strength <= 25) strengthBar.style.background = '#d63031'; // ضعيفة
         else if (strength <= 50) strengthBar.style.background = '#f1c40f'; // متوسطة
@@ -29,7 +29,7 @@ if (passwordInput && strengthBar) {
 
 // --- 2. إظهار وإخفاء كلمة المرور ---
 document.querySelectorAll(".toggle-password").forEach(icon => {
-    icon.addEventListener("click", function() {
+    icon.addEventListener("click", function () {
         const input = this.parentElement.querySelector("input");
         input.type = input.type === "password" ? "text" : "password";
         this.classList.toggle("fa-eye-slash");
@@ -50,39 +50,70 @@ function clearErrors() {
     document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
 }
 
-// --- 4. إرسال البيانات لـ Laravel ---
-async function handleSignup(e) {
+
+
+//link log in 
+const form = document.getElementById("loginForm");
+const errorMsg = document.getElementById("errorMsg");
+
+form.addEventListener("submit", (e) => {
     e.preventDefault();
-    clearErrors();
 
-    const formData = new FormData();
-    formData.append('name', document.getElementById('fullname').value);
-    formData.append('email', document.getElementById('email').value);
-    formData.append('password', document.getElementById('password').value);
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-    try {
-        const response = await fetch('/register', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': CSRF_TOKEN,
-                'Accept': 'application/json'
-            },
-            body: formData
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            window.location.href = data.redirect || '/home';
-        } else if (response.status === 422) {
-            // معالجة أخطاء الـ Validation القادمة من Laravel
-            Object.keys(data.errors).forEach(key => {
-                showError(key === 'name' ? 'fullname' : key, data.errors[key][0]);
-            });
-        }
-    } catch (error) {
-        console.error("Error:", error);
+    // Validation client-side
+    if (!email.includes("@")) {
+        errorMsg.textContent = "Please enter a valid email.";
+        return;
     }
-}
 
-document.getElementById('signupForm')?.addEventListener('submit', handleSignup);
+    if (password.length < 6) {
+        errorMsg.textContent = "Password must be at least 6 characters.";
+        return;
+    }
+
+    errorMsg.textContent = "";
+
+    // إرسال البيانات كـ JSON
+    fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+        .then(res => res.json().then(data => ({ status: res.status, body: data })))
+        .then(({ status, body }) => {
+            if (status === 200 && body.token) {
+
+                // حفظ التوكن
+                localStorage.setItem("token", body.token);
+
+                // (اختياري) حفظ بيانات المستخدم
+                localStorage.setItem("user", JSON.stringify(body.user));
+
+                // التوجيه حسب الدور
+                if (body.user.role === "admin") {
+                    window.location.href = "admin_dashboard.html";
+                } else if (body.user.role === "user") {
+                    window.location.href = "user_dashboard.html";
+                } else {
+                    // في حال دور غير معروف
+                    window.location.href = "index.html";
+                }
+
+            } else {
+                errorMsg.textContent = body.message || "Login failed";
+            }
+        })
+
+        .catch(err => {
+            console.error(err);
+            errorMsg.textContent = "Server error, please try again later.";
+        });
+});
