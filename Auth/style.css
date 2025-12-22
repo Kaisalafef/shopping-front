@@ -125,7 +125,7 @@ input:focus {
     position: absolute;
     left: 15px;
     /* RTL fix */
-    top: 50%;
+    top: 60px;
     transform: translateY(-50%);
     cursor: pointer;
     color: var(--text-muted);
@@ -182,4 +182,23 @@ input.invalid {
     color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
+}
+@media (max-width: 700px) {
+    .body{
+        display: block;
+        align-items: center;
+    }
+    .background-blob {
+        display: none;
+    animation: none;}
+    .container {
+        display: block;
+        height: 89%;
+        width: 100%;
+        border-radius: 15px;
+    }
+
+    .logo {
+        width: 80px;
+    }
 }
