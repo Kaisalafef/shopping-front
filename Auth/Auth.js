@@ -99,9 +99,9 @@ form.addEventListener("submit", (e) => {
 
                 // التوجيه حسب الدور
                 if (body.user.role === "admin") {
-                    window.location.href = "admin_dashboard.html";
+                    window.location.href = "/Home/admin_dashboard.html";
                 } else if (body.user.role === "user") {
-                    window.location.href = "user_dashboard.html";
+                    window.location.href = "/Home/user_dashboard.html";
                 } else {
                     // في حال دور غير معروف
                     window.location.href = "index.html";
