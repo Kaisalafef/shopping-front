@@ -188,3 +188,63 @@
     transform: scale(1.05);
     background: var(--accent-gold, #f1c40f);
 }
+/* =========================================
+   Mobile Responsiveness (Add to style_AddADS.css)
+   ========================================= */
+
+@media (max-width: 600px) {
+    /* الحاوية الرئيسية */
+    .form-container {
+        padding: 15px;
+        margin: 10px auto;
+        border-radius: 8px;
+        border: none;
+    }
+
+    /* تكبير حقول الإدخال للمس */
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+        padding: 14px; /* مساحة أكبر للإصبع */
+        font-size: 16px; /* منع التكبير التلقائي في آيفون */
+    }
+
+    /* خيارات الألوان */
+    .color-options {
+        justify-content: space-between; /* توزيع الألوان */
+        flex-wrap: wrap;
+    }
+
+    .color-label {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* الأزرار */
+    .form-actions {
+        flex-direction: column; /* ترتيب عمودي */
+        gap: 10px;
+    }
+
+    .btn-save, .btn-cancel {
+        width: 100%; /* عرض كامل */
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .btn-cancel {
+        order: 2; /* جعل زر الإلغاء في الأسفل */
+        background: transparent;
+        color: #e74c3c;
+        border: 1px solid #e74c3c;
+    }
+
+    /* البنر الإعلاني */
+    .ad-banner {
+        min-height: 200px;
+    }
+    
+    .ad-content h3 {
+        font-size: 1.5rem;
+    }
+}

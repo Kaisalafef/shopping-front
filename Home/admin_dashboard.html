@@ -1,61 +1,71 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - المدير</title>
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="/Wedgit/style_header.css">
-    <link rel="stylesheet" href="style_dashboard.css">
-  </head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>لوحة التحكم - المدير</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="/Wedgit/style_header.css">
+        <link rel="stylesheet" href="style_dashboard.css">
+    </head>
 
-  <body>
+    <body>
 
-    <header class="main-header">
-      <div class="header-container">
-        <a href="#" class="logo-link">
-          <img src="/images/logo.png" class="logo" alt="Logo">
-        </a>
+        <header class="main-header">
+            <div class="header-container">
+                <a href="#" class="logo-link">
+                    <img src="/images/logo.png" class="logo" alt="Logo">
+                </a>
 
-        <div class="profile-menu">
-          <button class="icon-btn" id="profileBtn" type="button"
-            title="فتح القائمة">
-            <i class="fas fa-user"></i>
-          </button>
+                <div class="profile-menu">
+                    <button class="icon-btn" id="profileBtn" type="button"
+                        title="فتح القائمة">
+                        <i class="fas fa-user"></i>
+                    </button>
 
-          <ul class="dropdown" id="desktopDropdown">
-            <li><a href="#"><i class="fas fa-user-circle"></i> حسابي</a></li>
-            <li><a href="#"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
-           
-           <li><a href="/ADS/Add_ADS.html"><i class="fas fa-bullhorn"></i> اضافة إعلانات</a></li> <li><a href="/Discount/Add_Discount.html"><i class="fas fa-tags"></i> اضافة خصومات</a></li> <li><a href="/Add Proudct/add_Proudct.html"><i class="fas fa-add"></i> اضافة منتجات</a></li>
-            <li><a href="/Discount/Add_Discount.html"><i class="fas fa-add"></i> اضافة خصومات</a></li>
-            <li><a href="#"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                    <ul class="dropdown" id="desktopDropdown">
+                        <li><a href="#"><i class="fas fa-user-circle"></i>
+                                حسابي</a></li>
 
-            <li class="divider"></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
-          </ul>
+                        <li><a href="/ADS/Add_ADS.html"><i
+                                    class="fas fa-bullhorn"></i> اضافة
+                                إعلانات</a></li> <li><a
+                                href="/Discount/Add_Discount.html"><i
+                                    class="fas fa-tags"></i> اضافة
+                                خصومات</a></li> <li><a
+                                href="/Add Proudct/add_Proudct.html"><i
+                                    class="fas fa-add"></i> اضافة
+                                منتجات</a></li>
+                        
+                        <li><a href="#"><i class="fas fa-cog"></i>
+                                الإعدادات</a></li>
+
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>
+                                خروج</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <input type="text" placeholder="ابحث عن منتجات...">
+                    <button class="search-btn" type="submit" title="بحث"><i
+                            class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#">الرئيسية</a>
+            <a href="#">حسابي</a>
+            <a href="#">اضافة منتجات</a>
+            <a href="#">اضافة خصومات</a>
+            <a href="#">الإعدادات</a>
+            <a href="#">تسجيل خروج</a>
         </div>
-      </div>
 
-      <div class="search-wrapper">
-        <div class="search-box">
-          <input type="text" placeholder="ابحث عن منتجات...">
-          <button class="search-btn" type="submit" title="بحث"><i
-              class="fas fa-search"></i></button>
-        </div>
-      </div>
-    </header>
-
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#">الرئيسية</a>
-      <a href="#">حسابي</a>
-      <a href="#">اضافة منتجات</a>
-      <a href="#">اضافة خصومات</a>
-      <a href="#">الإعدادات</a>
-      <a href="#">تسجيل خروج</a>
-    </div>
-   
         <div class="dashboard-container">
             <main class="main-content">
 
@@ -65,71 +75,83 @@
 
                 <div class="pdf-categories-grid horizontal-scroll-wrapper">
 
-                    <a href="/Proudcts/Products.html?cat=electronics"
+                    <a href="/Proudcts/Products.html?cat=electronics&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-laptop"></i> </div>
-                        <div class="pdf-card-title">ألكترونيات</div>
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <div class="pdf-card-title">إلكترونيات</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=food" class="pdf-card">
+                    <a href="/Proudcts/Products.html?cat=food&role=admin"
+                        class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-apple-whole"></i> </div>
+                            <i class="fas fa-apple-whole"></i>
+                        </div>
                         <div class="pdf-card-title">مواد غذائية</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=meals"
+                    <a href="/Proudcts/Products.html?cat=meals&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-utensils"></i> </div>
+                            <i class="fas fa-utensils"></i>
+                        </div>
                         <div class="pdf-card-title">وجبات</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=makeup"
+                    <a href="/Proudcts/Products.html?cat=makeup&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-wand-magic-sparkles"></i> </div>
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                        </div>
                         <div class="pdf-card-title">مكياج</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=men" class="pdf-card">
+                    <a href="/Proudcts/Products.html?cat=men&role=admin"
+                        class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-shirt"></i> </div>
+                            <i class="fas fa-shirt"></i>
+                        </div>
                         <div class="pdf-card-title">أزياء رجالية</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=women"
+                    <a href="/Proudcts/Products.html?cat=women&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-person-dress"></i> </div>
+                            <i class="fas fa-person-dress"></i>
+                        </div>
                         <div class="pdf-card-title">أزياء نسائية</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=perfume"
+                    <a href="/Proudcts/Products.html?cat=perfume&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-spray-can-sparkles"></i> </div>
+                            <i class="fas fa-spray-can-sparkles"></i>
+                        </div>
                         <div class="pdf-card-title">عطور</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=cleaning"
+                    <a href="/Proudcts/Products.html?cat=cleaning&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-pump-soap"></i> </div>
+                            <i class="fas fa-pump-soap"></i>
+                        </div>
                         <div class="pdf-card-title">منظفات</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=furniture"
+                    <a href="/Proudcts/Products.html?cat=furniture&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-couch"></i> </div>
+                            <i class="fas fa-couch"></i>
+                        </div>
                         <div class="pdf-card-title">مفروشات</div>
                     </a>
 
-                    <a href="/Proudcts/Products.html?cat=sweets"
+                    <a href="/Proudcts/Products.html?cat=sweets&role=admin"
                         class="pdf-card">
                         <div class="pdf-card-inner">
-                            <i class="fas fa-candy-cane"></i> </div>
+                            <i class="fas fa-candy-cane"></i>
+                        </div>
                         <div class="pdf-card-title">حلويات</div>
                     </a>
 
@@ -158,5 +180,5 @@
         <script src="script.js"></script>
         <script src="/Wedgit/script_header.js"></script>
 
-      </body>
-    </html>
+    </body>
+</html>
