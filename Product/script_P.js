@@ -284,6 +284,7 @@
             dom.ratingInputContainer.appendChild(star);
         }
     }
+<<<<<<< HEAD
   
     function updateStarVisuals(val) {
         const stars = dom.ratingInputContainer.querySelectorAll('.rating-star');
@@ -418,3 +419,171 @@
     loadProductData();
   
   })();
+=======
+
+    // حفظ السلة المحدثة
+    localStorage.setItem('marketCart', JSON.stringify(cart));
+
+    // محاكاة تأخير بسيط للجمالية
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    console.log("تم الحفظ في السلة بنجاح:", payload);
+
+    dom.btnText.textContent = "تمت الإضافة!";
+    
+    // تحديث عداد السلة في الهيدر إذا كان موجوداً
+    updateCartBadge();
+
+    setTimeout(() => {
+      dom.btnText.textContent = "اضف الى السلة";
+      dom.addBtn.disabled = false;
+      isAdding = false;
+    }, 1500);
+  }
+
+  // دالة لتحديث رقم السلة في الهيدر (اختياري)
+  function updateCartBadge() {
+      const cart = JSON.parse(localStorage.getItem('marketCart') || '[]');
+      const badge = document.querySelector('.fa-shopping-cart + span') || document.querySelector('.cart-count');
+      if (badge) badge.textContent = cart.length;
+  }
+
+  /* ---------------------------
+      باقي دوال النظام (الصور والتهيئه)
+     --------------------------- */
+  function openLightbox() {
+    dom.lightbox.classList.add("pw--active");
+    dom.lightboxImg.src = dom.productImage.src;
+    dom.lightboxClose.focus();
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    dom.lightbox.classList.remove("pw--active");
+    dom.imageTrigger.focus();
+    document.body.style.overflow = "";
+  }
+
+  function initProductWidget(product) {
+    if (!product || !product.id) return;
+
+    productData = {
+      id: product.id,
+      title: product.title,
+      price: typeof product.price === "object" ? product.price.amount : product.price,
+      currency: typeof product.price === "object" ? product.price.currency : product.currency || "SYP",
+      image: product.image || "",
+      description: product.description || "",
+      options: Array.isArray(product.options) ? product.options : [],
+    };
+
+    dom.title.textContent = productData.title;
+    dom.price.textContent = formatPrice(productData.price, productData.currency);
+    dom.description.innerHTML = productData.description;
+    dom.productImage.src = productData.image;
+
+    // Render Colors & Sizes (نفس منطقك الأصلي)
+    renderOptions();
+    updateQuantityButtons();
+  }
+
+  function renderOptions() {
+    const colors = productData.options.filter((o) => o.type === "color");
+    const sizes = productData.options.filter((o) => o.type === "size");
+
+    if (colors.length > 0) {
+      dom.colorGroup.classList.remove("pw--hidden");
+      dom.colorOptionsContainer.innerHTML = "";
+      colors.forEach((colorObj) => {
+        const swatch = document.createElement("div");
+        swatch.className = "pw__color-swatch";
+        swatch.style.backgroundColor = colorObj.value;
+        swatch.addEventListener("click", () => {
+          document.querySelectorAll(".pw__color-swatch").forEach((el) => el.classList.remove("selected"));
+          swatch.classList.add("selected");
+          selectedState.color = colorObj;
+          if (colorObj.image) dom.productImage.src = colorObj.image;
+        });
+        dom.colorOptionsContainer.appendChild(swatch);
+      });
+    }
+
+    if (sizes.length > 0) {
+      dom.sizeGroup.classList.remove("pw--hidden");
+      dom.sizeSelect.innerHTML = '<option value="">اختر القياس...</option>';
+      sizes.forEach((sizeObj) => {
+        const opt = document.createElement("option");
+        opt.value = sizeObj.value;
+        opt.textContent = sizeObj.value;
+        dom.sizeSelect.appendChild(opt);
+      });
+    }
+  }
+
+  // Bindings
+  dom.imageTrigger.addEventListener("click", openLightbox);
+  dom.lightboxClose.addEventListener("click", closeLightbox);
+  dom.qtyDecBtn.addEventListener("click", () => {
+    let val = parseInt(dom.quantityInput.value, 10) || 1;
+    if (val > 1) { dom.quantityInput.value = val - 1; updateQuantityButtons(); }
+  });
+  dom.qtyIncBtn.addEventListener("click", () => {
+    let val = parseInt(dom.quantityInput.value, 10) || 1;
+    if (val < getMaxQuantity()) { dom.quantityInput.value = val + 1; updateQuantityButtons(); }
+  });
+  dom.addBtn.addEventListener("click", handleAddToCart);
+
+  async function loadProductFromApi() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id');
+  if (!productId) return;
+
+  try {
+    const res = await fetch(`http://127.0.0.1:8000/api/products/${productId}`);
+    if (!res.ok) throw new Error('Failed to fetch product');
+
+    const product = await res.json();
+
+    initProductWidget({
+      id: product.id,
+      title: product.name,
+      price: product.price,
+      currency: product.currency || 'SYP',
+      image: product.images?.length ? `http://127.0.0.1:8000/storage/${product.images[0].image}` : '',
+      description: product.description,
+      options: product.sizes?.map(s => ({ type: 'size', value: s.size })) || [],
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+  // Load product from LocalStorage based on URL ID
+  function loadProductFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    const storedProducts = JSON.parse(localStorage.getItem('marketProducts') || '[]');
+    const product = storedProducts.find(p => p.id === productId);
+
+    if (product) {
+        initProductWidget({
+            id: product.id,
+            title: product.name,
+            price: product.price,
+            currency: product.currency,
+            image: product.img,
+            description: product.description,
+            options: product.options
+        });
+    }
+  }
+
+  loadProductFromApi();
+
+
+  /* ---------------------------
+     نظام التقييمات (نفس كودك السابق)
+     --------------------------- */
+  // ... (احتفظ بكود التقييمات هنا كما هو)
+})();
+>>>>>>> 0bf4b8ffbdbb3f1c9f3cc305acbdf9445d112602
