@@ -261,6 +261,31 @@
   });
   dom.addBtn.addEventListener("click", handleAddToCart);
 
+  async function loadProductFromApi() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id');
+  if (!productId) return;
+
+  try {
+    const res = await fetch(`http://127.0.0.1:8000/api/products/${productId}`);
+    if (!res.ok) throw new Error('Failed to fetch product');
+
+    const product = await res.json();
+
+    initProductWidget({
+      id: product.id,
+      title: product.name,
+      price: product.price,
+      currency: product.currency || 'SYP',
+      image: product.images?.length ? `http://127.0.0.1:8000/storage/${product.images[0].image}` : '',
+      description: product.description,
+      options: product.sizes?.map(s => ({ type: 'size', value: s.size })) || [],
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
   // Load product from LocalStorage based on URL ID
   function loadProductFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -281,7 +306,8 @@
     }
   }
 
-  loadProductFromUrl();
+  loadProductFromApi();
+
 
   /* ---------------------------
      نظام التقييمات (نفس كودك السابق)
