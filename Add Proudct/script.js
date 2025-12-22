@@ -125,8 +125,8 @@
             if (currentType === "color") {
                 // إنشاء قائمة الألوان الشهيرة
                 let colorOptions = POPULAR_COLORS.map(c => 
-                        `<option value="${c.hex}" style= " border-left: 60px solid ${c.hex};" ${currentValue === c.hex ? 'selected' : ''}>
-                        ${c.name}
+                        `<option value="${c.hex}" ${currentValue === c.hex ? 'selected' : ''}>
+                       <span  style= " border-left: 60px solid red;">  ${c.name}</span>
                         
                     </option>`
                 ).join('');
@@ -139,7 +139,7 @@
                         </select>
                         
                         <div class="mini-upload-wrapper" style="display:flex; align-items:center;">
-                             <label for="file-${rowId}" class="btn btn-sm btn-outline" style="cursor:pointer; margin-right:20px;">
+                             <label for="file-${rowId}" class="btn btn-sm btn-outline" style="cursor:pointer; margin-right:px;">
                                 <i class="fas fa-camera"></i>
                              </label>
                              <input type="file" id="file-${rowId}" class="opt-file-input" hidden accept="image/*">
