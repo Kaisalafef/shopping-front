@@ -17,7 +17,7 @@
 <body>
     <div class="background-blob"></div>
     <div class="container">
-        <img class="logo" src="/Market/images/logo.png" alt="" srcset="">
+        <img class="logo" src="/images/logo.png" alt="" srcset="">
         <p class="subtitle">أدخل بياناتك لتسجيل الدخول إلى حسابك</p>
         
         <form id="loginForm">
@@ -26,7 +26,7 @@
                 <div class="input-wrapper">
                     <input type="email" id="email" placeholder="name@example.com">
                 </div>
-                <small class="error-msg">رسالة خطأ</small>
+                <small class="error-msg" id="errorMsg">رسالة خطأ</small>
             </div>
 
             <div class="input-group">
@@ -38,21 +38,21 @@
                 <small class="error-msg">رسالة خطأ</small>
             </div>
 
-            <div class="options">
+            <!-- <div class="options">
                 <label class="checkbox-container">
                     <input type="checkbox" id="rememberMe"> تذكرني
                 </label>
                 <a href="#" class="link">هل نسيت كلمة المرور؟</a>
-            </div>
+            </div> -->
 
             <button type="submit" class="btn-primary">تسجيل الدخول</button>
         </form>
 
         <p class="switch-page">
-            ليس لديك حساب؟ <a href="/Market/Auth/Sign_up.html" class="link">إنشاء حساب جديد</a>
+            ليس لديك حساب؟ <a href="/Auth/Sign_up.html" class="link">إنشاء حساب جديد</a>
         </p>
     </div>
 
-    <script src="auth.js"></script>
+    <script src="Auth.js"></script>
 </body>
 </html>
