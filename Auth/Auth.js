@@ -53,10 +53,10 @@ function clearErrors() {
 
 
 //link log in 
-const form = document.getElementById("loginForm");
+const loginForm = document.getElementById("loginForm");
 const errorMsg = document.getElementById("errorMsg");
-
-form.addEventListener("submit", (e) => {
+if (loginForm) {
+loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email").value.trim();
@@ -101,10 +101,10 @@ form.addEventListener("submit", (e) => {
                 if (body.user.role === "admin") {
                     window.location.href = "/Home/admin_dashboard.html";
                 } else if (body.user.role === "user") {
-                    window.location.href = "/Home/user_dashboard.html";
+                    window.location.href = "/Home/client_dashboard.html";
                 } else {
                     // في حال دور غير معروف
-                    window.location.href = "index.html";
+                    window.location.href = "/Home/client_dashboard.html";
                 }
 
             } else {
@@ -116,4 +116,105 @@ form.addEventListener("submit", (e) => {
             console.error(err);
             errorMsg.textContent = "Server error, please try again later.";
         });
+});
+
+
+}
+//////////////////////link sign up 
+document.addEventListener("DOMContentLoaded", () => {
+    const signupForm = document.getElementById("signupForm");
+      if(signupForm){
+    signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // قراءة القيم
+        const name = document.getElementById("fullname").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const passwordcomf = document.getElementById("passwordcomf").value;
+        const phone = document.getElementById("phone").value;
+
+        // التحقق client-side
+        let hasError = false;
+        if (name.length < 3) {
+            showError("fullname", "Name must be at least 3 characters.");
+            hasError = true;
+        } else {
+            clearError("fullname");
+        }
+
+        if (!email.includes("@")) {
+            showError("email", "Please enter a valid email.");
+            hasError = true;
+        } else {
+            clearError("email");
+        }
+
+        if (password.length < 8) {
+            showError("password", "Password must be at least 8 characters.");
+            hasError = true;
+        } else if (password !== passwordcomf) {
+            showError("passwordcomf", "Passwords do not match.");
+            hasError = true;
+        } else {
+            clearError("password");
+            clearError("passwordcomf");
+        }
+
+        if (hasError) return;
+
+        // إعداد البيانات للإرسال
+        const data = {
+            name,
+            email,
+            password,
+            password_confirmation: passwordcomf,
+            phone
+        };
+
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/register", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const resData = await response.json();
+
+            if (response.ok) {
+                alert(resData.message || "Account created successfully!");
+                // تخزين التوكن
+                localStorage.setItem("token", resData.token);
+                // تحويل المستخدم مباشرة إلى لوحة التحكم أو الصفحة الرئيسية
+                if (resData.user.role === "admin") {
+                    window.location.href = "/Home/admin_dashboard.html";
+                } else if (resData.user.role === "user") {
+                    window.location.href = "/Home/client_dashboard.html";
+                } else {
+                    // في حال دور غير معروف
+                    window.location.href = "/Home/client_dashboard.html";
+                }
+            } else {
+                // عرض رسالة الخطأ من السيرفر
+                alert(resData.message || "Registration failed.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Server error, please try again later.");
+        }
+    }); }
+
+    // دوال مساعدة لعرض الأخطاء
+    function showError(fieldId, message) {
+        const small = document.querySelector(`small[data-for="${fieldId}"]`);
+        if (small) small.textContent = message;
+    }
+
+    function clearError(fieldId) {
+        const small = document.querySelector(`small[data-for="${fieldId}"]`);
+        if (small) small.textContent = "";
+    }
 });
