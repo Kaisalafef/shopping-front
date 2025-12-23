@@ -218,16 +218,71 @@ body {
 }
 
 /* Responsive Fix */
+/* =========================================
+   Mobile Responsiveness (Replace existing query in products_styl.css)
+   ========================================= */
+
 @media (max-width: 600px) {
+    /* الشبكة: عرض منتجين دائماً */
     .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        grid-template-columns: repeat(2, 1fr); /* عمودين إجباري */
+        gap: 10px; /* تقليل المسافة */
+        padding: 5px;
     }
+
+    .product-card {
+        border-radius: 10px;
+    }
+
+    /* تصغير مساحة الصورة */
     .product-img-wrapper {
-        height: 140px;
+        height: 130px;
+        padding: 10px;
     }
+
+    /* النصوص */
+    .product-info {
+        padding: 10px;
+    }
+
+    .product-title {
+        font-size: 0.9rem;
+        height: 36px; /* ارتفاع لسطرين */
+        margin-bottom: 4px;
+    }
+
+    .product-price {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    /* أزرار الإجراءات (Edit/Delete) */
+    .admin-actions {
+        flex-direction: row; /* الحفاظ على الأزرار بجانب بعض */
+        gap: 5px;
+    }
+
     .btn-edit, .btn-delete {
-        font-size: 0.8rem;
+        font-size: 0; /* إخفاء النص */
+        padding: 8px 0;
+    }
+
+    /* إظهار الأيقونة فقط وتكبيرها */
+    .btn-edit i, .btn-delete i {
+        font-size: 1.1rem; 
+        margin: 0;
+    }
+    
+    
+    .btn-edit, .btn-delete {
+        font-size: 0.75rem;
+        padding: 6px;
+    }
+    
+
+    /* زر الإضافة للسلة للعميل */
+    .btn-cart {
+        font-size: 0.85rem;
         padding: 8px;
     }
 }
