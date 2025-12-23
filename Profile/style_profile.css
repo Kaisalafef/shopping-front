@@ -173,3 +173,49 @@ body {
     margin-top: 5px;
     display: none; /* مخفي افتراضياً */
 }
+/* =========================================
+   Mobile Responsiveness (Add to style_profile.css)
+   ========================================= */
+
+@media (max-width: 768px) {
+    .profile-container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .profile-card {
+        padding: 20px;
+    }
+
+    /* شبكة المعلومات */
+    .info-grid {
+        grid-template-columns: 1fr; /* عمود واحد */
+        gap: 15px;
+    }
+
+    /* التعامل مع الجداول الكبيرة */
+    .role-section {
+        padding: 15px;
+        overflow-x: auto; /* السماح بالسكرول الأفقي للجدول */
+    }
+
+    .data-table {
+        min-width: 600px; /* إجبار الجدول على الحفاظ على عرضه ليظهر السكرول */
+    }
+
+    .data-table th, .data-table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    /* الأزرار في الهيدر */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .section-header button {
+        width: 100%;
+    }
+}

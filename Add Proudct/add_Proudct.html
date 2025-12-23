@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <title>إدارة المنتجات | إضافة منتج جديد</title>
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -13,10 +15,9 @@
         <link rel="stylesheet" href="/Wedgit/style_header.css">
     </head>
     <body>
-
-        <header class="main-header">
+<header class="main-header">
             <div class="header-container">
-                <a href="/Home/admin_dashboard.html" class="logo-link">
+                <a href="#" class="logo-link">
                     <img src="/images/logo.png" class="logo" alt="Logo">
                 </a>
 
@@ -29,17 +30,16 @@
                     <ul class="dropdown" id="desktopDropdown">
                         <li><a href="#"><i class="fas fa-user-circle"></i>
                                 حسابي</a></li>
-                        <li><a href="#"><i class="fas fa-shopping-cart"></i>
-                                سلتي</a></li>
 
-                        <li><a href="/Add Proudct/add_Proudct.html"><i
+                        <li><a href="/ADS/Add_ADS.html"><i
+                                    class="fas fa-bullhorn"></i> اضافة
+                                إعلانات</a></li> <li><a
+                                href="/Discount/Add_Discount.html"><i
+                                    class="fas fa-tags"></i> اضافة
+                                خصومات</a></li> <li><a
+                                href="/Add Proudct/add_Proudct.html"><i
                                     class="fas fa-add"></i> اضافة
                                 منتجات</a></li>
-                        <li><a href="/Discount/Add_Discount.html"><i
-                                    class="fas fa-add"></i> اضافة
-                                خصومات</a></li>
-                        <li><a href="#"><i class="fas fa-cog"></i>
-                                الإعدادات</a></li>
                         <li class="divider"></li>
                         <li><a href="#"><i class="fas fa-sign-out-alt"></i>
                                 خروج</a></li>
@@ -59,113 +59,113 @@
         <div class="mobile-menu" id="mobileMenu">
             <a href="#">الرئيسية</a>
             <a href="#">حسابي</a>
-            <a href="#">سلتي</a>
-            <a href="#">الإعدادات</a>
+            <a href="#">اضافة منتجات</a>
+            <a href="#">اضافة خصومات</a>
             <a href="#">تسجيل خروج</a>
         </div>
 
-        <input type="hidden" id="prodId">
 
         <main class="container">
             <header class="page-header">
                 <div class="header-content">
                     <h1>إضافة منتج جديد</h1>
-                    <p class="subtitle">أدخل تفاصيل المنتج بدقة.</p>
+                    <p class="subtitle">أدخل تفاصيل المنتج ليتم عرضها في
+                        المتجر.</p>
                 </div>
+                <input type="hidden" id="prodId">
                 <div class="header-meta">
                     <button type="button" id="regenBtn"
-                        class="btn btn-sm btn-outline">توليد ID جديد</button>
+                        class="btn btn-sm btn-outline"
+                        style="display:none">تحديث</button>
                 </div>
             </header>
 
-            <form id="productForm" class="main-grid" novalidate>
+            <form id="productForm" class="main-grid" novalidate
+                onsubmit="return false;">
 
                 <section class="card form-section">
-                    <h2 class="card-title">بيانات المنتج الأساسية</h2>
+                    <h2 class="card-title">البيانات الأساسية</h2>
 
                     <div class="form-group">
-                        <label for="title" class="required">اسم المنتج</label>
-                        <input id="title" name="title" type="text"
+                        <label for="title" class="required">اسم
+                            المنتج</label>
+                        <input id="title" name="name" type="text"
                             class="form-input" required
                             placeholder="مثال: قميص قطني صيفي" />
-                        <div class="error-msg" id="titleError"></div>
-                    </div>
-
-                    <div class="row-2-col">
-                        <div class="form-group">
-                            <label for="price" class="required">السعر</label>
-                            <input id="price" name="price" type="number"
-                                class="form-input" required min="0.01"
-                                step="0.01" placeholder="0.00" />
-                            <div class="error-msg" id="priceError"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="currency">العملة</label>
-                            <select id="currency" name="currency"
-                                class="form-select">
-                                <option value="SYP">ليرة سورية (SYP)</option>
-                                <option value="USD">دولار أمريكي (USD)</option>
-                            </select>
-                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="description">تفاصيل المنتج</label>
+                        <label for="description">وصف المنتج</label>
                         <textarea id="description" name="description"
                             class="form-textarea"
-                            placeholder="اكتب وصفاً جذاباً للمنتج..."></textarea>
+                            placeholder="اكتب وصفاً دقيقاً للمنتج..."></textarea>
                     </div>
 
                     <div class="row-2-col">
                         <div class="form-group">
-    <label for="category" class="required">الفئة</label>
-    <select id="category" class="form-control" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ddd;">
-        <option value="" disabled selected>اختر الفئة...</option>
-        <option value="electronics">الإلكترونيات</option>
-        <option value="food">المواد الغذائية</option>
-        <option value="meals">المأكولات</option>
-        <option value="makeup">مستحضرات التجميل</option>
-        <option value="men">أزياء رجالية</option>
-        <option value="women">أزياء نسائية</option>
-        <option value="perfume">العطور</option>
-        <option value="cleaning">المنظفات</option>
-        <option value="furniture">المفروشات</option>
-        <option value="sweets">الحلويات</option>
-    </select>
-</div>
+                            <label for="price"
+                                class="required">السعر</label>
+                            <input id="price" name="price" type="number"
+                                class="form-input" required min="1"
+                                step="0.01"
+                                placeholder="0.00" />
+                        </div>
+
+                    </div>
+
+                    <div class="row-2-col">
+                        <div class="form-group">
+                            <label for="category" class="required">الفئة</label>
+                            <select id="category" name="category"
+                                class="form-select" required>
+                                <option value disabled selected>اختر
+                                    الفئة...</option>
+
+                                <option
+                                    value="electronics">الإلكترونيات</option>
+                                <option value="food">المواد الغذائية</option>
+                                <option value="meals">المأكولات</option>
+                                <option value="makeup">مستحضرات التجميل</option>
+                                <option value="men">أزياء رجالية</option>
+                                <option value="women">أزياء نسائية</option>
+                                <option value="perfume">العطور</option>
+                                <option value="cleaning">المنظفات</option>
+                                <option value="furniture">المفروشات</option>
+                                <option value="sweets">الحلويات</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="brand">العلامة التجارية</label>
+                            <label for="brand">العلامة التجارية
+                                (Brand)</label>
                             <input id="brand" name="brand" type="text"
                                 class="form-input"
-                                placeholder="مثال: Zara, Nike" />
+                                placeholder="مثال: Nike, Zara" />
                         </div>
                     </div>
                 </section>
 
                 <aside class="sidebar">
                     <div class="card">
-                        <h3 class="card-title">صورة المنتج</h3>
+                        <h3 class="card-title">الصورة الأساسية</h3>
                         <div class="image-uploader">
                             <div class="preview-area" id="mainPreview">
-                                <div class="placeholder-text">معاينة
-                                    الصورة</div>
+                                <div class="placeholder-text">لا توجد
+                                    صورة</div>
                             </div>
 
                             <div class="upload-controls">
                                 <label class="btn btn-secondary"
-                                    style="width:100%; display:block; text-align:center; cursor:pointer;">
-                                    <i class="fas fa-upload"></i> اختر ملف صورة
+                                    style="width:100%; cursor:pointer;">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    رفع
+                                    صورة
                                     <input id="imageFile" type="file" hidden
                                         accept="image/*" />
                                 </label>
-
-                                <div class="error-msg" id="imageError"></div>
-
                                 <button type="button" id="clearImage"
                                     class="btn btn-text text-danger" hidden
                                     style="margin-top:10px; width:100%">
-                                    إزالة الصورة
+                                    حذف الصورة
                                 </button>
                             </div>
                         </div>
@@ -173,36 +173,40 @@
 
                     <div class="card">
                         <div class="card-header-flex">
-                            <h3 class="card-title">خيارات المنتج</h3>
+                            <h3 class="card-title">المتغيرات
+                                (Colors/Sizes)</h3>
                             <button type="button" id="addOptionBtn"
                                 class="btn btn-sm btn-outline">
                                 <i class="fas fa-plus"></i> إضافة
                             </button>
                         </div>
 
-                        <div class="hint-box">
-                            <i class="fas fa-info-circle"></i> يمكنك إضافة ألوان
-                            مع صور خاصة، أو قياسات.
+                        <div class="hint-box"
+                            style="background:#eff6ff; color:#1e40af; padding:10px; border-radius:6px; font-size:0.85rem; margin-bottom:1rem;">
+                            <i class="fas fa-info-circle"></i> يمكنك اختيار
+                            لون
+                            من القائمة الشهيرة أو كتابة قياس.
                         </div>
 
-                        <div id="optionsList" class="options-container">
-                        </div>
+                        <div id="optionsList"
+                            class="options-container"></div>
                     </div>
                 </aside>
 
-                <footer class="form-actions">
+                <footer class="form-actions"
+                    style="grid-column: 1 / -1; display:flex; gap:1rem; margin-top:1rem;">
                     <button type="button" id="saveBtn"
-                        class="btn btn-primary">حفظ المنتج</button>
-                    <button type="button" id="resetBtn"
-                        class="btn btn-secondary">مسح الكل</button>
+                        class="btn btn-primary"
+                        style="flex:1">حفظ المنتج</button>
                 </footer>
 
             </form>
 
-            <div id="toast" class="toast hidden"></div>
+            <div id="toast" class="toast hidden">تم الحفظ بنجاح</div>
         </main>
-
-        <script src="script.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
         <script src="/Wedgit/script_header.js"></script>
+        <script src="script.js"></script>
     </body>
 </html>

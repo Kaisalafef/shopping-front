@@ -433,3 +433,102 @@ body {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* =========================================
+   Mobile Responsiveness (Add to style_P.css)
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* تحسين الحاويات */
+    .container {
+        padding: 0 15px;
+    }
+    
+    .product-widget {
+        margin: 15px auto;
+        width: 100%;
+        box-shadow: none; /* إزالة الظل للشاشات الصغيرة لتوفير المساحة */
+        border-radius: 0;
+    }
+
+    /* ترتيب العناصر عمودياً */
+    .pw__inner {
+        flex-direction: column;
+    }
+
+    /* قسم الصورة */
+    .pw__image-col {
+        padding: 0;
+        background: #fff;
+    }
+    
+    .pw__image-trigger {
+        max-width: 100%;
+        border-radius: 0;
+        aspect-ratio: 4/3; /* جعل الصورة مستطيلة قليلاً للموبايل */
+    }
+
+    /* قسم التفاصيل */
+    .pw__details {
+        padding: 20px 15px;
+        gap: 15px;
+    }
+
+    .pw__title {
+        font-size: 1.4rem; /* تصغير الخط */
+    }
+
+    .pw__price {
+        font-size: 1.3rem;
+    }
+
+    /* أزرار الكمية والإضافة */
+    .pw__controls {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .pw__qty {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .pw__qty-btn {
+        width: 50px; /* أزرار أكبر للمس */
+        height: 50px;
+    }
+
+    .pw__qty-input {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* زر الإضافة للسلة (Sticky Bottom Option) - اختياري لجعله ثابتاً بالأسفل */
+    /*
+    .pw__add-btn {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+        z-index: 100;
+        padding: 15px;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    .pw__details { padding-bottom: 70px; } 
+    */
+
+    /* قسم التقييمات */
+    .reviews-layout {
+        grid-template-columns: 1fr; /* عمود واحد */
+        gap: 20px;
+    }
+
+    .review-form {
+        padding: 15px;
+    }
+
+    .rating-star {
+        font-size: 24px; /* تصغير النجوم قليلاً */
+    }
+}
