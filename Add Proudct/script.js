@@ -148,6 +148,7 @@ const getAuthHeaders = () => ({
     }
 
 
+
     const fd = new FormData();
 
     fd.append("name", els.title.value);
@@ -155,13 +156,13 @@ const getAuthHeaders = () => ({
     fd.append("price", els.price.value);
     fd.append("category", els.category.value);
     fd.append("brand", els.brand.value || "");
-
+    
     state.sizes.forEach((s, i) => {
         if (s.value) fd.append(`sizes[${i}][size]`, s.value);
     });
 
     state.colors.forEach((c, i) => {
-        fd.append(`images[${i}][color]`, c.hex);
+        fd.append(`images[${i}][color]`, c.value);
         fd.append(`images[${i}][file]`, c.file);
     });
 
