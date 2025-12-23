@@ -45,9 +45,34 @@ document.addEventListener("DOMContentLoaded", () => {
 let t1 = gsap.timeline();
 t1.from(".main-header ", {
   y: -100,
- 
+
   opacity: 0,
   duration: 2,
   ease: "power2.out",
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const token = localStorage.getItem("token");
+
+            fetch("http://127.0.0.1:8000/api/logout", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            }).finally(() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                window.location.href = "/Auth/Log_in.html";
+            });
+        });
+    }
+});
+
 
