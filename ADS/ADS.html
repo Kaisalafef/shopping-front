@@ -1,111 +1,102 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>عرض الإعلان</title>
-    <link rel="stylesheet" href="style_dashboard.css">
-    <link rel="stylesheet" href="style_AddADS.css">
-    <link rel="stylesheet" href="/Wedgit/style_header.css">
+    <link rel="stylesheet" href="../Home/style_dashboard.css" />
+    <link rel="stylesheet" href="style_AddADS.css" />
+    <link rel="stylesheet" href="/Wedgit/style_header.css" />
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            display: block;
-            justify-content: center;
-            
-            align-items: center;
-        }
+      body {
+        font-family: "Cairo", sans-serif;
+        background-color: #f4f7f6;
+        margin: 0;
+        display: block;
+        justify-content: center;
 
-        .display-container {
-            justify-content: center;
-            align-content: center;
-            width: 100%;
-            max-width: 900px;
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+        align-items: center;
+      }
 
-        
-        
-        .btn-back {
-            text-decoration: none;
-            color: white;
-            background-color: #2c3e50;
-            padding: 10px 20px;
-            border-radius: 5px;
-        }
+      .display-container {
+        justify-content: center;
+        align-content: center;
+        width: 100%;
+        max-width: 900px;
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-back {
+        text-decoration: none;
+        color: white;
+        background-color: #2c3e50;
+        padding: 10px 20px;
+        border-radius: 5px;
+      }
     </style>
-</head>
-<body>
-<header class="main-header">
-  <div class="header-container">
-    <a href="/Home/client_dashboard.html" class="logo-link">
-      <img src="/images/logo.png" class="logo" alt="Logo">
-    </a>
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="header-container">
+        <a href="/Home/client_dashboard.html" class="logo-link">
+          <img src="/images/logo.png" class="logo" alt="Logo" />
+        </a>
 
-    <div class="profile-menu">
-      <button class="icon-btn" id="profileBtn" type="button" title="فتح القائمة">
-        <i class="fas fa-user"></i>
-      </button>
+        <div class="profile-menu">
+          <button
+            class="icon-btn"
+            id="profileBtn"
+            type="button"
+            title="فتح القائمة"
+          >
+            <i class="fas fa-user"></i>
+          </button>
 
-      <ul class="dropdown" id="desktopDropdown">
-        <li><a href="/Profile/Profile.html"><i class="fas fa-user-circle"></i> حسابي</a></li>
-        <li><a href="/Cart/Cart.html"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
-        <li class="divider"></li>
-        <li><a href="#"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="search-wrapper">
-    <div class="search-box">
-      <input type="text" placeholder="ابحث عن منتجات...">
-      <button class="search-btn" type="submit" title="بحث"><i class="fas fa-search"></i></button>
-    </div>
-  </div>
-</header>
-
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#">الرئيسية</a>
-  <a href="#">حسابي</a>
-  <a href="#">سلتي</a>
-  <a href="#">تسجيل خروج</a>
-</div>
-    <div class="display-container">
-        
-        <div id="adDisplayArea">
-            <p style="text-align: center; color: #777;">جاري تحميل الإعلان...</p>
+          <ul class="dropdown" id="desktopDropdown">
+            <li>
+              <a href="/Profile/Profile.html"
+                ><i class="fas fa-user-circle"></i> حسابي</a
+              >
+            </li>
+            <li>
+              <a href="/Cart/Cart.html"
+                ><i class="fas fa-shopping-cart"></i> سلتي</a
+              >
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#"><i class="fas fa-sign-out-alt"></i> خروج</a>
+            </li>
+          </ul>
         </div>
+      </div>
+
+      <div class="search-wrapper">
+        <div class="search-box">
+          <input type="text" placeholder="ابحث عن منتجات..." />
+          <button class="search-btn" type="submit" title="بحث">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#">الرئيسية</a>
+      <a href="#">حسابي</a>
+      <a href="#">سلتي</a>
+      <a href="#">تسجيل خروج</a>
     </div>
-
-    <script>
-        // استرجاع البيانات المحفوظة من LocalStorage
-        const savedAd = localStorage.getItem('singleAd');
-        const displayArea = document.getElementById('adDisplayArea');
-
-        if (savedAd) {
-            const data = JSON.parse(savedAd);
-            
-            // إنشاء كود الـ HTML للإعلان
-            displayArea.innerHTML = `
-                <div class="ad-banner" style="background-image: ${data.image}">
-                    <div class="ad-overlay"></div>
-                    <div class="ad-content">
-                        <h3>${data.title}</h3>
-                        <p>${data.desc}</p>
-                        <button onclick="alert('تم النقر على الزر!')">${data.btnText}</button>
-                    </div>
-                </div>
-            `;
-        } else {
-            displayArea.innerHTML = '<h3 style="text-align:center">لا يوجد إعلان حالياً. قم بإضافة إعلان من لوحة الإدارة.</h3>';
-        }
-    </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="/Wedgit/script_header.js"></script>
-</body>
+    <div class="display-container">
+      <div id="adDisplayArea">
+        <p style="text-align: center; color: #777">جاري تحميل الإعلان...</p>
+      </div>
+    </div>
+    <script src="display_ads.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="/Wedgit/script_header.js"></script>
+  </body>
 </html>

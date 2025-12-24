@@ -112,60 +112,7 @@
         </main>
     </div>
 
-    <script>
-        // عناصر الإدخال
-        const titleInput = document.getElementById('titleInput');
-        const descInput = document.getElementById('descInput');
-        const btnInput = document.getElementById('btnInput');
-        const imageInput = document.getElementById('imageInput');
-        
-        // عناصر المعاينة
-        const previewBox = document.getElementById('livePreview');
-        const prevTitle = document.getElementById('prevTitle');
-        const prevDesc = document.getElementById('prevDesc');
-        const prevBtn = document.getElementById('prevBtn');
+    <script src="add_ads.js"></script>
 
-        // تحديث النصوص
-        function updateText() {
-            if(titleInput.value) prevTitle.textContent = titleInput.value;
-            if(descInput.value) prevDesc.textContent = descInput.value;
-            if(btnInput.value) prevBtn.textContent = btnInput.value;
-        }
-
-        titleInput.addEventListener('input', updateText);
-        descInput.addEventListener('input', updateText);
-        btnInput.addEventListener('input', updateText);
-
-        // تحديث الصورة (FileReader)
-        imageInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // تعيين الصورة كخلفية للمعاينة
-                    previewBox.style.backgroundImage = `url(${e.target.result})`;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // التعامل مع زر الحفظ (نحفظ البيانات في LocalStorage لنقلها لصفحة ADS.html)
-        document.getElementById('adsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // تجهيز البيانات
-            const adData = {
-                title: titleInput.value,
-                desc: descInput.value,
-                btnText: btnInput.value,
-                // ملاحظة: حفظ الصورة كنص Base64 في LocalStorage قد يكون ثقيلاً لكنه يعمل للتجربة
-                image: previewBox.style.backgroundImage 
-            };
-
-            localStorage.setItem('singleAd', JSON.stringify(adData));
-            alert('تم نشر الإعلان بنجاح!');
-            window.location.href = 'ADS.html'; // الانتقال لصفحة العرض
-        });
-    </script>
 </body>
 </html>
