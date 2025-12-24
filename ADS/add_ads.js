@@ -69,8 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const formData = new FormData();
-        formData.append("title", titleInput.value);
-        formData.append("image", imageInput.files[0]);
+formData.append("title", titleInput.value);
+formData.append("description", descInput.value); // إضافة الوصف
+formData.append("btn_text", btnInput.value);     // إضافة نص الزر
+formData.append("image", imageInput.files[0]);
 
         try {
             const response = await fetch("http://127.0.0.1:8000/api/ads", {
