@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!token) {
     alert("يرجى تسجيل الدخول أولاً");
-    window.location.href = "/Auth/Login.html";
+    window.location.href = "/Auth/Log_in.html";
     return;
   }
 
