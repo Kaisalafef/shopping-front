@@ -646,6 +646,7 @@ body {
 
 /* الصندوق البرتقالي/الذهبي الكبير */
 .offers-gold-box {
+    
     padding: 25px;
     position: relative;
     display: flex;
@@ -736,16 +737,7 @@ body {
    MOBILE DASHBOARD FIX (Professional)
    ============================================================ */
 @media (max-width: 768px) {
-.offers-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* لابتوب: توزيع تلقائي */
-        gap: 20px;
-    }
-    .offer-img-box {
-        height: 180px;
-    }
-    .offer-title {
-        font-size: 1rem;
-    }
+
   body {
     overflow-x: hidden;
   }
@@ -921,34 +913,57 @@ body {
   }
 
   /* ===== Daily Offers ===== */
-  .offers-title {
-    font-size: 1.2rem;
-    text-align: center;
-  }
+  /* داخل الميديا كويري @media (max-width: 768px) */
 
-  .offers-gold-box {
-    padding: 15px;
-    border-radius: 20px;
-  }
-
-  .offers-inner-grid {
-    grid-template-columns: repeat(21, 150px);
-    gap: 10px;
+/* 1. تعديل الحاوية لتصبح فليكس بدلاً من جريد */
+.offers-inner-grid {
+    display: flex !important;       /* إجبار العرض ليكون مرناً */
+    flex-wrap: nowrap !important;   /* منع نزول العناصر للأسفل */
+    overflow-x: auto !important;    /* تفعيل السكرول الأفقي */
+    gap: 15px;                      /* مسافة بين الكروت */
+    padding: 10px 5px;              /* حواف داخلية */
     margin-right: 0;
-  }
+    
+    /* تحسين تجربة السكرول */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; 
+    
+    /* إخفاء إعدادات الجريد القديمة */
+    grid-template-columns: none; 
+}
 
-  .offer-white-card {
-    border-radius: 15px;
-    padding: 6px;
-  }
-
-  .discount-circle {
-    width: 28px;
-    height: 28px;
-    font-size: 0.65rem;
-  }
-
-  .offers-nav-arrow {
+/* إخفاء شريط التمرير (اختياري لجمالية أكثر) */
+.offers-inner-grid::-webkit-scrollbar {
     display: none;
-  }
+}
+
+/* 2. ضبط حجم الكارت ليكون ثابتاً ولا ينكمش */
+.offer-white-card {
+    min-width: 160px;       /* عرض ثابت للكارت في الموبايل */
+    width: 160px;           
+    height: 240px;          /* ارتفاع مناسب */
+    flex-shrink: 0;         /* منع الكارت من الانكماش */
+    margin-bottom: 0;       /* إزالة الهوامش السفلية */
+    border-radius: 15px;
+}
+
+/* 3. تنسيق محتويات الكارت لضمان ظهورها بشكل جيد في الحجم الصغير */
+.offer-img-box {
+    height: 120px;          /* تصغير ارتفاع الصورة قليلاً للموبايل */
+}
+
+.offer-title {
+    font-size: 0.85rem;     /* تصغير الخط قليلاً */
+    white-space: normal;    /* السماح بالتفاف النص إذا كان طويلاً */
+    height: 35px;           /* ارتفاع محدد للعنوان */
+    overflow: hidden;
+}
+
+.discount-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+    top: 8px;
+    left: 8px;
+}
 }

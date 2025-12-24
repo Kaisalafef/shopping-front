@@ -104,7 +104,7 @@ const addColorRow = (data = {}) => {
   row.className = "option-item";
 
   row.innerHTML = `
-      <select class="form-select" style="margin-bottom: 0.5rem;">
+      <select class="form-select" style="margin-bottom: 0.5rem ;">
           <option value="">اختر لون</option>
           ${COLORS.map(
             (c) => `<option value="${c.value}">${c.label}</option>`
