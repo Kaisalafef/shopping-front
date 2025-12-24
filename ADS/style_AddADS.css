@@ -123,71 +123,80 @@
             color: #777;
             margin-bottom: 15px;
         }
-        /* تنسيق البنر ليدعم الصورة */
+    /* تنسيق البنر الإعلاني */
 .ad-banner {
     position: relative;
     width: 100%;
-    min-height: 250px; /* ارتفاع مناسب للصورة */
-    border-radius: 15px;
+    height: 400px; /* ارتفاع ثابت لضمان ظهور الصورة بوضوح */
+    border-radius: 20px;
     overflow: hidden;
-    background-color: #ddd; /* لون احتياطي */
-    background-size: cover;
-    background-position: center;
+    background-color: #f4f4f4;
+    background-size: cover; /* تغطية كامل المساحة */
+    background-position: center center;
     background-repeat: no-repeat;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center; /* توسيط عمودي */
+    justify-content: center; /* توسيط أفقي */
     text-align: center;
     color: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    margin-bottom: 30px;
 }
 
-/* طبقة تعتيم سوداء خفيفة فوق الصورة ليظهر النص بوضوح */
+/* طبقة التعتيم لجعل النص مقروءاً */
 .ad-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* شفافية سوداء 50% */
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)); /* تدرج لوني */
     z-index: 1;
 }
 
-/* المحتوى ليكون فوق الطبقة السوداء */
+/* المحتوى */
 .ad-content {
     position: relative;
     z-index: 2;
-    padding: 20px;
+    padding: 40px;
+    max-width: 800px;
 }
 
 .ad-content h3 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    color: #fff;
 }
 
 .ad-content p {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-    opacity: 0.9;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    color: #f0f0f0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .ad-content button {
-    background: white;
-    color: #333;
+    background: var(--accent-gold, #f0c14b);
+    color: #111;
     border: none;
-    padding: 10px 25px;
-    font-size: 1rem;
-    border-radius: 25px;
+    padding: 12px 35px;
+    font-size: 1.1rem;
+    border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
-    transition: transform 0.2s;
+    box-shadow: 0 4px 15px rgba(240, 193, 75, 0.4);
+    transition: all 0.3s ease;
 }
 
 .ad-content button:hover {
-    transform: scale(1.05);
-    background: var(--accent-gold, #f1c40f);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(240, 193, 75, 0.6);
+    background: #ffdb72;
 }
+
 /* =========================================
    Mobile Responsiveness (Add to style_AddADS.css)
    ========================================= */
@@ -239,12 +248,25 @@
         border: 1px solid #e74c3c;
     }
 
-    /* البنر الإعلاني */
     .ad-banner {
-        min-height: 200px;
+        height: 300px;
     }
-    
     .ad-content h3 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
+    .ad-content p {
+        font-size: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* إظهار سطرين فقط */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .ad-content p {
+        font-size: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* إظهار سطرين فقط */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
 }

@@ -1,357 +1,294 @@
 /**
- * Discount Management Script (API Integrated)
+ * Discount Management Script
+ * Connected to Laravel Offers API
  */
 (function () {
-    "use strict";
+  "use strict";
 
-    // ================= State & Config =================
-    const state = {
-        products: [], // سيتم ملؤها من الـ API
-        isLoading: false
-    };
+  /* ================= CONFIG ================= */
 
-    // روابط الـ API (عدلها حسب الراوت لديك في لارافيل)
-    const API_URLS = {
-        GET_PRODUCTS: '/api/products', // لجلب القائمة
-        UPDATE_DISCOUNT: (id) => `/api/products/${id}/discount`, // لتحديث أو إضافة خصم
-        REMOVE_DISCOUNT: (id) => `/api/products/${id}/remove-discount` // لحذف الخصم
-    };
+  const API_BASE = "http://127.0.0.1:8000";
 
-    // ================= DOM Elements =================
-    const els = {
-        grid: document.getElementById('productsGrid'),
-        search: document.getElementById('searchInput'),
-        modal: document.getElementById('discountModal'),
-        modalForm: document.getElementById('discountForm'),
-        
-        // Modal Elements
-        mTitle: document.getElementById('modalTitle'),
-        mImg: document.getElementById('modalImg'),
-        mBasePrice: document.getElementById('modalBasePrice'),
-        mCurrency: document.getElementById('modalCurrency'),
-        mId: document.getElementById('modalProdId'),
-        mInputVal: document.getElementById('discountValue'),
-        mNewPrice: document.getElementById('newPriceDisplay'),
-        mRemoveBtn: document.getElementById('removeDiscountBtn'),
-        mSuffix: document.getElementById('valueSuffix'),
-        radios: document.getElementsByName('discountType'),
-        
-        toast: document.getElementById('toast'),
-        closeBtns: document.querySelectorAll('.close-modal')
-    };
+  const API_URLS = {
+    GET_PRODUCTS: `${API_BASE}/api/products`,
+    CREATE_OFFER: `${API_BASE}/api/offers`,
+    UPDATE_OFFER: (id) => `${API_BASE}/api/offers/${id}`,
+    DELETE_OFFER: (id) => `${API_BASE}/api/offers/${id}`,
+  };
 
-    // ================= Helpers =================
-    
-    // جلب التوكن للحماية (Laravel CSRF)
-    const getCsrfToken = () => {
-        const token = document.querySelector('meta[name="csrf-token"]');
-        return token ? token.content : '';
-    };
+  const state = {
+    products: [],
+  };
 
-    const formatCurrency = (amount) => new Intl.NumberFormat('en-US').format(amount);
+  /* ================= DOM ================= */
 
-    const showToast = (message, type = "success") => {
-        els.toast.textContent = message;
-        els.toast.style.backgroundColor = type === "error" ? "#ef4444" : "#1f2937";
-        els.toast.classList.remove("hidden");
-        setTimeout(() => els.toast.classList.add("hidden"), 3000);
-    };
+  const els = {
+    grid: document.getElementById("productsGrid"),
+    search: document.getElementById("searchInput"),
 
-    // حساب السعر بعد الخصم (للعرض فقط)
-    const calculatePrice = (base, type, value) => {
-        let final = parseFloat(base);
-        const val = parseFloat(value) || 0;
-        
-        if (type === 'percent') {
-            final = base - (base * (val / 100));
-        } else {
-            final = base - val;
-        }
-        return Math.max(0, final);
-    };
+    modal: document.getElementById("discountModal"),
+    form: document.getElementById("discountForm"),
 
-    // ================= API Functions =================
+    mId: document.getElementById("modalProdId"),
+    mTitle: document.getElementById("modalTitle"),
+    mImg: document.getElementById("modalImg"),
+    mBasePrice: document.getElementById("modalBasePrice"),
+    mCurrency: document.getElementById("modalCurrency"),
+    mValue: document.getElementById("discountValue"),
+    mNewPrice: document.getElementById("newPriceDisplay"),
+    mRemoveBtn: document.getElementById("removeDiscountBtn"),
+    radios: document.getElementsByName("discountType"),
+    suffix: document.getElementById("valueSuffix"),
 
-    /**
-     * 1. GET: جلب المنتجات من السيرفر
-     */
-    const fetchProducts = async () => {
-        state.isLoading = true;
-        els.grid.innerHTML = '<div class="loading-spinner" style="grid-column:1/-1; text-align:center;">جاري تحميل المنتجات...</div>';
+    closeBtns: document.querySelectorAll(".close-modal"),
+    toast: document.getElementById("toast"),
+  };
 
-        try {
-            const response = await fetch(API_URLS.GET_PRODUCTS, {
-                headers: { 'Accept': 'application/json' }
-            });
+  /* ================= HELPERS ================= */
 
-            if (!response.ok) throw new Error("فشل تحميل البيانات");
+  const getCsrfToken = () =>
+    document.querySelector('meta[name="csrf-token"]')?.content || "";
 
-            const data = await response.json();
-            
-            // نفترض أن الـ API يعيد مصفوفة من المنتجات
-            // سنقوم بتوحيد شكل البيانات (Mapping) لضمان عمل الكود
-            state.products = data.map(prod => ({
-                id: prod.id,
-                title: prod.name, // تأكد من اسم الحقل في الداتابيز
-                basePrice: parseFloat(prod.price),
-                currency: "SYP", // أو prod.currency
-                // استخدم الصورة الأولى أو صورة افتراضية
-                image: (prod.product_images && prod.product_images.length > 0) 
-                        ? prod.product_images[0].image 
-                        : 'https://via.placeholder.com/400x400?text=No+Image',
-                // كائن الخصم (null إذا لم يوجد)
-                discount: (prod.discount_value && prod.discount_type) ? {
-                    type: prod.discount_type, // 'percent' or 'fixed'
-                    value: prod.discount_value
-                } : null
-            }));
+  const format = (n) => new Intl.NumberFormat("en-US").format(n);
 
-            renderProducts(state.products);
+  const toast = (msg, type = "success") => {
+    els.toast.textContent = msg;
+    els.toast.style.background = type === "error" ? "#dc2626" : "#111827";
+    els.toast.classList.remove("hidden");
+    setTimeout(() => els.toast.classList.add("hidden"), 3000);
+  };
 
-        } catch (error) {
-            console.error(error);
-            els.grid.innerHTML = '<div style="color:red; text-align:center; grid-column:1/-1">حدث خطأ أثناء الاتصال بالسيرفر</div>';
-        } finally {
-            state.isLoading = false;
-        }
-    };
+  const calcPrice = (base, type, value) => {
+    if (type === "percent") {
+      return Math.max(0, base - base * (value / 100));
+    }
+    return Math.max(0, base - value);
+  };
 
-    /**
-     * 2. POST: تحديث الخصم
-     */
-    const saveDiscountToApi = async (id, type, value) => {
-        const btn = els.modalForm.querySelector('button[type="submit"]');
-        const originalText = btn.textContent;
-        btn.disabled = true;
-        btn.textContent = "جاري الحفظ...";
+  /* ================= API ================= */
 
-        try {
-            const response = await fetch(API_URLS.UPDATE_DISCOUNT(id), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': getCsrfToken(),
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    discount_type: type,
-                    discount_value: value
-                })
-            });
+  async function fetchProducts() {
+    els.grid.innerHTML = `<div class="loading-spinner">جاري التحميل...</div>`;
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message || "حدث خطأ");
+    try {
+      const res = await fetch(API_URLS.GET_PRODUCTS, {
+        headers: { Accept: "application/json" },
+      });
+
+      const data = await res.json();
+
+      state.products = data.map((p) => ({
+        id: p.id,
+        title: p.name,
+        basePrice: Number(p.price),
+        currency: "SYP",
+        image: p.product_images?.[0]?.image
+          ? `/storage/${p.product_images[0].image}`
+          : "https://via.placeholder.com/400",
+
+        discount: p.offer
+          ? {
+              offerId: p.offer.id,
+              type: p.offer.discount_percentage ? "percent" : "fixed",
+              value: p.offer.discount_percentage ?? p.offer.discount_price,
             }
+          : null,
+      }));
 
-            // تحديث الواجهة محلياً بعد نجاح السيرفر
-            const prodIndex = state.products.findIndex(p => p.id == id);
-            if (prodIndex > -1) {
-                state.products[prodIndex].discount = { type, value };
-                renderProducts(state.products);
-            }
+      render(state.products);
+    } catch {
+      els.grid.innerHTML = `<div style="color:red">فشل تحميل البيانات</div>`;
+    }
+  }
 
-            showToast("تم تحديث الخصم بنجاح");
-            closeModal();
+  async function saveDiscount(productId, type, value) {
+    const product = state.products.find((p) => p.id == productId);
+    const hasOffer = !!product.discount;
 
-        } catch (error) {
-            console.error(error);
-            showToast("فشل الحفظ: " + error.message, "error");
-        } finally {
-            btn.disabled = false;
-            btn.textContent = originalText;
-        }
+    const payload = {
+      product_id: productId,
+      discount_percentage: type === "percent" ? value : null,
+      discount_price: type === "fixed" ? value : null,
+      is_active: true,
     };
 
-    /**
-     * 3. DELETE/POST: حذف الخصم
-     */
-    const removeDiscountFromApi = async (id) => {
-        try {
-            const response = await fetch(API_URLS.REMOVE_DISCOUNT(id), {
-                method: 'POST', // أو DELETE حسب الـ Router لديك
-                headers: {
-                    'X-CSRF-TOKEN': getCsrfToken(),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
+    const url = hasOffer
+      ? API_URLS.UPDATE_OFFER(product.discount.offerId)
+      : API_URLS.CREATE_OFFER;
 
-            if (!response.ok) throw new Error("فشل الحذف");
+    const method = hasOffer ? "PUT" : "POST";
 
-            // تحديث الواجهة محلياً
-            const prodIndex = state.products.findIndex(p => p.id == id);
-            if (prodIndex > -1) {
-                state.products[prodIndex].discount = null;
-                renderProducts(state.products);
-            }
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
-            showToast("تم إلغاء الخصم");
-            closeModal();
+      if (!res.ok) throw new Error();
 
-        } catch (error) {
-            showToast("حدث خطأ أثناء الحذف", "error");
-        }
-    };
+      toast("تم حفظ الخصم بنجاح");
+      closeModal();
+      fetchProducts();
+    } catch {
+      toast("فشل حفظ الخصم", "error");
+    }
+  }
 
-    // ================= Render Logic =================
-    const renderProducts = (list) => {
-        els.grid.innerHTML = '';
-        
-        if (list.length === 0) {
-            els.grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:2rem; color:#666;">لا توجد منتجات للعرض</div>';
-            return;
-        }
+  async function removeDiscount(productId) {
+    const product = state.products.find((p) => p.id == productId);
+    if (!product?.discount) return;
 
-        list.forEach(prod => {
-            let currentPrice = prod.basePrice;
-            let hasDiscount = false;
-            let discountBadge = '';
+    try {
+      await fetch(API_URLS.DELETE_OFFER(product.discount.offerId), {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      });
 
-            if (prod.discount && parseFloat(prod.discount.value) > 0) {
-                hasDiscount = true;
-                currentPrice = calculatePrice(prod.basePrice, prod.discount.type, prod.discount.value);
-                const badgeText = prod.discount.type === 'percent' ? `-${prod.discount.value}%` : 'تخفيض';
-                discountBadge = `<span class="discount-badge">${badgeText}</span>`;
-            }
+      toast("تم حذف الخصم");
+      closeModal();
+      fetchProducts();
+    } catch {
+      toast("فشل حذف الخصم", "error");
+    }
+  }
 
-            const card = document.createElement('div');
-            card.className = 'prod-card';
-            card.innerHTML = `
-                ${discountBadge}
-                <img src="${prod.image}" alt="${prod.title}" class="prod-img">
-                <h3 class="prod-title" title="${prod.title}">${prod.title}</h3>
-                <div class="prod-meta"><span>#${prod.id}</span></div>
+  /* ================= RENDER ================= */
+
+  function render(list) {
+    els.grid.innerHTML = "";
+
+    if (!list.length) {
+      els.grid.innerHTML = `<div>لا توجد منتجات</div>`;
+      return;
+    }
+
+    list.forEach((p) => {
+      const hasDiscount = !!p.discount;
+      const finalPrice = hasDiscount
+        ? calcPrice(p.basePrice, p.discount.type, p.discount.value)
+        : p.basePrice;
+
+      const card = document.createElement("div");
+      card.className = "prod-card";
+      card.innerHTML = `
+                ${hasDiscount ? `<span class="discount-badge">خصم</span>` : ""}
+                <img src="${p.image}" class="prod-img">
+                <h3>${p.title}</h3>
                 <div class="price-row">
-                    ${hasDiscount 
-                        ? `<span class="current-price active-discount-price">${formatCurrency(currentPrice)} ${prod.currency}</span>
-                           <span class="old-price">${formatCurrency(prod.basePrice)}</span>`
-                        : `<span class="current-price">${formatCurrency(prod.basePrice)} ${prod.currency}</span>`
+                    <span class="current-price">${format(finalPrice)} ${
+        p.currency
+      }</span>
+                    ${
+                      hasDiscount
+                        ? `<span class="old-price">${format(
+                            p.basePrice
+                          )}</span>`
+                        : ""
                     }
                 </div>
-                <button class="btn btn-primary open-discount-btn" data-id="${prod.id}">
-                    <i class="fas fa-tag"></i> ${hasDiscount ? 'تعديل الخصم' : 'إضافة خصم'}
+                <button class="btn btn-primary" data-id="${p.id}">
+                    ${hasDiscount ? "تعديل الخصم" : "إضافة خصم"}
                 </button>
             `;
-            els.grid.appendChild(card);
-        });
+      card
+        .querySelector("button")
+        .addEventListener("click", () => openModal(p.id));
+      els.grid.appendChild(card);
+    });
+  }
 
-        // إعادة ربط الأحداث للأزرار الجديدة
-        document.querySelectorAll('.open-discount-btn').forEach(btn => {
-            btn.addEventListener('click', () => openModal(btn.dataset.id));
-        });
-    };
+  /* ================= MODAL ================= */
 
-    // ================= Modal Logic =================
-    const openModal = (id) => {
-        // البحث في المتغير state بدلاً من DOM
-        // ملاحظة: نستخدم == بدلاً من === لأن الـ id قد يأتي كنص أو رقم
-        const prod = state.products.find(p => p.id == id);
-        if (!prod) return;
+  function openModal(id) {
+    const p = state.products.find((x) => x.id == id);
+    if (!p) return;
 
-        els.mId.value = prod.id;
-        els.mTitle.textContent = prod.title;
-        els.mImg.src = prod.image;
-        els.mBasePrice.textContent = formatCurrency(prod.basePrice);
-        els.mBasePrice.dataset.raw = prod.basePrice;
-        els.mCurrency.textContent = prod.currency;
+    els.mId.value = p.id;
+    els.mTitle.textContent = p.title;
+    els.mImg.src = p.image;
+    els.mBasePrice.textContent = format(p.basePrice);
+    els.mBasePrice.dataset.raw = p.basePrice;
+    els.mCurrency.textContent = p.currency;
 
-        // تعبئة البيانات إذا كان هناك خصم مسبق
-        if (prod.discount) {
-            const radio = [...els.radios].find(r => r.value === prod.discount.type);
-            if (radio) radio.checked = true;
-            els.mInputVal.value = prod.discount.value;
-            els.mRemoveBtn.classList.remove('hidden');
-        } else {
-            els.radios[0].checked = true; // Default Percent
-            els.mInputVal.value = '';
-            els.mRemoveBtn.classList.add('hidden');
-        }
+    if (p.discount) {
+      [...els.radios].find((r) => r.value === p.discount.type).checked = true;
+      els.mValue.value = p.discount.value;
+      els.mRemoveBtn.classList.remove("hidden");
+    } else {
+      els.radios[0].checked = true;
+      els.mValue.value = "";
+      els.mRemoveBtn.classList.add("hidden");
+    }
 
-        updateModalCalculations();
-        els.modal.classList.add('visible');
-    };
+    updateCalc();
+    els.modal.classList.add("visible");
+  }
 
-    const closeModal = () => {
-        els.modal.classList.remove('visible');
-        els.modalForm.reset();
-        els.mNewPrice.textContent = '--';
-    };
+  function closeModal() {
+    els.modal.classList.remove("visible");
+    els.form.reset();
+    els.mNewPrice.textContent = "--";
+  }
 
-    const updateModalCalculations = () => {
-        const base = parseFloat(els.mBasePrice.dataset.raw);
-        const type = [...els.radios].find(r => r.checked).value;
-        const val = els.mInputVal.value;
-        
-        els.mSuffix.textContent = type === 'percent' ? '%' : els.mCurrency.textContent;
-        
-        if (base && val) {
-            const final = calculatePrice(base, type, val);
-            els.mNewPrice.textContent = `${formatCurrency(final)} ${els.mCurrency.textContent}`;
-        } else {
-            els.mNewPrice.textContent = '--';
-        }
-    };
+  function updateCalc() {
+    const base = Number(els.mBasePrice.dataset.raw);
+    const type = [...els.radios].find((r) => r.checked).value;
+    const val = Number(els.mValue.value);
 
-    // ================= Event Listeners =================
-    const init = () => {
-        // 1. Fetch Data on Load
-        fetchProducts();
+    els.suffix.textContent =
+      type === "percent" ? "%" : els.mCurrency.textContent;
 
-        // 2. Real-time Calculation in Modal
-        els.modalForm.addEventListener('input', updateModalCalculations);
-        els.radios.forEach(r => r.addEventListener('change', updateModalCalculations));
+    if (val > 0) {
+      els.mNewPrice.textContent =
+        format(calcPrice(base, type, val)) + " " + els.mCurrency.textContent;
+    } else {
+      els.mNewPrice.textContent = "--";
+    }
+  }
 
-        // 3. Close Modal Events
-        els.closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-        els.modal.addEventListener('click', (e) => {
-            if (e.target === els.modal) closeModal();
-        });
+  /* ================= EVENTS ================= */
 
-        // 4. Submit Form (Save)
-        els.modalForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = els.mId.value;
-            const type = [...els.radios].find(r => r.checked).value;
-            const value = parseFloat(els.mInputVal.value);
-            const base = parseFloat(els.mBasePrice.dataset.raw);
+  els.form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id = els.mId.value;
+    const type = [...els.radios].find((r) => r.checked).value;
+    const value = Number(els.mValue.value);
 
-            // Validation
-            if (isNaN(value) || value <= 0) {
-                showToast('يرجى إدخال قيمة صحيحة للخصم', "error");
-                return;
-            }
-            if (type === 'percent' && value > 100) {
-                showToast('النسبة لا يمكن أن تتجاوز 100%', "error");
-                return;
-            }
-            if (type === 'fixed' && value >= base) {
-                showToast('قيمة الخصم أكبر من سعر المنتج!', "error");
-                return;
-            }
+    if (value <= 0) return toast("قيمة غير صحيحة", "error");
+    if (type === "percent" && value > 100)
+      return toast("النسبة لا تتجاوز 100%", "error");
 
-            // Call API
-            saveDiscountToApi(id, type, value);
-        });
+    saveDiscount(id, type, value);
+  });
 
-        // 5. Remove Discount
-        els.mRemoveBtn.addEventListener('click', () => {
-            if (confirm('هل أنت متأكد من إزالة الخصم عن هذا المنتج؟')) {
-                const id = els.mId.value;
-                removeDiscountFromApi(id);
-            }
-        });
+  els.mRemoveBtn.addEventListener("click", () => {
+    if (confirm("هل أنت متأكد؟")) {
+      removeDiscount(els.mId.value);
+    }
+  });
 
-        // 6. Search Filter (Local Filtering)
-        els.search.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = state.products.filter(p => 
-                p.title.toLowerCase().includes(term) || 
-                p.id.toString().includes(term)
-            );
-            renderProducts(filtered);
-        });
-    };
+  els.radios.forEach((r) => r.addEventListener("change", updateCalc));
+  els.form.addEventListener("input", updateCalc);
+  els.closeBtns.forEach((b) => b.addEventListener("click", closeModal));
 
-    init();
+  els.search.addEventListener("input", (e) => {
+    const q = e.target.value.toLowerCase();
+    render(
+      state.products.filter(
+        (p) => p.title.toLowerCase().includes(q) || p.id.toString().includes(q)
+      )
+    );
+  });
+
+  /* ================= INIT ================= */
+
+  fetchProducts();
 })();
