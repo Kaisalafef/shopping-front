@@ -114,7 +114,7 @@ body {
 
 .btn-cart {
     width: 100%;
-    background: var(--gold);
+    background: #f1c65adf;
     border: 1px solid #a88734;
     padding: 10px;
     border-radius: 20px;
@@ -125,6 +125,7 @@ body {
 }
 
 .btn-cart:hover {
+    transform: translateY(3);
     background: #f4d078;
 }
 

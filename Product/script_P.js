@@ -284,8 +284,7 @@
             dom.ratingInputContainer.appendChild(star);
         }
     }
-<<<<<<< HEAD
-  
+
     function updateStarVisuals(val) {
         const stars = dom.ratingInputContainer.querySelectorAll('.rating-star');
         stars.forEach(s => {
@@ -419,7 +418,6 @@
     loadProductData();
   
   })();
-=======
 
     // حفظ السلة المحدثة
     localStorage.setItem('marketCart', JSON.stringify(cart));
@@ -439,7 +437,7 @@
       dom.addBtn.disabled = false;
       isAdding = false;
     }, 1500);
-  }
+  
 
   // دالة لتحديث رقم السلة في الهيدر (اختياري)
   function updateCartBadge() {
@@ -581,9 +579,4 @@
   loadProductFromApi();
 
 
-  /* ---------------------------
-     نظام التقييمات (نفس كودك السابق)
-     --------------------------- */
-  // ... (احتفظ بكود التقييمات هنا كما هو)
-})();
->>>>>>> 0bf4b8ffbdbb3f1c9f3cc305acbdf9445d112602
+ 

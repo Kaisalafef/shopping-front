@@ -123,7 +123,7 @@
             color: #777;
             margin-bottom: 15px;
         }
-        /* تنسيق البنر ليدعم الصورة */
+    /* تنسيق البنر الإعلاني */
 .ad-banner {
     position: relative;
     width: 100%;
@@ -248,12 +248,18 @@
         border: 1px solid #e74c3c;
     }
 
-    /* البنر الإعلاني */
-     .ad-banner {
+    .ad-banner {
         height: 300px;
     }
     .ad-content h3 {
         font-size: 1.8rem;
+    }
+    .ad-content p {
+        font-size: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* إظهار سطرين فقط */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     .ad-content p {
         font-size: 1rem;

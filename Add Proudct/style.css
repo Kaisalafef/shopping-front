@@ -13,7 +13,9 @@
     --font-family: 'Tajawal', sans-serif;
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -23,85 +25,267 @@ body {
     line-height: 1.6;
 }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
 
 /* Header */
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.page-header h1 { margin: 0; font-size: 1.8rem; font-weight: 700; }
-.subtitle { color: var(--text-muted); margin: 0.25rem 0 0; font-size: 0.95rem; }
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin: 0.25rem 0 0;
+    font-size: 0.95rem;
+}
 
 /* Grid Layout */
-.main-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: start; }
-@media (min-width: 992px) { .main-grid { grid-template-columns: 2fr 1fr; } }
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (min-width: 992px) {
+    .main-grid {
+        grid-template-columns: 2fr 1fr;
+    }
+}
 
 /* Cards */
 .card {
     background: var(--bg-card);
     border-radius: var(--radius-md);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     padding: 1.5rem;
     border: 1px solid var(--border);
     margin-bottom: 1.5rem;
 }
+
 .card-title {
-    margin-top: 0; margin-bottom: 1rem; font-size: 1.1rem;
-    border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
 }
+
 .card-header-flex {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
 }
-.card-header-flex .card-title { margin: 0; border: none; padding: 0; }
+
+.card-header-flex .card-title {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
 
 /* Forms */
-.form-group { margin-bottom: 1.25rem; }
-.row-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group {
+    margin-bottom: 1.25rem;
+}
 
-label { display: block; font-weight: 500; margin-bottom: 0.5rem; font-size: 0.95rem; }
-label.required::after { content: " *"; color: var(--danger); }
+.row-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
 
-.form-input, .form-select, .form-textarea, .form-control {
-    width: 100%; padding: 0.75rem 1rem;
-    border: 1px solid var(--border); border-radius: var(--radius-sm);
-    font-family: inherit; font-size: 0.95rem; background-color: #fff;
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+label.required::after {
+    content: " *";
+    color: var(--danger);
+}
+
+.form-input,
+.form-select,
+.form-textarea,
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.95rem;
+    background-color: #fff;
     transition: border-color 0.2s;
 }
-.form-input:focus, .form-select:focus, .form-textarea:focus {
-    outline: none; border-color: var(--primary);
+
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
-.form-textarea { min-height: 120px; resize: vertical; }
+
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
 
 /* Buttons */
 .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 0.75rem 1.5rem; border-radius: var(--radius-sm);
-    font-weight: 600; cursor: pointer; border: none; font-family: inherit;
-    transition: all 0.2s; gap: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: all 0.2s;
+    gap: 0.5rem;
 }
-.btn-primary { background-color: var(--primary); color: white; }
-.btn-primary:hover { background-color: var(--primary-dark); }
-.btn-secondary { background-color: white; border: 1px solid var(--border); color: var(--text-main); }
-.btn-secondary:hover { background-color: #f9fafb; }
-.btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.4rem 1rem; }
-.btn-outline:hover { background: var(--primary); color: white; }
-.btn-sm { font-size: 0.85rem; padding: 0.25rem 0.75rem; }
-.btn-text { background: none; border: none; padding: 0; text-decoration: underline; cursor: pointer; }
+/* تنسيق زر رفع الصورة المخصص */
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.6rem;
+    border: 1px dashed var(--border); /* حدود منقطة */
+    border-radius: var(--radius-sm);
+    background-color: #f9fafb;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* تأثير عند مرور الماوس */
+.custom-file-upload:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: #eff6ff;
+}
+
+/* تأثير عند اختيار ملف (سيتم إضافتها بالجافاسكريبت) */
+.custom-file-upload.uploaded {
+    border-style: solid;
+    border-color: var(--success);
+    color: var(--success);
+    background-color: #ecfdf5;
+}
+
+/* إخفاء الـ input الأصلي تماماً */
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+/* تنسيق الأيقونة داخل الزر */
+.custom-file-upload i {
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+    background-color: white;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover {
+    background-color: #f9fafb;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 0.4rem 1rem;
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.75rem;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 /* Image Uploader (Main) */
 .preview-area {
-    width: 100%; aspect-ratio: 16/9; background-color: #f9fafb;
-    border: 2px dashed var(--border); border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
-    margin-bottom: 1rem; position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: #f9fafb;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    position: relative;
 }
-.preview-area img { width: 100%; height: 100%; object-fit: contain; }
-.placeholder-text { color: var(--text-muted); font-size: 0.9rem; }
+
+.preview-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.placeholder-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
 
 /* =========================================
    OPTIONS LIST STYLING (JS Compatible)
    ========================================= */
-.options-container { display: flex; flex-direction: column; gap: 0.75rem; }
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
 
 .option-item {
     background: #ffffff;
@@ -109,33 +293,56 @@ label.required::after { content: " *"; color: var(--danger); }
     border-radius: var(--radius-sm);
     padding: 1rem;
     position: relative;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     transition: transform 0.2s;
 }
-.option-item:hover { border-color: #cbd5e1; }
+
+.option-item:hover {
+    border-color: #cbd5e1;
+}
 
 /* Remove Button (X) */
-.btn-remove-opt {
-    background: transparent; color: var(--text-muted);
-    border: none; font-size: 1.5rem; line-height: 1;
-    cursor: pointer; padding: 0 5px;
+.btn-remove {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    font-size: 1.5rem;
+    line-height:-5;
+    cursor: pointer;
+        margin: 0px;
     transition: color 0.2s;
 }
-.btn-remove-opt:hover { color: var(--danger); }
+
+.btn-remove-opt {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 5px;
+    transition: color 0.2s;
+}
+
+.btn-remove-opt:hover {
+    color: var(--danger);
+}
 
 /* Popular Colors Select Dropdown */
 .val-input-color {
-    appearance: none; /* Remove default arrow to style cleaner if needed, or keep standard */
+    appearance: none;
+    /* Remove default arrow to style cleaner if needed, or keep standard */
     cursor: pointer;
     font-weight: 500;
 }
+
 /* Ensure colors show inside the dropdown options */
 .val-input-color option {
     padding: 8px;
     margin: 2px;
     border-radius: 4px;
     font-weight: bold;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Mini Upload Wrapper (Inside Option Row) */
@@ -144,8 +351,10 @@ label.required::after { content: " *"; color: var(--danger); }
     border: 1px solid var(--border);
     padding: 4px;
     border-radius: var(--radius-sm);
-    height: 42px; /* Match Input Height */
+    height: 42px;
+    /* Match Input Height */
 }
+
 .mini-img-preview {
     border: 1px solid #ddd;
     background: #fff;
@@ -153,14 +362,33 @@ label.required::after { content: " *"; color: var(--danger); }
 
 /* Toast Notification */
 .toast {
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-    background-color: #1f2937; color: white; padding: 12px 24px;
-    border-radius: 30px; font-weight: 500; z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1f2937;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 500;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-.hidden { display: none !important; }
-.text-danger { color: var(--danger); }
-.error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 0.25rem; }
+
+.hidden {
+    display: none !important;
+}
+
+.text-danger {
+    color: var(--danger);
+}
+
+.error-msg {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
 .val-input-color {
     text-align: center;
     font-weight: bold;
@@ -170,17 +398,18 @@ label.required::after { content: " *"; color: var(--danger); }
 }
 
 .val-input-color option {
-    background-color: white; /* لجعل الخيارات دائماً واضحة حتى لو كان الـ select ملون */
+    background-color: white;
+    /* لجعل الخيارات دائماً واضحة حتى لو كان الـ select ملون */
     color: black;
     padding: 10px;
-}   
+}
 
 /* =========================================
    MOBILE RESPONSIVENESS (MEDIA QUERIES)
    ========================================= */
 
 @media screen and (max-width: 600px) {
-    
+
     /* 1. ضبط الحاوية الأساسية لتقليل الهوامش الجانبية */
     .container {
         padding: 1rem 1rem;
@@ -197,30 +426,34 @@ label.required::after { content: " *"; color: var(--danger); }
     .header-content {
         width: 100%;
     }
-    
+
     .header-meta {
         width: 100%;
         display: flex;
-        justify-content: flex-start; /* محاذاة الزر لليمين في العربية */
+        justify-content: flex-start;
+        /* محاذاة الزر لليمين في العربية */
     }
 
     /* 3. تحويل الحقول المزدوجة (مثل السعر والفئة) إلى عمود واحد */
     /* هذا أهم جزء لضمان عدم انضغاط الحقول */
     .row-2-col {
-        grid-template-columns: 1fr !important; /* Force single column */
+        grid-template-columns: 1fr !important;
+        /* Force single column */
         gap: 1rem;
     }
 
     /* 4. تحسين عرض البطاقات (Cards) */
     .card {
-        padding: 1rem; /* تقليل الحشو الداخلي لتوفير مساحة */
+        padding: 1rem;
+        /* تقليل الحشو الداخلي لتوفير مساحة */
     }
 
     /* 5. ضبط حقول خيارات الألوان والصور المصغرة (التي يولدها الجافاسكريبت) */
     .option-item .row-2-col {
         display: flex;
         flex-direction: column;
-        align-items: stretch !important; /* تمديد العناصر للعرض الكامل */
+        align-items: stretch !important;
+        /* تمديد العناصر للعرض الكامل */
     }
 
     /* تصحيح عرض اختيار اللون */
@@ -232,21 +465,23 @@ label.required::after { content: " *"; color: var(--danger); }
     /* تصحيح حاوية رفع صورة اللون المصغرة */
     .mini-upload-wrapper {
         width: 100%;
-        justify-content: space-between; /* توزيع الكاميرا والصورة */
+        justify-content: space-between;
+        /* توزيع الكاميرا والصورة */
         padding: 0 10px;
     }
 
     /* إلغاء المارجن الكبير الذي تم وضعه عبر JS (margin-right:45px) */
     /* نستخدم !important للتغلب على الـ Inline Style في JS */
     .mini-upload-wrapper label.btn {
-        margin-right: 0 !important; 
+        margin-right: 0 !important;
         flex: 1;
         text-align: center;
     }
 
     /* 6. تحسين منطقة معاينة الصورة الأساسية */
     .preview-area {
-        aspect-ratio: auto; /* السماح للطول بالتغير */
+        aspect-ratio: auto;
+        /* السماح للطول بالتغير */
         min-height: 200px;
     }
 
@@ -257,9 +492,10 @@ label.required::after { content: " *"; color: var(--danger); }
     }
 
     .form-actions button {
-        width: 100%; /* جعل الزر بعرض الشاشة لسهولة الضغط */
+        width: 100%;
+        /* جعل الزر بعرض الشاشة لسهولة الضغط */
     }
-    
+
     /* 8. تحسين ظهور التنبيهات (Toast) */
     .toast {
         width: 90%;
@@ -267,20 +503,21 @@ label.required::after { content: " *"; color: var(--danger); }
         bottom: 10px;
         font-size: 0.5rem;
     }
-:root{
-    --primary: #3b82f6;
-    --primary-dark: #2563eb;
-    --bg-body: #f3f4f6;
-    --bg-card: #ffffff;
-    --text-main: #1f2937;
-    --text-muted: #6b7280;
-    --border: #e5e7eb;
-    --danger: #ef4444;
-    --success: #10b981;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --font-family: 'Tajawal', sans-serif;
-    --font-size-sm: 0.85rem;
-    --font-size-md: 1rem;
-}
+
+    :root {
+        --primary: #3b82f6;
+        --primary-dark: #2563eb;
+        --bg-body: #f3f4f6;
+        --bg-card: #ffffff;
+        --text-main: #1f2937;
+        --text-muted: #6b7280;
+        --border: #e5e7eb;
+        --danger: #ef4444;
+        --success: #10b981;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --font-family: 'Tajawal', sans-serif;
+        --font-size-sm: 0.85rem;
+        --font-size-md: 1rem;
+    }
 }
