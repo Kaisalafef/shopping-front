@@ -166,6 +166,84 @@ body {
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
 }
+/* تنسيقات قائمة نتائج البحث */
+
+
+.search-results-dropdown {
+    position: absolute;
+    top: 100%; /* تظهر أسفل الحقل مباشرة */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    z-index: 2000;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none; /* مخفية افتراضياً */
+    border: 1px solid #eee;
+    border-top: none;
+}
+
+/* تنسيق عنصر النتيجة الواحد */
+.search-box{
+  align-content: center;
+}
+.search-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.search-item:last-child {
+    border-bottom: none;
+}
+
+.search-item:hover {
+    background-color: #f9f9f9;
+}
+
+
+/* صورة المنتج في البحث */
+.search-item img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-left: 10px; /* مسافة للصورة لأن الموقع RTL */
+}
+
+/* تفاصيل المنتج */
+.search-item-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.search-item-title {
+    font-size: 0.9rem;
+    color: #232f3e;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.search-item-price {
+    font-size: 0.8rem;
+    color: #B12704; /* لون السعر المميز */
+    font-weight: bold;
+}
+
+/* رسالة عدم وجود نتائج */
+.no-results {
+    padding: 15px;
+    text-align: center;
+    color: #777;
+    font-size: 0.9rem;
+}
 
 /* Media Queries */
 @media (max-width: 768px) {
