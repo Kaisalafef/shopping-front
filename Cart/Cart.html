@@ -1,82 +1,104 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="stylesheet" href="/Wedgit/style_header.css">
-        <link rel="stylesheet" href="style.css">
-        <script src="/Wedgit/script_header.js"></script>
-        <title>Document</title>
-    </head>
-    <body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/Wedgit/style_header.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="/Wedgit/script_header.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="header-container">
+        <a href="/Home/client_dashboard.html" class="logo-link">
+          <img src="/images/logo.png" class="logo" alt="Logo" />
+        </a>
 
-        <header class="main-header">
-            <div class="header-container">
-                <a href="/Home/client_dashboard.html" class="logo-link">
-                    <img src="/images/logo.png" class="logo" alt="Logo">
-                </a>
+        <div class="profile-menu">
+          <button
+            class="icon-btn"
+            id="profileBtn"
+            type="button"
+            title="فتح القائمة"
+          >
+            <i class="fas fa-user"></i>
+          </button>
 
-                <div class="profile-menu">
-                    <button class="icon-btn" id="profileBtn" type="button"
-                        title="فتح القائمة">
-                        <i class="fas fa-user"></i>
-                    </button>
-
-                    <ul class="dropdown" id="desktopDropdown">
-                        <li><a href="#"><i class="fas fa-user-circle"></i>
-                                حسابي</a></li>
-                        <li><a href="#"><i class="fas fa-shopping-cart"></i>
-                                سلتي</a></li>
-                        <li><a href="#"><i class="fas fa-cog"></i>
-                                الإعدادات</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>
-                                خروج</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="search-wrapper">
-                <div class="search-box">
-                    <input type="text" placeholder="ابحث عن منتجات...">
-                    <button class="search-btn" type="submit" title="بحث"><i
-                            class="fas fa-search"></i></button>
-                </div>
-            </div>
-        </header>
-
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#">الرئيسية</a>
-            <a href="#">حسابي</a>
-            <a href="#">سلتي</a>
-            <a href="#">الإعدادات</a>
-            <a href="#">تسجيل خروج</a>
+          <ul class="dropdown" id="desktopDropdown">
+            <li>
+              <a href="/Profile/Profile.html"
+                ><i class="fas fa-user-circle"></i> حسابي</a
+              >
+            </li>
+            <li>
+              <a href="/Cart/Cart.html"
+                ><i class="fas fa-shopping-cart"></i> سلتي</a
+              >
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#" id="logoutBtn"
+                ><i class="fas fa-sign-out-alt"></i> خروج</a
+              >
+            </li>
+          </ul>
         </div>
+      </div>
 
-        <div class="dashboard-container">
-            <main class="main-content">
-    <div class="section-header">
-        <h2>سلتي</h2>
-        
-        <div class="header-controls">
-            <button id="buyAllBtn" onclick="checkoutAll()" class="btn-buy-all" style="display: none;">
-                <i class="fas fa-check-double"></i> إتمام شراء الكل
+      <div class="search-wrapper">
+        <div class="search-box">
+          <input type="text" placeholder="ابحث عن منتجات..." />
+          <button class="search-btn" type="submit" title="بحث">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#">الرئيسية</a>
+      <a href="#">حسابي</a>
+      <a href="#">سلتي</a>
+      <a href="#">تسجيل خروج</a>
+    </div>
+
+    <div class="dashboard-container">
+      <main class="main-content">
+        <div class="section-header">
+          <h2>سلتي</h2>
+
+          <div class="header-controls">
+            <button
+              id="buyAllBtn"
+              onclick="checkoutAll()"
+              class="btn-buy-all"
+              style="display: none"
+            >
+              <i class="fas fa-check-double"></i> إتمام شراء الكل
             </button>
 
             <select class="sort-select" title="ترتيب المنتجات">
-                <option>ترتيب حسب: </option>
-                <option>التاريخ: من الأحدث للاقدم</option>
-                <option>التاريخ: من الاقدم للأحدث</option>
+              <option>ترتيب حسب:</option>
+              <option>التاريخ: من الأحدث للاقدم</option>
+              <option>التاريخ: من الاقدم للأحدث</option>
             </select>
+          </div>
         </div>
+
+        <div class="products-grid"></div>
+        <div class="cart-summary">
+          <h3>
+            الإجمالي:
+            <span id="cartTotal">0 ₪</span>
+          </h3>
+        </div>
+      </main>
     </div>
-
-    <div class="products-grid">
-        </div>
-</main>
-        </div>
-    </body>
-
+    <script src="Cart.js"></script>
+  </body>
 </html>

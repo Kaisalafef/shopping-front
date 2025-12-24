@@ -1,217 +1,143 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>إدارة المنتجات | إضافة منتج جديد</title>
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
-            rel="stylesheet">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="/Wedgit/style_header.css">
-    </head>
-    <body>
-<header class="main-header">
-            <div class="header-container">
-                <a href="#" class="logo-link">
-                    <img src="/images/logo.png" class="logo" alt="Logo">
-                </a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>إدارة المنتجات | إضافة منتج جديد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/Wedgit/style_header.css">
+</head>
 
-                <div class="profile-menu">
-                    <button class="icon-btn" id="profileBtn" type="button"
-                        title="فتح القائمة">
-                        <i class="fas fa-user"></i>
-                    </button>
+<body>
 
-                    <ul class="dropdown" id="desktopDropdown">
-                        <li><a href="#"><i class="fas fa-user-circle"></i>
-                                حسابي</a></li>
-
-                        <li><a href="/ADS/Add_ADS.html"><i
-                                    class="fas fa-bullhorn"></i> اضافة
-                                إعلانات</a></li> <li><a
-                                href="/Discount/Add_Discount.html"><i
-                                    class="fas fa-tags"></i> اضافة
-                                خصومات</a></li> <li><a
-                                href="/Add Proudct/add_Proudct.html"><i
-                                    class="fas fa-add"></i> اضافة
-                                منتجات</a></li>
-                        
-                        <li><a href="#"><i class="fas fa-cog"></i>
-                                الإعدادات</a></li>
-
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>
-                                خروج</a></li>
-                    </ul>
-                </div>
+    <header class="main-header">
+        <div class="header-container">
+            <a href="#" class="logo-link">
+                <img src="/images/logo.png" class="logo" alt="Logo">
+            </a>
+            <div class="profile-menu">
+                <button class="icon-btn" id="profileBtn" type="button" title="فتح القائمة">
+                    <i class="fas fa-user"></i>
+                </button>
+                <ul class="dropdown" id="desktopDropdown">
+                    <li><a href="#"><i class="fas fa-user-circle"></i> حسابي</a></li>
+                    <li><a href="#"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
+                    <li><a href="/ADS/Add_ADS.html"><i class="fas fa-bullhorn"></i> اضافة إعلانات</a></li>
+                    <li><a href="/Discount/Add_Discount.html"><i class="fas fa-tags"></i> اضافة خصومات</a></li>
+                    <li><a href="/Add Proudct/add_Proudct.html"><i class="fas fa-add"></i> اضافة منتجات</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
+                </ul>
             </div>
-
-            <div class="search-wrapper">
-                <div class="search-box">
-                    <input type="text" placeholder="ابحث عن منتجات...">
-                    <button class="search-btn" type="submit" title="بحث"><i
-                            class="fas fa-search"></i></button>
-                </div>
+        </div>
+        <div class="search-wrapper">
+            <div class="search-box">
+                <input type="text" placeholder="ابحث عن منتجات...">
+                <button class="search-btn" type="submit" title="بحث"><i class="fas fa-search"></i></button>
             </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#">الرئيسية</a>
+        <a href="#">حسابي</a>
+        <a href="#">اضافة منتجات</a>
+        <a href="#">اضافة خصومات</a>
+        <a href="#">الإعدادات</a>
+        <a href="#">تسجيل خروج</a>
+    </div>
+
+    <main class="container">
+        <header class="page-header">
+            <div class="header-content">
+                <h1>إضافة منتج جديد</h1>
+                <p class="subtitle">أدخل تفاصيل المنتج ليتم عرضها في المتجر.</p>
+            </div>
+            <input type="hidden" id="prodId">
         </header>
 
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#">الرئيسية</a>
-            <a href="#">حسابي</a>
-            <a href="#">اضافة منتجات</a>
-            <a href="#">اضافة خصومات</a>
-            <a href="#">الإعدادات</a>
-            <a href="#">تسجيل خروج</a>
-        </div>
+        <form id="productForm" class="main-grid" novalidate onsubmit="return false;">
 
-
-        <main class="container">
-            <header class="page-header">
-                <div class="header-content">
-                    <h1>إضافة منتج جديد</h1>
-                    <p class="subtitle">أدخل تفاصيل المنتج ليتم عرضها في
-                        المتجر.</p>
+            <section class="card form-section">
+                <h2 class="card-title">البيانات الأساسية</h2>
+                <div class="form-group">
+                    <label for="title" class="required">اسم المنتج</label>
+                    <input id="title" name="name" type="text" class="form-input" required
+                        placeholder="مثال: قميص قطني صيفي" />
                 </div>
-                <input type="hidden" id="prodId">
-                <div class="header-meta">
-                    <button type="button" id="regenBtn"
-                        class="btn btn-sm btn-outline"
-                        style="display:none">تحديث</button>
+
+                <div class="form-group">
+                    <label for="description">وصف المنتج</label>
+                    <textarea id="description" name="description" class="form-textarea"
+                        placeholder="اكتب وصفاً دقيقاً للمنتج..."></textarea>
                 </div>
-            </header>
 
-            <form id="productForm" class="main-grid" novalidate
-                onsubmit="return false;">
-
-                <section class="card form-section">
-                    <h2 class="card-title">البيانات الأساسية</h2>
-
+                <div class="row-2-col">
                     <div class="form-group">
-                        <label for="title" class="required">اسم
-                            المنتج</label>
-                        <input id="title" name="name" type="text"
-                            class="form-input" required
-                            placeholder="مثال: قميص قطني صيفي" />
+                        <label for="price" class="required">السعر</label>
+                        <input id="price" name="price" type="number" class="form-input" required min="1" step="0.01"
+                            placeholder="0.00" />
                     </div>
 
                     <div class="form-group">
-                        <label for="description">وصف المنتج</label>
-                        <textarea id="description" name="description"
-                            class="form-textarea"
-                            placeholder="اكتب وصفاً دقيقاً للمنتج..."></textarea>
+                        <label for="category" class="required">الفئة</label>
+                        <select id="category" name="category" class="form-select" required>
+                            <option value="" disabled selected>اختر الفئة...</option>
+                            <option value="clothes">ملابس</option>
+                            <option value="electronics">إلكترونيات</option>
+                            <option value="shoes">أحذية</option>
+                            <option value="watches">ساعات</option>
+                            <option value="accessories">إكسسوارات</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="row-2-col">
-                        <div class="form-group">
-                            <label for="price"
-                                class="required">السعر</label>
-                            <input id="price" name="price" type="number"
-                                class="form-input" required min="1"
-                                step="0.01"
-                                placeholder="0.00" />
-                        </div>
+                <div class="form-group">
+                    <label for="brand">العلامة التجارية (Brand)</label>
+                    <input id="brand" name="brand" type="text" class="form-input" placeholder="مثال: Nike, Zara" />
+                </div>
+            </section>
 
+            <aside class="sidebar">
+                <!-- ===== COLORS ===== -->
+                <div class="card">
+                    <div class="card-header-flex">
+                        <h3 class="card-title">الألوان مع الصور</h3>
+                        <button type="button" id="addColorBtn" class="btn btn-sm btn-outline">
+                            <i class="fas fa-plus"></i> إضافة لون
+                        </button>
                     </div>
+                    <div id="colorsList" class="options-container"></div>
+                </div>
 
-                    <div class="row-2-col">
-                        <div class="form-group">
-                            <label for="category" class="required">الفئة</label>
-                            <select id="category" name="category"
-                                class="form-select" required>
-                                <option value disabled selected>اختر
-                                    الفئة...</option>
-
-                                <option
-                                    value="electronics">الإلكترونيات</option>
-                                <option value="food">المواد الغذائية</option>
-                                <option value="meals">المأكولات</option>
-                                <option value="makeup">مستحضرات التجميل</option>
-                                <option value="men">أزياء رجالية</option>
-                                <option value="women">أزياء نسائية</option>
-                                <option value="perfume">العطور</option>
-                                <option value="cleaning">المنظفات</option>
-                                <option value="furniture">المفروشات</option>
-                                <option value="sweets">الحلويات</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="brand">العلامة التجارية
-                                (Brand)</label>
-                            <input id="brand" name="brand" type="text"
-                                class="form-input"
-                                placeholder="مثال: Nike, Zara" />
-                        </div>
+                <!-- ===== SIZES ===== -->
+                <div class="card">
+                    <div class="card-header-flex">
+                        <h3 class="card-title">المقاسات المتوفرة (اختياري)</h3>
+                        <button type="button" id="addSizeBtn" class="btn btn-sm btn-outline">
+                            <i class="fas fa-plus"></i> إضافة مقاس
+                        </button>
                     </div>
-                </section>
+                    <div id="sizesList" class="options-container"></div>
+                </div>
+            </aside>
 
-                <aside class="sidebar">
-                    <div class="card">
-                        <h3 class="card-title">الصورة الأساسية</h3>
-                        <div class="image-uploader">
-                            <div class="preview-area" id="mainPreview">
-                                <div class="placeholder-text">لا توجد
-                                    صورة</div>
-                            </div>
+            <footer class="form-actions" style="grid-column: 1 / -1; display:flex; gap:1rem; margin-top:1rem;">
+                <button type="button" id="saveBtn" class="btn btn-primary" style="flex:1">حفظ المنتج</button>
+            </footer>
+        </form>
 
-                            <div class="upload-controls">
-                                <label class="btn btn-secondary"
-                                    style="width:100%; cursor:pointer;">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    رفع
-                                    صورة
-                                    <input id="imageFile" type="file" hidden
-                                        accept="image/*" />
-                                </label>
-                                <button type="button" id="clearImage"
-                                    class="btn btn-text text-danger" hidden
-                                    style="margin-top:10px; width:100%">
-                                    حذف الصورة
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <div id="toast" class="toast hidden">تم الحفظ بنجاح</div>
+    </main>
 
-                    <div class="card">
-                        <div class="card-header-flex">
-                            <h3 class="card-title">المتغيرات
-                                (Colors/Sizes)</h3>
-                            <button type="button" id="addOptionBtn"
-                                class="btn btn-sm btn-outline">
-                                <i class="fas fa-plus"></i> إضافة
-                            </button>
-                        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="/Wedgit/script_header.js"></script>
+    <script src="script.js"></script>
+</body>
 
-                        <div class="hint-box"
-                            style="background:#eff6ff; color:#1e40af; padding:10px; border-radius:6px; font-size:0.85rem; margin-bottom:1rem;">
-                            <i class="fas fa-info-circle"></i> يمكنك اختيار
-                            لون
-                            من القائمة الشهيرة أو كتابة قياس.
-                        </div>
-
-                        <div id="optionsList"
-                            class="options-container"></div>
-                    </div>
-                </aside>
-
-                <footer class="form-actions"
-                    style="grid-column: 1 / -1; display:flex; gap:1rem; margin-top:1rem;">
-                    <button type="button" id="saveBtn"
-                        class="btn btn-primary"
-                        style="flex:1">حفظ المنتج</button>
-                </footer>
-
-            </form>
-
-            <div id="toast" class="toast hidden">تم الحفظ بنجاح</div>
-        </main>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-        <script src="/Wedgit/script_header.js"></script>
-        <script src="script.js"></script>
-    </body>
 </html>

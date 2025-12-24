@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   /* ===============================
      0. التحقق من تسجيل الدخول
   ================================ */
@@ -22,9 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("http://127.0.0.1:8000/api/profile", {
         method: "GET",
         headers: {
-          "Accept": "application/json",
-          "Authorization": `Bearer ${token}`
-        }
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
@@ -42,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.getElementById("info-phone").innerText = profile.phone;
       document.getElementById("edit-phone").value = profile.phone;
-
     } catch (error) {
       console.error(error);
       alert("خطأ في جلب بيانات الملف الشخصي");
@@ -59,15 +57,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputs = document.querySelectorAll(".edit-input, .pass-wrapper");
 
     if (isEditing) {
-      infoTexts.forEach(p => p.style.display = "none");
-      inputs.forEach(input => input.style.display = "block");
+      infoTexts.forEach((p) => (p.style.display = "none"));
+      inputs.forEach((input) => (input.style.display = "block"));
       document.getElementById("edit-pass").value = "";
 
       editBtn.style.display = "none";
       saveBtn.style.display = "inline-block";
     } else {
-      infoTexts.forEach(p => p.style.display = "block");
-      inputs.forEach(input => input.style.display = "none");
+      infoTexts.forEach((p) => (p.style.display = "block"));
+      inputs.forEach((input) => (input.style.display = "none"));
       editBtn.style.display = "inline-block";
       saveBtn.style.display = "none";
     }
@@ -120,14 +118,20 @@ document.addEventListener("DOMContentLoaded", () => {
      4. حفظ التعديلات
   ================================ */
   saveBtn.addEventListener("click", async () => {
-
     if (!validateForm()) return;
 
     const updatedData = {
       name: document.getElementById("edit-fullname").value,
       email: document.getElementById("edit-email").value,
-      phone: document.getElementById("edit-phone").value
+      phone: document.getElementById("edit-phone").value,
     };
+    const password = document.getElementById("edit-pass").value;
+    const passwordConfirm = document.getElementById("edit-pass-confirm").value;
+
+    if (password.trim() !== "") {
+      updatedData.password = password;
+      updatedData.password_confirmation = passwordConfirm;
+    }
 
     saveBtn.innerText = "جاري الحفظ...";
     saveBtn.disabled = true;
@@ -136,11 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("http://127.0.0.1:8000/api/profile", {
         method: "PUT",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedData)
+        body: JSON.stringify(updatedData),
       });
 
       const result = await response.json();
@@ -156,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         alert(result.message || "حدث خطأ أثناء التحديث");
       }
-
     } catch (error) {
       console.error(error);
       alert("خطأ في الاتصال بالخادم");
@@ -181,5 +184,4 @@ document.addEventListener("DOMContentLoaded", () => {
       icon.classList.replace("fa-eye-slash", "fa-eye");
     }
   };
-
 });
