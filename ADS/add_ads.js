@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    /* في ملف add_ads.js داخل دالة submit */
 
     const formData = new FormData();
     formData.append("title", titleInput.value);
