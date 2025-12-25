@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('فشل في جلب المنتجات');
             }
 
-            const result = await response.json();
-            const data = result.data; // الوصول للمصفوفة الفعلية
+           const result = await response.json();
+const data = result.data; // الوصول للمصفوفة الفعلية
 
 
             allProducts = data.map((item) => ({
