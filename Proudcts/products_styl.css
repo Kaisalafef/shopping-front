@@ -52,16 +52,17 @@ body {
 /* Image Area */
 .product-img-wrapper {
     background-color: #f7f9fa;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 180px;
+    height: 130px; /* أصغر */
 }
+
 
 .product-image {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 90px;
     object-fit: contain;
     mix-blend-mode: multiply;
     transition: transform 0.3s;
@@ -286,4 +287,14 @@ body {
         font-size: 0.85rem;
         padding: 8px;
     }
+}
+.product-img-wrapper img {
+    max-height: 200px ;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.product-img-wrapper {
+    height: 150px ;
+    padding: 8px;
 }
