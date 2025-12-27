@@ -72,44 +72,44 @@ function getAuthToken() {
   /* ================= API ================= */
 
   async function fetchProducts() {
-  els.grid.innerHTML = `<div class="loading-spinner">جاري التحميل...</div>`;
+    els.grid.innerHTML = `<div class="loading-spinner">جاري التحميل...</div>`;
 
-  try {
-    const res = await fetch(API_URLS.GET_PRODUCTS, {
-      headers: { Accept: "application/json" },
-    });
+    try {
+      const res = await fetch(API_URLS.GET_PRODUCTS, {
+        headers: { Accept: "application/json" },
+      });
 
-    if (!res.ok) throw new Error("API Error");
+      if (!res.ok) throw new Error("API Error");
 
-    const resData = await res.json();
-    const products = resData.data ?? resData;
+      const resData = await res.json();
+      const products = resData.data ?? resData;
 
-    state.products = products.map((p) => ({
-      id: p.id,
-      title: p.name,
-      basePrice: Number(p.price),
-      currency: "SYP",
-      image: p.product_images?.[0]?.image
-        ? `${API_BASE}/storage/${p.product_images[0].image}`
-        : "https://via.placeholder.com/400",
+      state.products = products.map((p) => ({
+        id: p.id,
+        title: p.name,
+        basePrice: Number(p.price),
+        currency: "SYP",
+        image:
+          p.image_url ||
+          p.images?.[0]?.url ||
+          "https://via.placeholder.com/400",
 
-      discount: p.offer
-        ? {
-            offerId: p.offer.id,
-            type: p.offer.discount_percentage ? "percent" : "fixed",
-            value: p.offer.discount_percentage ?? p.offer.discount_price,
-          }
-        : null,
-    }));
+        discount: p.offer
+          ? {
+              offerId: p.offer.id,
+              type: p.offer.discount_percentage ? "percent" : "fixed",
+              value: p.offer.discount_percentage ?? p.offer.discount_price,
+            }
+          : null,
+      }));
 
-    render(state.products);
-
-  } catch (err) {
-    console.error(err);
-    els.grid.innerHTML = `<div style="color:red">فشل تحميل البيانات</div>`;
+      render(state.products);
+    } catch (err) {
+      console.error(err);
+      els.grid.innerHTML = `<div style="color:red">فشل تحميل البيانات</div>`;
+    }
   }
-}
-  
+
   async function saveDiscount(productId, type, value) {
     const product = state.products.find((p) => p.id == productId);
     const hasOffer = !!product.discount;
@@ -310,7 +310,7 @@ async function loadDailyOffers() {
     // ✅ هذا السطر هو الحل
     const products = response.data ?? response;
 
-    const offers = products.filter(p => p.offer);
+    const offers = products.filter((p) => p.offer);
 
     const container = document.getElementById("offersContainer");
     container.innerHTML = "";
@@ -320,7 +320,7 @@ async function loadDailyOffers() {
       return;
     }
 
-    offers.forEach(p => {
+    offers.forEach((p) => {
       const offer = p.offer;
 
       const discountText = offer.discount_percentage
@@ -329,13 +329,12 @@ async function loadDailyOffers() {
 
       container.innerHTML += `
         <div class="offer-card">
-          <img src="http://127.0.0.1:8000/storage/${p.product_images?.[0]?.image || ""}">
+          <img src="${p.image_url || p.images?.[0]?.url || 'https://via.placeholder.com/400'}">
           <h4>${p.name}</h4>
           <p>${discountText}</p>
         </div>
       `;
     });
-
   } catch (e) {
     console.error("خطأ تحميل العروض:", e);
   }
