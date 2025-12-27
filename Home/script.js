@@ -6,71 +6,70 @@ document.addEventListener("DOMContentLoaded", () => {
        1️⃣ جلب وعرض العروض اليومية
     ============================== */
     const loadDailyOffers = async () => {
-        const offersContainer = document.getElementById("offersContainer");
-        if (!offersContainer) return;
+    const offersContainer = document.getElementById("offersContainer");
+    if (!offersContainer) return;
 
-        offersContainer.innerHTML = "جاري تحميل العروض...";
+    offersContainer.innerHTML = "جاري تحميل العروض...";
 
-        try {
-            const res = await fetch(`${BASE_URL}/api/offers`);
-            const json = await res.json();
+    try {
+        const res = await fetch(`${BASE_URL}/api/offers`);
+        const json = await res.json();
 
-            // ✅ التصحيح هنا
-            const offers = json.offers || [];
+        const offers = json.offers || [];
 
-            if (!offers.length) {
-                offersContainer.innerHTML = "لا توجد عروض حالياً";
-                return;
+        if (!offers.length) {
+            offersContainer.innerHTML = "لا توجد عروض حالياً";
+            return;
+        }
+
+        offersContainer.innerHTML = "";
+
+        offers.forEach(o => {
+            const p = o.product;
+            if (!p) return;
+
+            /* ✅ الصورة الصحيحة */
+            let img = "/images/CLE.jpg";
+            if (p.image_url) {
+                img = p.image_url;
             }
 
-            offersContainer.innerHTML = "";
+            /* السعر */
+            const basePrice = Number(p.price);
+            let finalPrice = basePrice;
+            let label = "";
 
-            offers.forEach(o => {
-                const p = o.product;
-                if (!p) return;
+            if (o.discount_percentage) {
+                finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
+                label = `-${o.discount_percentage}%`;
+            }
 
-                /* الصورة */
-                let img = "/images/CLE.jpg"; // صورة افتراضية
-                if (p.product_images && p.product_images.length > 0) {
-                    img = `${BASE_URL}/storage/${p.product_images[0].image}`;
-                }
+            offersContainer.insertAdjacentHTML("beforeend", `
+                <div class="offer-white-card">
+                    <span class="discount-circle">${label}</span>
 
-                /* السعر */
-                const basePrice = Number(p.price);
-                let finalPrice = basePrice;
-                let label = "";
-
-                if (o.discount_type === "percent" && o.discount_percentage) {
-                    finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
-                    label = `-${o.discount_percentage}%`;
-                }
-
-                if (o.discount_type === "fixed" && o.discount_price) {
-                    finalPrice = basePrice - o.discount_price;
-                    label = "خصم";
-                }
-
-                offersContainer.insertAdjacentHTML("beforeend", `
-                    <div class="offer-white-card">
-                        <span class="discount-circle">${label}</span>
-
+                    <div class="offer-img-box">
                         <img src="${img}" alt="${p.name}">
+                    </div>
 
-                        <h4>${p.name}</h4>
+                    <div class="offer-details">
+                        <h4 class="offer-title">${p.name}</h4>
 
-                        <div class="price-box">
-                            <span class="new-price">${finalPrice} SYP</span>
-                            <del class="old-price">${basePrice}</del>
+                        <div class="offer-prices">
+                            <span class="new-price">${Math.round(finalPrice)} SYP</span>
+                            <span class="old-price">${basePrice} SYP</span>
                         </div>
                     </div>
-                `);
-            });
+                </div>
+            `);
+        });
 
-        } catch (e) {
-            console.error(e);
-            offersContainer.innerHTML = "خطأ في تحميل العروض";
-        }
-    };
+    } catch (e) {
+        console.error(e);
+        offersContainer.innerHTML = "خطأ في تحميل العروض";
+    }
+};
+
 
     /* ==============================
        2️⃣ جلب الإعلانات
