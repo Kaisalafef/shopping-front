@@ -7,13 +7,14 @@
     --search-bg: #ffffff;
     --border-color: #4b6584;
 }
-
+ 
 /* Reset for Header Elements */
 .main-header * {
     box-sizing: border-box;
 }
 
 .main-header {
+    
   background: linear-gradient(90deg, #eaeded , #f0c14b , #eaeded );
     color: var(--header-text);
     position: sticky; /* تثبيت الهيدر عند السكرول */
