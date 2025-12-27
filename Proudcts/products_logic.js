@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('فشل في جلب المنتجات');
             }
 
-           const result = await response.json();
-const data = result.data; // الوصول للمصفوفة الفعلية
+            const result = await response.json();
+            const data = result.data; // الوصول للمصفوفة الفعلية
 
 
             allProducts = data.map((item) => ({
@@ -202,12 +202,13 @@ window.deleteProduct = async (id) => {
     if (!confirm('هل أنت متأكد من حذف المنتج؟')) return;
 
     try {
-        const response = await fetch(API_URLS.DELETE_PRODUCT(id), {
+        const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
             method: 'DELETE',
             headers: {
-                'X-CSRF-TOKEN': getCsrfToken(),
                 Accept: 'application/json',
-            },
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+
         });
 
         if (response.ok) {
