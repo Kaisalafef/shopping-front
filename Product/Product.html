@@ -1,67 +1,80 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Modern Store - Product Page</title>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Modern Store - Product Page</title>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/Wedgit/style_header.css">
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-  <link rel="stylesheet" href="/Wedgit/style_header.css">
-  <link rel="stylesheet" href="style.css" />
-</head>
+  <body>
 
 <body>
-
   <header class="main-header">
-    <div class="header-container">
-      <a href="#" class="logo-link">
-        <img src="/images/logo.png" class="logo" alt="Logo">
-      </a>
-      <div class="search-box">
-        <input type="text" id="globalSearchInput" placeholder="ابحث عن منتجات..." autocomplete="off">
+      <div class="header-container">
 
-        <button class="search-btn" type="submit" title="بحث">
-          <i class="fas fa-search"></i>
-        </button>
+        <div class="profile-menu">
+          <button class="icon-btn" id="profileBtn" type="button"
+            title="القائمة الشخصية">
+            <i class="fas fa-user"></i>
+          </button>
 
-        <div id="searchResults" class="search-results-dropdown"></div>
-      </div>
-      <div class="profile-menu">
-        <button class="icon-btn" id="profileBtn" type="button" title="فتح القائمة">
-          <i class="fas fa-user"></i>
-        </button>
-
-        <ul class="dropdown" id="desktopDropdown">
-          <li><a href="#"><i class="fas fa-user-circle"></i> حسابي</a></li>
-          <li><a href="/Cart/Cart.html"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
-          <li class="divider"></li>
-          <li><a href="#"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
-        </ul>
-      </div>
-    </div>
-
-
-  </header>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#">الرئيسية</a>
-    <a href="#">حسابي</a>
-    <a href="#">سلتي</a>
-    <a href="#">تسجيل خروج</a>
-  </div>
-
-  <div id="product-widget-container">
-    <article class="pw product-widget" role="article" aria-label="Product details">
-      <div class="pw__inner">
-        <div class="pw__image-col">
-          <div id="pw-image-trigger" class="pw__image-trigger" role="button" tabindex="0"
-            aria-label="View larger image">
-            <img id="pw-product-image" class="pw__image" src alt />
-          </div>
+          <ul class="dropdown" id="desktopDropdown">
+            <li>
+              <a href="/Profile/Profile.html">
+                <i class="fas fa-user-circle"></i> حسابي
+              </a>
+            </li>
+            <li>
+              <a href="/Cart/Cart.html">
+                <i class="fas fa-shopping-cart"></i> سلتي
+              </a>
+            </li><li>
+              <a href="/Wedgit/About.html">
+                <i class="fas fa-info-circle"></i> حول
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+              </a>
+            </li>
+          </ul>
         </div>
+
+        <div class="search-box">
+          <input type="text" id="globalSearchInput"
+            placeholder="ابحث عن منتج، ماركة، أو فئة..." autocomplete="off">
+          <button class="search-btn" type="submit" title="بحث">
+            <i class="fas fa-search"></i>
+          </button>
+          <div id="searchResults" class="search-results-dropdown"></div>
+        </div>
+        <a href="/Home/client_dashboard.html" class="logo-link">
+          <img src="/images/logo.webp" class="logo" alt="Logo">
+        </a>
+
+      </div>
+    </header>
+   
+
+    <div id="product-widget-container">
+      <article class="pw product-widget" role="article"
+        aria-label="Product details">
+        <div class="pw__inner">
+          <div class="pw__image-col">
+            <div id="pw-image-trigger" class="pw__image-trigger" role="button"
+              tabindex="0" aria-label="View larger image">
+              <img id="pw-product-image" class="pw__image" src alt />
+            </div>
+          </div>
 
         <div class="pw__details">
           <h1 id="pw-title" class="pw__title"></h1>
@@ -142,20 +155,19 @@
         </form>
 
 
-        <div id="reviews-list" class="reviews-list"></div>
+          <div id="reviews-list" class="reviews-list"></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="related-products-section" class="related-products-container">
-    <div class="container">
-      <h2 class="section-title">قد يعجبك أيضاً</h2>
-      <div id="related-products-list" class="related-products-list"></div>
-    </div>
-  </section>
+    <section id="related-products-section" class="related-products-container">
+      <div class="container">
+        <h2 class="section-title">قد يعجبك أيضاً</h2>
+        <div id="related-products-list" class="related-products-list"></div>
+      </div>
+    </section>
 
-  <script src="/Wedgit/script_header.js"></script>
-  <script src="script_P.js"></script>
-</body>
-
+    <script src="/Wedgit/script_header.js"></script>
+    <script src="script_P.js"></script>
+  </body>
 </html>

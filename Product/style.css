@@ -23,11 +23,11 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: #f3f4f6;
-
+    
     /* تعديل 1: إزالة الـ padding والـ margin من الجسم لكي يأخذ الهيدر كامل الشاشة */
     margin: 0;
     padding: 0;
-
+    
     color: var(--pw-text);
     min-height: 100vh;
 }
@@ -38,12 +38,11 @@ body {
     border: 1px solid var(--pw-border);
     border-radius: var(--pw-radius);
     max-width: 900px;
-
+    
     /* تعديل 2: إضافة مسافة من الأعلى (بدلاً من padding الجسم) ومن الجوانب */
-    margin: 40px auto;
-    width: 95%;
-    /* لضمان عدم التصاقه بالحواف في الشاشات الصغيرة */
-
+    margin: 40px auto; 
+    width: 95%; /* لضمان عدم التصاقه بالحواف في الشاشات الصغيرة */
+    
     overflow: hidden;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
@@ -345,21 +344,19 @@ body {
     overflow: auto;
     color: #a5f3fc
 }
-
-.logo {
+.logo{
     width: 200px;
     height: 80px;
     object-fit: contain;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: var(--text-dark);
-    font-weight: 800;
-    font-size: 1.5rem;
-    transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 800;
+  font-size: 1.5rem;
+  transition: transform 0.2s;
 }
-
 .demo__log {
     margin-top: 16px;
     background: #0b1220;
@@ -376,15 +373,13 @@ body {
 .demo .log-entry {
     color: #34d399
 }
-
 /* style.css (Append this to your existing content) */
 
 /* --- Layout utility for centered content --- */
 .container {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 15px;
-    /* Add padding to sides for all container usage */
+    padding: 0 15px; /* Add padding to sides for all container usage */
 }
 
 /* Ensure the main widget section still looks good */
@@ -435,8 +430,7 @@ body {
     font-weight: 600;
 }
 
-.form-input,
-.form-textarea {
+.form-input, .form-textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--pw-border);
@@ -447,8 +441,7 @@ body {
     transition: border-color .15s ease, box-shadow .15s ease;
 }
 
-.form-input:focus,
-.form-textarea:focus {
+.form-input:focus, .form-textarea:focus {
     outline: none;
     border-color: var(--pw-primary-color);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.06);
@@ -460,32 +453,29 @@ body {
 
 .submit-btn {
     /* Reusing existing button style for consistency */
-    width: auto;
+    width: auto; 
     padding: 10px 20px;
 }
 
 /* Star Rating Input */
 .rating-input {
     display: flex;
-    flex-direction: row-reverse;
-    /* Reverses order for traditional star input logic */
-    justify-content: flex-end;
-    /* Aligns stars to the right for RTL */
+    flex-direction: row-reverse; /* Reverses order for traditional star input logic */
+    justify-content: flex-end; /* Aligns stars to the right for RTL */
 }
 
 .rating-star {
     font-size: 24px;
     cursor: pointer;
-    color: #ccc;
-    /* Default grey color */
+    color: #ccc; /* Default grey color */
     transition: color 0.2s;
     margin-right: 5px;
 }
 
 .rating-star:hover,
-.rating-star:hover~.rating-star,
+.rating-star:hover ~ .rating-star,
 .rating-star.selected,
-.rating-star.selected~.rating-star {
+.rating-star.selected ~ .rating-star {
     color: gold;
 }
 
@@ -553,25 +543,20 @@ body {
     display: flex;
     overflow-x: auto;
     gap: 20px;
-    padding: 10px 0;
-    /* Vertical padding for potential scrollbar */
+    padding: 10px 0; /* Vertical padding for potential scrollbar */
     scroll-snap-type: x mandatory;
     /* Styles to hide scrollbar while keeping functionality */
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
 .related-products-list::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari, Opera */
+    display: none; /* Chrome, Safari, Opera */
 }
 
 /* Product Card Styling */
 .product-card {
-    flex: 0 0 240px;
-    /* Fixed width for card (Adjust as needed) */
+    flex: 0 0 240px; /* Fixed width for card (Adjust as needed) */
     scroll-snap-align: start;
     background: var(--pw-bg);
     border: 1px solid var(--pw-border);
@@ -604,8 +589,7 @@ body {
     font-size: var(--pw-font-base);
     color: var(--pw-text);
     margin: 5px 0;
-    min-height: 2.4em;
-    /* Ensure uniform height for names */
+    min-height: 2.4em; /* Ensure uniform height for names */
     overflow: hidden;
 }
 
@@ -642,35 +626,27 @@ body {
 /* Media Query for Mobile Responsiveness */
 @media (max-width: 600px) {
     .reviews-list {
-        grid-template-columns: 1fr;
-        /* Stack reviews vertically on small screens */
+        grid-template-columns: 1fr; /* Stack reviews vertically on small screens */
     }
-
     .product-card {
-        flex: 0 0 65vw;
-        /* Wider cards on mobile for easy scrolling/swiping */
+        flex: 0 0 65vw; /* Wider cards on mobile for easy scrolling/swiping */
     }
-
     .product-card-image {
         height: 150px;
     }
 }
-
 /* style.css */
 
 :root {
     /* FIX: Changed Blue to Dark Grey/Yellow to match the Header Brand */
-    --pw-primary-color: #1e272e;
-    /* Matches Header Text Dark */
+    --pw-primary-color: #1e272e; /* Matches Header Text Dark */
     --pw-primary-hover: #000000;
-    --pw-accent-color: #FFC312;
-    /* Matches Header Yellow */
+    --pw-accent-color: #FFC312; /* Matches Header Yellow */
     --pw-bg: #ffffff;
     --pw-text: #2d3436;
     --pw-muted: #636e72;
     --pw-border: #dfe6e9;
-    --pw-radius: 16px;
-    /* Slightly rounder */
+    --pw-radius: 16px; /* Slightly rounder */
     --pw-gap: 20px;
     --pw-font-base: 1rem;
     --pw-font-lg: 1.5rem;
@@ -678,9 +654,7 @@ body {
 }
 
 /* Reset & base */
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -703,7 +677,7 @@ body {
     background: var(--pw-bg);
     border: none;
     border-radius: var(--pw-radius);
-    margin: 40px auto;
+    margin: 40px auto; 
     width: 95%;
     max-width: 1000px;
     overflow: hidden;
@@ -716,9 +690,7 @@ body {
 }
 
 @media(min-width:768px) {
-    .pw__inner {
-        flex-direction: row;
-    }
+    .pw__inner { flex-direction: row; }
 }
 
 /* Image column */
@@ -748,9 +720,7 @@ body {
     transition: transform .3s ease;
 }
 
-.pw__image-trigger:hover .pw__image {
-    transform: scale(1.08);
-}
+.pw__image-trigger:hover .pw__image { transform: scale(1.08); }
 
 /* Details column */
 .pw__details {
@@ -771,8 +741,7 @@ body {
 
 .pw__price {
     font-size: 1.5rem;
-    color: #e74c3c;
-    /* Red for price stands out */
+    color: #e74c3c; /* Red for price stands out */
     font-weight: 700;
     margin: 0;
 }
@@ -784,8 +753,7 @@ body {
 }
 
 /* Inputs */
-.pw__select,
-.pw__qty-input {
+.pw__select, .pw__qty-input {
     width: 100%;
     padding: 12px;
     border: 2px solid var(--pw-border);
@@ -795,8 +763,7 @@ body {
     background: #fff;
 }
 
-.pw__select:focus,
-.pw__qty-input:focus {
+.pw__select:focus, .pw__qty-input:focus {
     outline: none;
     border-color: var(--pw-accent-color);
 }
@@ -830,8 +797,7 @@ body {
 .pw__add-btn {
     padding: 15px 25px;
     background: var(--pw-primary-color);
-    color: #fff;
-    /* Yellow text on Dark button */
+    color: #fff; /* Yellow text on Dark button */
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -859,7 +825,6 @@ body {
     margin-bottom: 30px;
     padding-bottom: 10px;
 }
-
 .section-title::after {
     content: '';
     position: absolute;
@@ -876,11 +841,8 @@ body {
     grid-template-columns: 1fr 2fr;
     gap: 30px;
 }
-
 @media (max-width: 800px) {
-    .reviews-layout {
-        grid-template-columns: 1fr;
-    }
+    .reviews-layout { grid-template-columns: 1fr; }
 }
 
 /* Review Form */
@@ -899,20 +861,17 @@ body {
     justify-content: flex-end;
     gap: 5px;
 }
-
 .rating-star {
     font-size: 28px;
     cursor: pointer;
     color: #dcdcdc;
     transition: color 0.2s;
 }
-
 .rating-star:hover,
-.rating-star:hover~.rating-star,
+.rating-star:hover ~ .rating-star,
 .rating-star.selected,
-.rating-star.selected~.rating-star {
-    color: var(--pw-accent-color);
-    /* Yellow Stars */
+.rating-star.selected ~ .rating-star {
+    color: var(--pw-accent-color); /* Yellow Stars */
 }
 
 /* Review Cards */
@@ -929,25 +888,14 @@ body {
     border: 1px solid var(--pw-border);
     transition: transform 0.2s;
 }
-
-.review-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
+.review-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 
 .review-header {
     border-bottom: none;
     margin-bottom: 5px;
 }
-
-.review-rating-display {
-    color: var(--pw-accent-color);
-    font-size: 0.9rem;
-}
-
-.review-name {
-    font-size: 1.1rem;
-}
+.review-rating-display { color: var(--pw-accent-color); font-size: 0.9rem; }
+.review-name { font-size: 1.1rem; }
 
 /* Related Products Scroll */
 .related-products-list {
@@ -958,7 +906,6 @@ body {
     scroll-behavior: smooth;
     /* RTL Scroll fix is handled by dir="rtl" usually */
 }
-
 .product-card {
     flex: 0 0 220px;
     background: #fff;
@@ -969,29 +916,18 @@ body {
     color: inherit;
     transition: all 0.3s;
 }
-
 .product-card:hover {
     border-color: var(--pw-accent-color);
     transform: translateY(-5px);
 }
-
-.product-card-image {
-    height: 160px;
-    border-radius: 8px;
-}
-
-.product-card-price {
-    color: var(--pw-primary-color);
-    font-weight: 800;
-}
-
+.product-card-image { height: 160px; border-radius: 8px; }
+.product-card-price { color: var(--pw-primary-color); font-weight: 800; }
 .product-card-btn {
     background: transparent;
     color: var(--pw-primary-color);
     border: 2px solid var(--pw-primary-color);
     width: 100%;
 }
-
 .product-card-btn:hover {
     background: var(--pw-primary-color);
     color: #fff;
@@ -1004,52 +940,20 @@ body {
     margin-top: 5px;
     display: none;
 }
-
-.pw--hidden {
-    display: none;
-}
+.pw--hidden { display: none; }
 
 /* Lightbox */
 .pw__lightbox {
     background: rgba(30, 39, 46, 0.95);
     /* ... rest of lightbox ... */
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .2s;
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 0; visibility: hidden; transition: opacity .2s;
 }
-
-.pw__lightbox.pw--active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.pw__lightbox-inner {
-    position: relative;
-    max-width: 90vw;
-}
-
-.pw__lightbox-img {
-    max-height: 90vh;
-    border-radius: 8px;
-}
-
+.pw__lightbox.pw--active { opacity: 1; visibility: visible; }
+.pw__lightbox-inner { position: relative; max-width: 90vw; }
+.pw__lightbox-img { max-height: 90vh; border-radius: 8px; }
 .pw__lightbox-close {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 2rem;
-    cursor: pointer;
+    position: absolute; top: -40px; right: 0; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer;
 }
-
 /* --- تنسيقات خيارات الألوان الجديدة --- */
 
 .pw__color-grid {
@@ -1067,7 +971,7 @@ body {
     border: 2px solid var(--pw-border);
     position: relative;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .pw__color-swatch:hover {
@@ -1078,29 +982,26 @@ body {
 /* حالة الاختيار للون */
 .pw__color-swatch.selected {
     border-color: var(--pw-primary-color);
-    box-shadow: 0 0 0 3px rgba(30, 39, 46, 0.2);
-    /* حلقة خارجية */
+    box-shadow: 0 0 0 3px rgba(30, 39, 46, 0.2); /* حلقة خارجية */
     transform: scale(1.1);
 }
 
 /* علامة صح داخل اللون المختار (اختياري) */
 .pw__color-swatch.selected::after {
-    content: '\2713';
-    /* علامة صح */
+    content: '\2713'; /* علامة صح */
     color: #fff;
     font-size: 14px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 /* إخفاء العناصر */
 .pw--hidden {
     display: none !important;
 }
-
 /* تحسين مدخلات النموذج */
 .form-group {
     margin-bottom: 15px;
@@ -1109,8 +1010,7 @@ body {
     gap: 8px;
 }
 
-.form-input,
-.form-textarea {
+.form-input, .form-textarea {
     width: 100%;
     padding: 12px;
     border: 2px solid var(--pw-border);
@@ -1119,8 +1019,7 @@ body {
     transition: border-color 0.2s;
 }
 
-.form-input:focus,
-.form-textarea:focus {
+.form-input:focus, .form-textarea:focus {
     outline: none;
     border-color: var(--pw-accent-color);
 }
@@ -1131,7 +1030,7 @@ body {
     padding: 20px;
     border-radius: 15px;
     border: 1px solid var(--pw-border);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -1152,8 +1051,7 @@ body {
 
 /* تنسيق النجوم الذهبية */
 .review-rating-display {
-    color: #FFC312;
-    /* اللون الذهبي */
+    color: #FFC312; /* اللون الذهبي */
     font-size: 1.1rem;
     letter-spacing: 2px;
 }
@@ -1165,38 +1063,27 @@ body {
     background: #f9f9f9;
     padding: 10px;
     border-radius: 8px;
-    border-right: 3px solid var(--pw-accent-color);
-    /* حافة جمالية بجانب النص */
+    border-right: 3px solid var(--pw-accent-color); /* حافة جمالية بجانب النص */
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
 /* =========================================
    Mobile Responsiveness (Add to style_P.css)
    ========================================= */
 
 @media (max-width: 768px) {
-
     /* تحسين الحاويات */
     .container {
         padding: 0 15px;
     }
-
+    
     .product-widget {
         margin: 15px auto;
         width: 100%;
-        box-shadow: none;
-        /* إزالة الظل للشاشات الصغيرة لتوفير المساحة */
+        box-shadow: none; /* إزالة الظل للشاشات الصغيرة لتوفير المساحة */
         border-radius: 0;
     }
 
@@ -1210,12 +1097,11 @@ body {
         padding: 0;
         background: #fff;
     }
-
+    
     .pw__image-trigger {
         max-width: 100%;
         border-radius: 0;
-        aspect-ratio: 4/3;
-        /* جعل الصورة مستطيلة قليلاً للموبايل */
+        aspect-ratio: 4/3; /* جعل الصورة مستطيلة قليلاً للموبايل */
     }
 
     /* قسم التفاصيل */
@@ -1225,8 +1111,7 @@ body {
     }
 
     .pw__title {
-        font-size: 1.4rem;
-        /* تصغير الخط */
+        font-size: 1.4rem; /* تصغير الخط */
     }
 
     .pw__price {
@@ -1246,8 +1131,7 @@ body {
     }
 
     .pw__qty-btn {
-        width: 50px;
-        /* أزرار أكبر للمس */
+        width: 50px; /* أزرار أكبر للمس */
         height: 50px;
     }
 
@@ -1272,12 +1156,16 @@ body {
     */
 
     /* قسم التقييمات */
+    .reviews-layout {
+        grid-template-columns: 1fr; /* عمود واحد */
+        gap: 20px;
+    }
 
-}
+    .review-form {
+        padding: 15px;
+    }
 
-.rating-input .star {
-    font-size: 2rem;
-    cursor: pointer;
-    color: gold;
-    margin-right: 5px;
+    .rating-star {
+        font-size: 24px; /* تصغير النجوم قليلاً */
+    }
 }

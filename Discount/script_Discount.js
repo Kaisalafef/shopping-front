@@ -1,3 +1,7 @@
+function getAuthToken() {
+  return localStorage.getItem("token");
+}
+
 /**
  * Discount Management Script
  * Connected to Laravel Offers API
@@ -75,16 +79,20 @@
         headers: { Accept: "application/json" },
       });
 
-      const data = await res.json();
+      if (!res.ok) throw new Error("API Error");
 
-      state.products = data.map((p) => ({
+      const resData = await res.json();
+      const products = resData.data ?? resData;
+
+      state.products = products.map((p) => ({
         id: p.id,
         title: p.name,
         basePrice: Number(p.price),
         currency: "SYP",
-        image: p.product_images?.[0]?.image
-          ? `/storage/${p.product_images[0].image}`
-          : "https://via.placeholder.com/400",
+        image:
+          p.image_url ||
+          p.images?.[0]?.url ||
+          "https://via.placeholder.com/400",
 
         discount: p.offer
           ? {
@@ -96,7 +104,8 @@
       }));
 
       render(state.products);
-    } catch {
+    } catch (err) {
+      console.error(err);
       els.grid.innerHTML = `<div style="color:red">فشل تحميل البيانات</div>`;
     }
   }
@@ -292,3 +301,43 @@
 
   fetchProducts();
 })();
+
+async function loadDailyOffers() {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/products");
+    const response = await res.json();
+
+    // ✅ هذا السطر هو الحل
+    const products = response.data ?? response;
+
+    const offers = products.filter((p) => p.offer);
+
+    const container = document.getElementById("offersContainer");
+    container.innerHTML = "";
+
+    if (!offers.length) {
+      container.innerHTML = "<p>لا توجد عروض حالياً</p>";
+      return;
+    }
+
+    offers.forEach((p) => {
+      const offer = p.offer;
+
+      const discountText = offer.discount_percentage
+        ? `خصم ${offer.discount_percentage}%`
+        : `خصم ${offer.discount_price} SYP`;
+
+      container.innerHTML += `
+        <div class="offer-card">
+          <img src="${p.image_url || p.images?.[0]?.url || 'https://via.placeholder.com/400'}">
+          <h4>${p.name}</h4>
+          <p>${discountText}</p>
+        </div>
+      `;
+    });
+  } catch (e) {
+    console.error("خطأ تحميل العروض:", e);
+  }
+}
+
+loadDailyOffers();
