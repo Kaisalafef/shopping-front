@@ -13,52 +13,52 @@
         <link rel="stylesheet" href="style_profile.css">
     </head>
     <body>
-        <header class="main-header">
-            <div class="header-container">
+      <header class="main-header">
+      <div class="header-container">
 
-                    <ul class="dropdown" id="desktopDropdown">
-                        <li><a href="/Profile/Profile.html"><i
-                                    class="fas fa-user-circle"></i>
-                                حسابي</a></li>
-                        <li><a href="/Cart/Cart.html"><i
-                                    class="fas fa-shopping-cart"></i>
-                                سلتي</a></li>
-                         <li>
-                            <a href="/Wedgit/About.html">
-                                <i class="fas fa-info-circle"></i> حول
-                            </a>
-                        </li>
-                                    <li class="divider"></li>
+        <div class="profile-menu">
+          <button class="icon-btn" id="profileBtn" type="button"
+            title="القائمة الشخصية">
+            <i class="fas fa-user"></i>
+          </button>
 
-                        <li><a href="#" id="logoutBtn"><i
-                                    class="fas fa-sign-out-alt"></i>
-                                خروج</a></li>
-                    </ul>
-                </div>
-                <div class="search-box">
-                    <input type="text" id="globalSearchInput"
-                        placeholder="ابحث عن منتجات..." autocomplete="off">
-
-                    <button class="search-btn" type="submit" title="بحث">
-                        <i class="fas fa-search"></i>
-                    </button>
-
-                    <div id="searchResults"
-                        class="search-results-dropdown"></div>
-                </div>
-                <div class="profile-menu">
-                    <button class="icon-btn" id="profileBtn" type="button"
-                        title="فتح القائمة">
-                        <i class="fas fa-user"></i>
-                    </button>
-
-                <a href="/Home/client_dashboard.html" class="logo-link">
-                    <img src="/images/logo.webp" class="logo" alt="Logo">
-                </a>
-            </div>
-
+          <ul class="dropdown" id="desktopDropdown">
+            <li>
+              <a href="/Profile/Profile.html">
+                <i class="fas fa-user-circle"></i> حسابي
+              </a>
+            </li>
+            <li>
+              <a href="/Cart/Cart.html">
+                <i class="fas fa-shopping-cart"></i> سلتي
+              </a>
+            </li><li>
+              <a href="/Wedgit/About.html">
+                <i class="fas fa-info-circle"></i> حول
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+              </a>
+            </li>
+          </ul>
         </div>
 
+        <div class="search-box">
+          <input type="text" id="globalSearchInput"
+            placeholder="ابحث عن منتج، ماركة، أو فئة..." autocomplete="off">
+          <button class="search-btn" type="submit" title="بحث">
+            <i class="fas fa-search"></i>
+          </button>
+          <div id="searchResults" class="search-results-dropdown"></div>
+        </div>
+        <a href="/Home/client_dashboard.html" class="logo-link">
+          <img src="/images/logo.webp" class="logo" alt="Logo">
+        </a>
+
+      </div>
     </header>
 
     <main class="profile-container">
