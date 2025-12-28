@@ -62,9 +62,6 @@ function renderCartItems(items) {
     document.getElementById("buyAllBtn").style.display = "inline-flex";
 
     items.forEach(item => {
-        // التحقق من وجود صورة (اختياري، إذا كان الـ API يدعم الصور)
-        // const imgSrc = item.product?.image || '/images/default-product.png';
-
         grid.innerHTML += `
         <div class="product-card">
             <div class="product-details">
@@ -76,11 +73,7 @@ function renderCartItems(items) {
                 <div class="actions-bottom">
                     <div class="quantity-control">
                         <button class="btn-qty" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
-                        <input 
-                            type="number"
-                            readonly
-                            value="${item.quantity}"
-                        >
+                        <input type="number" readonly value="${item.quantity}">
                         <button class="btn-qty" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
                     </div>
 
@@ -89,31 +82,7 @@ function renderCartItems(items) {
                     </button>
                 </div>
             </div>
-        </div>`;
-      <div class="product-card">
-
-
-    <div class="product-details">
-        <h3 class="product-name">${item.product?.name ?? "منتج بدون اسم"}</h3>
-        <p class="product-price">السعر: <span>${item.unit_price} ₪</span></p>
-
-        <div class="quantity-control">
-            <button class="btn-qty" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
-            <input 
-                type="number"
-                min="1"
-                value="${item.quantity}"
-                onchange="updateQuantity(${item.id}, this.value)"
-            >
-            <button class="btn-qty" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
         </div>
-
-        <button class="btn-remove" onclick="removeItem(${item.id})">
-            <i class="fas fa-trash"></i> حذف
-        </button>
-    </div>
-</div>
-
         `;
     });
 }
