@@ -1,5 +1,5 @@
 /************************************
- *  Cart Configuration
+ * Configuration
  ************************************/
 const API_URL = "http://127.0.0.1:8000/api";
 const token = localStorage.getItem("token");
@@ -17,7 +17,7 @@ const headers = {
 let CURRENT_CART_ID = null;
 
 /************************************
- *  Get My Cart (From Token)
+ * Get My Cart (by token)
  ************************************/
 async function getUserCart() {
     try {
@@ -29,9 +29,16 @@ async function getUserCart() {
         if (!res.ok) throw new Error("فشل جلب السلة");
 
         const cart = await res.json();
+
+        // حفظ ID السلة لاستخدامه في التحديث والحذف
         CURRENT_CART_ID = cart.id;
 
-        renderCartItems(cart.cartItem || [], cart.id);
+        // عرض العناصر
+        renderCartItems(cart.cart_item || []);
+
+        // تحديث الإجمالي
+        updateTotal(cart.total_price || 0);
+
     } catch (error) {
         console.error(error);
         alert("حدث خطأ أثناء تحميل السلة");
@@ -39,15 +46,16 @@ async function getUserCart() {
 }
 
 /************************************
- *  Render Cart Items
+ * Render Cart Items
  ************************************/
-function renderCartItems(items, cartId) {
+function renderCartItems(items) {
     const grid = document.querySelector(".products-grid");
     grid.innerHTML = "";
 
     if (!items || items.length === 0) {
         grid.innerHTML = `<p class="empty-cart">السلة فارغة</p>`;
         document.getElementById("buyAllBtn").style.display = "none";
+        document.getElementById("cartTotal").innerText = "0 ₪";
         return;
     }
 
@@ -55,50 +63,55 @@ function renderCartItems(items, cartId) {
 
     items.forEach(item => {
         grid.innerHTML += `
-        <div class="product-card">
-            <img src="${item.product?.image ?? '/images/default.png'}" alt="">
-            <h3>${item.product?.name}</h3>
-            <p>السعر: ${item.unit_price} ₪</p>
+      <div class="product-card">
 
-            <div class="quantity-control">
-                <input 
-                    type="number" 
-                    min="1" 
-                    value="${item.quantity}"
-                    onchange="updateQuantity(${cartId}, ${item.id}, this.value)"
-                >
-            </div>
 
-            <button class="btn-remove"
-                onclick="removeItem(${cartId}, ${item.id})">
-                <i class="fas fa-trash"></i> حذف
-            </button>
+    <div class="product-details">
+        <h3 class="product-name">${item.product?.name ?? "منتج بدون اسم"}</h3>
+        <p class="product-price">السعر: <span>${item.unit_price} ₪</span></p>
+
+        <div class="quantity-control">
+            <button class="btn-qty" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+            <input 
+                type="number"
+                min="1"
+                value="${item.quantity}"
+                onchange="updateQuantity(${item.id}, this.value)"
+            >
+            <button class="btn-qty" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
         </div>
+
+        <button class="btn-remove" onclick="removeItem(${item.id})">
+            <i class="fas fa-trash"></i> حذف
+        </button>
+    </div>
+</div>
+
         `;
     });
-
-    getTotal();
 }
 
 /************************************
- *  Update Item Quantity
+ * Update Quantity
  ************************************/
-async function updateQuantity(cartId, itemId, quantity) {
-    if (quantity < 1) return;
+async function updateQuantity(itemId, quantity) {
+    if (!CURRENT_CART_ID || quantity < 1) return;
 
     try {
         const res = await fetch(
-            `${API_URL}/carts/${cartId}/items/${itemId}`,
+            `${API_URL}/carts/${CURRENT_CART_ID}/items/${itemId}`,
             {
                 method: "PUT",
                 headers,
-                body: JSON.stringify({ quantity: parseInt(quantity) })
+                body: JSON.stringify({ quantity: Number(quantity) })
             }
         );
 
         if (!res.ok) throw new Error();
 
-        getTotal();
+        // تحديث السلة بعد التعديل
+        getUserCart();
+
     } catch (error) {
         console.error(error);
         alert("فشل تحديث الكمية");
@@ -106,14 +119,16 @@ async function updateQuantity(cartId, itemId, quantity) {
 }
 
 /************************************
- *  Remove Item From Cart
+ * Remove Item
  ************************************/
-async function removeItem(cartId, itemId) {
+async function removeItem(itemId) {
+    if (!CURRENT_CART_ID) return;
+
     if (!confirm("هل تريد حذف المنتج من السلة؟")) return;
 
     try {
         const res = await fetch(
-            `${API_URL}/carts/${cartId}/items/${itemId}`,
+            `${API_URL}/carts/${CURRENT_CART_ID}/items/${itemId}`,
             {
                 method: "DELETE",
                 headers
@@ -122,7 +137,9 @@ async function removeItem(cartId, itemId) {
 
         if (!res.ok) throw new Error();
 
+        // تحديث السلة بعد الحذف
         getUserCart();
+
     } catch (error) {
         console.error(error);
         alert("فشل حذف المنتج");
@@ -130,36 +147,22 @@ async function removeItem(cartId, itemId) {
 }
 
 /************************************
- *  Calculate Total Price
+ * Update Total
  ************************************/
-async function getTotal() {
-    try {
-        const res = await fetch(`${API_URL}/cart/total`, {
-            headers
-        });
-
-        if (!res.ok) throw new Error();
-
-        const data = await res.json();
-
-        document.getElementById("cartTotal").innerText =
-            `${data.total_price} ₪`;
-    } catch (error) {
-        console.error(error);
-    }
+function updateTotal(total) {
+    document.getElementById("cartTotal").innerText = `${total} ₪`;
 }
 
 /************************************
- *  Checkout All Items
+ * Checkout
  ************************************/
 function checkoutAll() {
-    alert("سيتم تحويلك إلى صفحة الدفع");
-    // لاحقاً:
-    // POST /orders
+    alert("سيتم تحويلك إلى صفحة الدفع لاحقًا");
+    // مستقبلاً: POST /orders
 }
 
 /************************************
- *  Init
+ * Init
  ************************************/
 document.addEventListener("DOMContentLoaded", () => {
     getUserCart();

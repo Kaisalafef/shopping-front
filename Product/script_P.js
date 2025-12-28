@@ -221,3 +221,82 @@ addBtn.addEventListener("click", () => {
   });
 });
 
+////////////////////////////////////
+
+const reviewRatingValue = document.getElementById("review-rating-value"); // بدلاً من pw-review-rating
+const reviewComment = document.getElementById("review-text");
+const reviewBtn = document.querySelector("#review-form .submit-btn");
+
+reviewBtn.addEventListener("click", (e) => {
+  e.preventDefault(); // منع إعادة تحميل الصفحة
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("يجب تسجيل الدخول لإضافة تقييم");
+    return;
+  }
+
+  if (!productId) {
+    alert("لا يمكن إضافة تقييم: المنتج غير محدد");
+    return;
+  }
+
+  const rating = parseFloat(reviewRatingValue.value); // هنا نأخذ القيمة من hidden input
+  const comment = reviewComment.value.trim();
+
+  if (!rating || rating < 1 || rating > 5) {
+    alert("الرجاء إدخال تقييم بين 1 و 5");
+    return;
+  }
+
+  const payload = {
+    product_id: productId,
+    rating,
+    comment
+  };
+
+  fetch(`${API_BASE}/reviews`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("تعذر إرسال التقييم");
+    return res.json();
+  })
+  .then(data => {
+    console.log("تم إرسال التقييم:", data);
+    alert("تم إرسال التقييم بنجاح ✅");
+    reviewRatingValue.value = "";
+    reviewComment.value = "";
+    // إعادة تلوين النجوم
+    document.querySelectorAll("#rating-input .star").forEach(s => s.textContent = "☆");
+  })
+  .catch(err => {
+    console.error(err);
+    alert(err.message);
+  });
+});
+
+////////////////////////////////////rate
+document.addEventListener("DOMContentLoaded", () => {
+  const stars = document.querySelectorAll("#rating-input .star");
+  const reviewRatingValue = document.getElementById("review-rating-value");
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      const rating = star.dataset.value;
+      reviewRatingValue.value = rating;
+
+      // تلوين النجوم حسب الاختيار
+      stars.forEach(s => s.textContent = "☆"); // إعادة ضبط
+      for (let i = 0; i < rating; i++) {
+        stars[i].textContent = "★";
+      }
+    });
+  });
+});
