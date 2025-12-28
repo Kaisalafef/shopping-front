@@ -17,16 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================== */
     let debounceTimer;
 
-    // Helpers
     const getImageUrl = (path) => {
-        if (!path) return '/images/placeholder.png'; // صورة افتراضية
+        if (!path) return '/images/placeholder.png';
         if (path.startsWith('http')) return path;
         return `http://127.0.0.1:8000/storage/${path}`;
     };
 
     if (searchInput && searchResults) {
         
-        // إخفاء النتائج عند النقر خارج الصندوق
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                 searchResults.classList.remove('active');
@@ -50,16 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         return res.json();
                     })
                     .then(resData => {
-                        // Laravel usually returns { data: [...] } or just [...]
                         const products = resData.data || resData; 
                         renderSearchResults(products);
                     })
                     .catch(err => {
                         console.error("Search Error:", err);
-                        searchResults.innerHTML = `<div class="search-item">خطأ في البحث</div>`;
+                        searchResults.innerHTML = `<div class="search-item" style="animation: fadeInUp 0.3s forwards">خطأ في البحث</div>`;
                         searchResults.classList.add('active');
                     });
-            }, 500); // 500ms delay
+            }, 500); 
         });
     }
 
@@ -68,16 +65,20 @@ document.addEventListener("DOMContentLoaded", () => {
         
         if (!products || products.length === 0) {
             searchResults.innerHTML = `
-                <div class="search-item" style="justify-content:center; color:#999;">
+                <div class="search-item" style="justify-content:center; color:#999; animation: fadeInUp 0.3s forwards">
                     لا توجد نتائج
                 </div>`;
         } else {
-            // عرض أول 5 نتائج فقط
-            products.slice(0, 5).forEach(product => {
+            // عرض أول 5 نتائج مع تأثير تتابعي (Staggered Animation)
+            products.slice(0, 5).forEach((product, index) => {
                 const item = document.createElement("a");
                 item.href = `/Product/Product.html?id=${product.id}`;
                 item.className = "search-item";
                 
+                // إضافة تأخير زمني لكل عنصر بناءً على ترتيبه
+                // العنصر الأول يظهر فوراً، الثاني بعد 0.1 ثانية، وهكذا
+                item.style.animationDelay = `${index * 0.1}s`;
+
                 item.innerHTML = `
                     <div class="search-item-info">
                         <span class="search-item-title">${product.name}</span>
@@ -97,13 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================== */
     if (profileBtn && dropdown) {
         
-        // Toggle Dropdown on Click (Desktop & Mobile)
         profileBtn.addEventListener("click", (e) => {
-            e.stopPropagation(); // منع إغلاق القائمة فوراً
+            e.stopPropagation();
             dropdown.classList.toggle("show");
         });
 
-        // Close when clicking anywhere else
         document.addEventListener("click", (e) => {
             if (!profileBtn.contains(e.target) && !dropdown.contains(e.target)) {
                 dropdown.classList.remove("show");
@@ -119,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             const token = localStorage.getItem("token");
             
-            // UI Feedback
             logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الخروج...';
 
             fetch("http://127.0.0.1:8000/api/logout", {
@@ -130,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
             .then(() => {
-                // مسح البيانات سواء نجح الطلب أو فشل (لضمان خروج المستخدم)
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
                 window.location.href = "/Auth/Log_in.html";

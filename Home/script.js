@@ -1,3 +1,4 @@
+// script.js - With Staggered Animations
 document.addEventListener("DOMContentLoaded", () => {
 
     const BASE_URL = "http://127.0.0.1:8000";
@@ -6,69 +7,73 @@ document.addEventListener("DOMContentLoaded", () => {
        1️⃣ جلب وعرض العروض اليومية
     ============================== */
     const loadDailyOffers = async () => {
-    const offersContainer = document.getElementById("offersContainer");
-    if (!offersContainer) return;
+        const offersContainer = document.getElementById("offersContainer");
+        if (!offersContainer) return;
 
-    offersContainer.innerHTML = "جاري تحميل العروض...";
+        // تأثير تحميل بسيط
+        offersContainer.innerHTML = '<div style="padding:20px; width:100%; text-align:center;">جاري تحميل العروض...</div>';
 
-    try {
-        const res = await fetch(`${BASE_URL}/api/offers`);
-        const json = await res.json();
+        try {
+            const res = await fetch(`${BASE_URL}/api/offers`);
+            const json = await res.json();
 
-        const offers = json.offers || [];
+            const offers = json.offers || [];
 
-        if (!offers.length) {
-            offersContainer.innerHTML = "لا توجد عروض حالياً";
-            return;
-        }
-
-        offersContainer.innerHTML = "";
-
-        offers.forEach(o => {
-            const p = o.product;
-            if (!p) return;
-
-            /* ✅ الصورة الصحيحة */
-            let img = "/images/CLE.jpg";
-            if (p.image_url) {
-                img = p.image_url;
+            if (!offers.length) {
+                offersContainer.innerHTML = '<div style="padding:20px;">لا توجد عروض حالياً</div>';
+                return;
             }
 
-            /* السعر */
-            const basePrice = Number(p.price);
-            let finalPrice = basePrice;
-            let label = "";
+            offersContainer.innerHTML = "";
 
-            if (o.discount_percentage) {
-                finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
-                label = `-${o.discount_percentage}%`;
-            }
+            offers.forEach((o, index) => {
+                const p = o.product;
+                if (!p) return;
 
-            offersContainer.insertAdjacentHTML("beforeend", `
-                <div class="offer-white-card">
-                    <span class="discount-circle">${label}</span>
+                /* ✅ الصورة الصحيحة */
+                let img = "/images/CLE.jpg";
+                if (p.image_url) {
+                    img = p.image_url;
+                }
 
-                    <div class="offer-img-box">
-                        <img src="${img}" alt="${p.name}">
-                    </div>
+                /* السعر */
+                const basePrice = Number(p.price);
+                let finalPrice = basePrice;
+                let label = "";
 
-                    <div class="offer-details">
-                        <h4 class="offer-title">${p.name}</h4>
+                if (o.discount_percentage) {
+                    finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
+                    label = `-${o.discount_percentage}%`;
+                }
 
-                        <div class="offer-prices">
-                            <span class="new-price">${Math.round(finalPrice)} SYP</span>
-                            <span class="old-price">${basePrice} SYP</span>
+                // حساب التأخير الزمني لكل كارت (index * 0.1s)
+                const delay = index * 0.1;
+
+                offersContainer.insertAdjacentHTML("beforeend", `
+                    <div class="offer-white-card" style="animation-delay: ${delay}s">
+                        <span class="discount-circle">${label}</span>
+
+                        <div class="offer-img-box">
+                            <img src="${img}" alt="${p.name}">
+                        </div>
+
+                        <div class="offer-details">
+                            <h4 class="offer-title">${p.name}</h4>
+
+                            <div class="offer-prices">
+                                <span class="new-price">${Math.round(finalPrice)} L.S</span>
+                                <span class="old-price">${basePrice}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `);
-        });
+                `);
+            });
 
-    } catch (e) {
-        console.error(e);
-        offersContainer.innerHTML = "خطأ في تحميل العروض";
-    }
-};
+        } catch (e) {
+            console.error(e);
+            offersContainer.innerHTML = "خطأ في تحميل العروض";
+        }
+    };
 
 
     /* ==============================
@@ -90,18 +95,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
             adsContainer.innerHTML = "";
 
-            ads.forEach(ad => {
+            ads.forEach((ad, index) => {
                 const img = ad.image
                     ? `${BASE_URL}/storage/${ad.image}`
                     : "https://via.placeholder.com/800x300";
 
+                // تأخير زمني للإعلانات أيضاً
+                const delay = index * 0.2;
+
                 adsContainer.insertAdjacentHTML("beforeend", `
                     <div class="ad-banner"
-                        style="background-image:url('${img}')">
+                        style="background-image:url('${img}'); animation-delay: ${delay}s;">
                         <div class="ad-overlay"></div>
                         <div class="ad-content">
                             <h3>${ad.title}</h3>
                             <p>${ad.description || ""}</p>
+                            ${ad.link ? `<button onclick="location.href='${ad.link}'">تصفح العرض</button>` : ''}
                         </div>
                     </div>
                 `);

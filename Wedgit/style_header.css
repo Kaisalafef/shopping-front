@@ -1,27 +1,54 @@
-/* style_header.css - Fully Responsive & Modern */
+/* style_header.css - Fully Responsive & Animated */
 
 :root {
-    --header-bg: #1e272e;       /* نفس الخلفية الداكنة لصفحة المنتج */
+    --header-bg: #1e272e;
     --header-text: #ffffff;
-    --accent-color: #FFC312;    /* الأصفر الذهبي */
+    --accent-color: #FFC312;
     --search-bg: #ffffff;
     --border-color: #4b6584;
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
- 
-/* Reset for Header Elements */
+
+/* Reset */
 .main-header * {
-    
     box-sizing: border-box;
 }
 
+/* ===========================
+   Keyframe Animations
+   =========================== */
+/* انزلاق الهيدر من الأعلى */
+@keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* ظهور العناصر (Fade In Up) */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* اهتزاز خفيف للوجو */
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg) scale(1.05); }
+    25% { transform: rotate(-3deg) scale(1.05); }
+    75% { transform: rotate(3deg) scale(1.05); }
+}
+
+/* ===========================
+   Main Layout
+   =========================== */
 .main-header {
-    
-  background: linear-gradient(90deg, #eaeded , #f0c14b , #eaeded );
+    background: linear-gradient(90deg, #eaeded , #f0c14b , #eaeded );
     color: var(--header-text);
-    position: sticky; /* تثبيت الهيدر عند السكرول */
+    position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-soft);
+    
+    /* تشغيل انيميشن الهيدر */
+    animation: slideDown 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .header-container {
@@ -31,7 +58,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap; /* يسمح بالعناصر بالنزول للسطر التالي في الموبايل */
+    flex-wrap: wrap;
     gap: 15px;
 }
 
@@ -42,53 +69,60 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    flex-shrink: 0; /* منع اللوجو من الانكماش */
+    flex-shrink: 0;
 }
 
 .logo {
-    margin: 0 0px ;
-    padding: 0 0px ;
-    height: 120px; /* حجم مناسب وموحد */
+    margin: 0;
+    padding: 0;
+    height: 120px;
     width: 120px;
     object-fit: contain;
-    transition: transform 0.3s;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة مطاطية */
 }
 
 .logo:hover {
-    transform: scale(1.05);
+    animation: wiggle 0.6s ease-in-out; /* اهتزاز عند التحويم */
 }
 
 /* ===========================
-   2. Search Box (The Engine)
+   2. Search Box
    =========================== */
 .search-box {
-    flex-grow: 1; /* يأخذ المساحة المتبقية في المنتصف */
+    flex-grow: 1;
     position: relative;
-    max-width: 600px; /* لا يتوسع أكثر من اللازم */
+    max-width: 600px;
     margin: 0 20px;
+    transition: transform 0.3s;
+}
+
+.search-box:focus-within {
+    transform: scale(1.02); /* تكبير بسيط عند الكتابة */
 }
 
 .search-box input {
     width: 100%;
     height: 42px;
-    padding: 0 50px 0 15px; /* مسافة للأيقونة */
-    border-radius: 25px; /* حواف دائرية عصرية */
+    padding: 0 50px 0 15px;
+    border-radius: 25px;
     border: 2px solid transparent;
     background: var(--search-bg);
     font-family: inherit;
     font-size: 0.95rem;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .search-box input:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 4px rgba(255, 195, 18, 0.2);
+    box-shadow: 0 0 0 4px rgba(255, 195, 18, 0.25);
+    background: #fff;
 }
 
 .search-btn {
     position: absolute;
-    left: 5px; /* RTL placement */
+    left: 5px;
     top: 50%;
     transform: translateY(-50%);
     background: var(--accent-color);
@@ -101,49 +135,77 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .search-btn:hover {
     background: #e1b12c;
+    transform: translateY(-50%) scale(1.1) rotate(15deg); /* دوران وتكبير */
 }
 
 /* Search Dropdown Results */
 .search-results-dropdown {
     position: absolute;
-    top: 100%;
+    top: 110%; /* البداية أبعد قليلاً للحركة */
     left: 0;
     right: 0;
     background: #fff;
     color: #333;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     margin-top: 8px;
     z-index: 1001;
     max-height: 300px;
     overflow-y: auto;
-    display: none; /* JS will toggle this */
+    
+    /* Animation defaults */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
 }
 
 .search-results-dropdown.active {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    top: 100%;
 }
 
 /* تصميم عناصر البحث الداخلي */
 .search-item {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
-    border-bottom: 1px solid #eee;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f1f1f1;
     text-decoration: none;
-    transition: background 0.2s;
+    transition: all 0.2s;
     color: #2d3436;
+    
+    /* للتأثير المتتابع الذي سنضيفه بالجافاسكربت */
+    opacity: 0; 
+    animation: fadeInUp 0.4s ease forwards;
 }
-.search-item:hover { background: #f5f6fa; }
-.search-item img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; margin-left: 10px; }
-.search-item-info { display: flex; flex-direction: column; }
-.search-item-title { font-weight: 600; font-size: 0.9rem; }
-.search-item-price { color: #e1b12c; font-weight: 700; font-size: 0.85rem; }
+
+.search-item:last-child { border-bottom: none; }
+
+.search-item:hover {
+    background: #fdf7e2; /* لون ذهبي فاتح جداً */
+    padding-right: 20px; /* حركة بسيطة لليمين */
+}
+
+.search-item img {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-left: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-item-info { display: flex; flex-direction: column; gap: 2px; }
+.search-item-title { font-weight: 700; font-size: 0.95rem; }
+.search-item-price { color: #e1b12c; font-weight: 700; font-size: 0.9rem; }
 
 /* ===========================
    3. Profile Menu
@@ -157,74 +219,112 @@
     background: #1d1b1be3;
     border: 2px solid #1d1b1b;
     color: #FFC312;
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 1.2rem;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* تأثير لمعان (Shine) عند التمرير */
+.icon-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+.icon-btn:hover::after {
+    left: 100%;
 }
 
 .icon-btn:hover {
     background: var(--accent-color);
     border-color: var(--accent-color);
     color: var(--header-bg);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 195, 18, 0.4);
 }
 
 .dropdown {
     position: absolute;
-    top: 120%;
-    left: 0; /* RTL alignment */
+    top: 130%; /* مسافة للأنيميشن */
+    left: 0;
     background: #fff;
-    min-width: 200px;
-    border-radius: 8px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    min-width: 220px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     padding: 10px 0;
     list-style: none;
+    
+    /* Animation States */
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
+    transform: translateY(15px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* حركة ارتدادية */
     z-index: 1002;
+    transform-origin: top left;
 }
-/* سهم صغير للقائمة */
+
 .dropdown::before {
     content: '';
     position: absolute;
     top: -6px;
-    left: 15px;
+    left: 20px;
     width: 12px;
     height: 12px;
     background: #fff;
     transform: rotate(45deg);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    border-left: 1px solid rgba(0,0,0,0.05);
 }
 
 /* إظهار القائمة */
 .dropdown.show {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    top: 120%;
 }
 
 .dropdown li a {
     display: block;
-    padding: 10px 20px;
+    padding: 12px 20px;
     color: #2d3436;
     text-decoration: none;
-    font-size: 1.01rem;
+    font-size: 1rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 10px;
-    transition: background 0.2s;
+    gap: 12px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
 }
 
 .dropdown li a:hover {
-    background: #f5f6fa;
-    color: var(--accent-color); /* برتقالي عند التحويم */
+    background: #fff8e1; /* خلفية صفراء فاتحة */
+    color: #e67e22;
+    border-left-color: #e67e22; /* خط جانبي ملون */
+    padding-right: 25px; /* حركة للنص */
 }
+
+.dropdown li a i {
+    transition: transform 0.2s;
+}
+.dropdown li a:hover i {
+    transform: scale(1.2);
+}
+
 .dropdown .divider {
     height: 1px;
     background: #eee;
@@ -232,28 +332,16 @@
 }
 
 /* ===========================
-   MOBILE RESPONSIVENESS (Magic Happens Here)
+   MOBILE RESPONSIVENESS
    =========================== */
 @media (max-width: 768px) {
-  .main-header {
-      background: linear-gradient(90deg,  #f0c14b ,#eaeded );
-
+    .main-header {
+        background: linear-gradient(90deg, #f0c14b ,#eaeded );
         padding: 10px 0;
     }
-    .header-container {
-        padding: 10px 15px;
-        justify-content: space-between;
-    }
-
-    /* 1. Logo: Top Right */
-    .logo-link {
-        order: 1;
-    }
-    .logo {
-        height: 90px; /* أصغر قليلاً للموبايل */
-    }
-
-    /* 2. Profile: Top Left */
+    
+    .logo { height: 90px; }
+    .logo-link { order: 1; }
     .icon-btn{
         background-color: #eaeded;
         color: #1d1b1b;
@@ -264,22 +352,19 @@
         color:#f0c14b;
         border-color: white;
     }
-    .profile-menu {
-        
-        order: 2;
-    }
+    
+    .profile-menu { order: 2; }
 
-    /* 3. Search Box: Full Width, Second Row */
     .search-box {
         order: 3;
-        width: 100%; /* عرض كامل */
-        margin: 5px 0 0 0; /* إلغاء الهوامش الجانبية */
+        width: 100%;
+        margin: 10px 0 0 0;
         max-width: none;
     }
     
     .dropdown {
-        min-width: 150;
-    font-size: 0.5rem;
-        left: -10px; /* ضبط موضع القائمة لتكون داخل الشاشة */
+        left: -10px;
+        width: 200px;
+        transform-origin: top center;
     }
 }
