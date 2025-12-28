@@ -10,6 +10,7 @@
  
 /* Reset for Header Elements */
 .main-header * {
+    
     box-sizing: border-box;
 }
 
@@ -21,7 +22,6 @@
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 10px 0;
 }
 
 .header-container {
@@ -46,8 +46,10 @@
 }
 
 .logo {
-    height: 90px; /* حجم مناسب وموحد */
-    width: auto;
+    margin: 0 0px ;
+    padding: 0 0px ;
+    height: 120px; /* حجم مناسب وموحد */
+    width: 120px;
     object-fit: contain;
     transition: transform 0.3s;
 }
@@ -152,9 +154,9 @@
 }
 
 .icon-btn {
-    background: rgba(241, 241, 241, 0.737);
+    background: #1d1b1be3;
     border: 2px solid #1d1b1b;
-    color: #1d1b1b;
+    color: #FFC312;
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -177,7 +179,7 @@
     top: 120%;
     left: 0; /* RTL alignment */
     background: #fff;
-    min-width: 200px;
+    min-width: 250px;
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
     padding: 10px 0;
@@ -212,7 +214,7 @@
     padding: 10px 20px;
     color: #2d3436;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 1.01rem;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -252,7 +254,18 @@
     }
 
     /* 2. Profile: Top Left */
+    .icon-btn{
+        background-color: white;
+        color: #1d1b1b;
+        border-color: white;
+    }
+    .icon-btn:hover{
+        background-color: white;
+        color:#f0c14b;
+        border-color: white;
+    }
     .profile-menu {
+        
         order: 2;
     }
 
@@ -265,6 +278,8 @@
     }
     
     .dropdown {
+        min-width: 150;
+    font-size: 0.5rem;
         left: -10px; /* ضبط موضع القائمة لتكون داخل الشاشة */
     }
 }
