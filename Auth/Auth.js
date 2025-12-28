@@ -43,7 +43,7 @@ if (loginForm) {
         // 🧹 تنظيف قديم
         localStorage.clear();
 
-        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("token", data.token);
         localStorage.setItem("auth_role", data.user.role);
         localStorage.setItem("auth_user", JSON.stringify(data.user));
 
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.clear();
 
         // ✅ تخزين صحيح
-        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("token", data.token);
         localStorage.setItem(
           "auth_role",
           data.user.role || "user" // افتراضي user
