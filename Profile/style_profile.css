@@ -219,3 +219,8 @@ body {
         width: 100%;
     }
 }
+.status-badge { padding: 5px 10px; border-radius: 15px; font-size: 0.85rem; font-weight: bold; }
+        .status-done { background: #d4edda; color: #155724; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .status-processing { background: #cce5ff; color: #004085; }
