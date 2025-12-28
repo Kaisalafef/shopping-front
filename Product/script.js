@@ -629,120 +629,120 @@
 //   // Initialize demo widget on load
 //   initProductWidget(exampleProduct);
 // })();
-const el = {
-  img: document.getElementById("productImage"),
-  title: document.getElementById("title"),
-  price: document.getElementById("price"),
-  desc: document.getElementById("description"),
-  colors: document.getElementById("colors"),
-  sizes: document.getElementById("sizes"),
-  qty: document.getElementById("qty"),
-  add: document.getElementById("addBtn"),
-  inc: document.getElementById("inc"),
-  dec: document.getElementById("dec"),
-};
+// const el = {
+//   img: document.getElementById("productImage"),
+//   title: document.getElementById("title"),
+//   price: document.getElementById("price"),
+//   desc: document.getElementById("description"),
+//   colors: document.getElementById("colors"),
+//   sizes: document.getElementById("sizes"),
+//   qty: document.getElementById("qty"),
+//   add: document.getElementById("addBtn"),
+//   inc: document.getElementById("inc"),
+//   dec: document.getElementById("dec"),
+// };
 
-let state = {
-  product: null,
-  color: null,
-  size: null,
-};
+// let state = {
+//   product: null,
+//   color: null,
+//   size: null,
+// };
 
-/* ================= PRODUCT LOAD ================= */
+// /* ================= PRODUCT LOAD ================= */
 
-async function loadProduct() {
-  const id = new URLSearchParams(location.search).get("id");
+// async function loadProduct() {
+//   const id = new URLSearchParams(location.search).get("id");
 
-  const res = await fetch(`/api/products/${id}`);
-  const product = await res.json();
+//   const res = await fetch(`/api/products/${id}`);
+//   const product = await res.json();
 
-  state.product = product;
+//   state.product = product;
 
-  renderProduct();
-}
+//   renderProduct();
+// }
 
-function renderProduct() {
-  const p = state.product;
+// function renderProduct() {
+//   const p = state.product;
 
-  el.title.textContent = p.name;
-  el.price.textContent = formatPrice(p.price);
-  el.desc.innerHTML = p.description;
-  el.img.src = imageUrl(p.images?.[0]?.image);
+//   el.title.textContent = p.name;
+//   el.price.textContent = formatPrice(p.price);
+//   el.desc.innerHTML = p.description;
+//   el.img.src = imageUrl(p.images?.[0]?.image);
 
-  renderColors(p.colors || []);
-  renderSizes(p.sizes || []);
-}
+//   renderColors(p.colors || []);
+//   renderSizes(p.sizes || []);
+// }
 
-/* ================= OPTIONS ================= */
+// /* ================= OPTIONS ================= */
 
-function renderColors(colors) {
-  el.colors.innerHTML = "";
+// function renderColors(colors) {
+//   el.colors.innerHTML = "";
 
-  colors.forEach(c => {
-    const div = document.createElement("div");
-    div.className = "color";
-    div.style.background = c.hex;
+//   colors.forEach(c => {
+//     const div = document.createElement("div");
+//     div.className = "color";
+//     div.style.background = c.hex;
 
-    div.onclick = () => {
-      document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
-      div.classList.add("active");
-      state.color = c;
+//     div.onclick = () => {
+//       document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
+//       div.classList.add("active");
+//       state.color = c;
 
-      if (c.image) el.img.src = imageUrl(c.image);
-    };
+//       if (c.image) el.img.src = imageUrl(c.image);
+//     };
 
-    el.colors.appendChild(div);
-  });
-}
+//     el.colors.appendChild(div);
+//   });
+// }
 
-function renderSizes(sizes) {
-  el.sizes.innerHTML = `<option value="">اختر المقاس</option>`;
-  sizes.forEach(s => {
-    el.sizes.innerHTML += `<option value="${s.size}">${s.size}</option>`;
-  });
+// function renderSizes(sizes) {
+//   el.sizes.innerHTML = `<option value="">اختر المقاس</option>`;
+//   sizes.forEach(s => {
+//     el.sizes.innerHTML += `<option value="${s.size}">${s.size}</option>`;
+//   });
 
-  el.sizes.onchange = e => state.size = e.target.value;
-}
+//   el.sizes.onchange = e => state.size = e.target.value;
+// }
 
-/* ================= CART ================= */
+// /* ================= CART ================= */
 
-el.inc.onclick = () => el.qty.value++;
-el.dec.onclick = () => el.qty.value > 1 && el.qty.value--;
+// el.inc.onclick = () => el.qty.value++;
+// el.dec.onclick = () => el.qty.value > 1 && el.qty.value--;
 
-el.add.onclick = () => {
-  if (!state.product) return;
+// el.add.onclick = () => {
+//   if (!state.product) return;
 
-  const item = {
-    id: state.product.id,
-    name: state.product.name,
-    price: state.product.price,
-    qty: +el.qty.value,
-    color: state.color?.hex || null,
-    size: state.size || null,
-    image: el.img.src
-  };
+//   const item = {
+//     id: state.product.id,
+//     name: state.product.name,
+//     price: state.product.price,
+//     qty: +el.qty.value,
+//     color: state.color?.hex || null,
+//     size: state.size || null,
+//     image: el.img.src
+//   };
 
-  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  cart.push(item);
-  localStorage.setItem("cart", JSON.stringify(cart));
+//   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+//   cart.push(item);
+//   localStorage.setItem("cart", JSON.stringify(cart));
 
-  el.add.textContent = "تمت الإضافة ✓";
-  setTimeout(() => el.add.textContent = "أضف إلى السلة", 1200);
-};
+//   el.add.textContent = "تمت الإضافة ✓";
+//   setTimeout(() => el.add.textContent = "أضف إلى السلة", 1200);
+// };
 
-/* ================= HELPERS ================= */
+// /* ================= HELPERS ================= */
 
-function imageUrl(path) {
-  if (!path) return "";
-  if (path.startsWith("http")) return path;
-  return `/storage/${path}`;
-}
+// function imageUrl(path) {
+//   if (!path) return "";
+//   if (path.startsWith("http")) return path;
+//   return `/storage/${path}`;
+// }
 
-function formatPrice(p) {
-  return new Intl.NumberFormat("ar-SY", {
-    style: "currency",
-    currency: "SYP"
-  }).format(p);
-}
+// function formatPrice(p) {
+//   return new Intl.NumberFormat("ar-SY", {
+//     style: "currency",
+//     currency: "SYP"
+//   }).format(p);
+// }
 
-loadProduct();
+// loadProduct();
