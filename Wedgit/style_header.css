@@ -261,7 +261,7 @@
     top: 130%; /* مسافة للأنيميشن */
     left: 0;
     background: #fff;
-    min-width: 220px;
+    min-width: 200px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     padding: 10px 0;
@@ -349,7 +349,7 @@
     }
     .icon-btn:hover{
         background-color: white;
-        color:#f0c14b;
+        color:#e67e22;
         border-color: white;
     }
     
@@ -364,7 +364,7 @@
     
     .dropdown {
         left: -10px;
-        width: 200px;
+        width: 100px;
         transform-origin: top center;
     }
 }
