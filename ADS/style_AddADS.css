@@ -1,0 +1,265 @@
+:root {
+    --bg-body: #eaeded;       
+    --white: #ffffff;
+    --dark-blue: #232f3e;     
+    --light-blue: #405670d8;   
+    --accent-gold: #f0c14b;   
+    --accent-hover: #ddb347;
+    --text-main: #0F1111;
+    --text-gray: #565959;
+    --price-red: #B12704;
+    --border-color: #ddd;
+    --success: #27ae60;
+    --danger: #d63031;
+    --blue-btn: #007185;
+}
+
+/* تنسيقات خاصة بصفحة الإضافة */
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--dark-blue);
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: var(--accent-gold);
+            outline: none;
+        }
+
+        /* معاينة الألوان */
+        .color-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .color-radio {
+            display: none;
+        }
+
+        .color-label {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-radio:checked + .color-label {
+            border-color: var(--dark-blue);
+            transform: scale(1.1);
+        }
+
+        /* أزرار الحفظ والإلغاء */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-save {
+            background: darkblue;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            flex: 2;
+        }
+
+        .btn-cancel {
+            background: #e74c3c;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+        }
+
+        /* Preview Box */
+        .preview-box {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #eee;
+        }
+        .preview-title {
+            text-align: center;
+            color: #777;
+            margin-bottom: 15px;
+        }
+    /* تنسيق البنر الإعلاني */
+.ad-banner {
+    position: relative;
+    width: 100%;
+    height: 400px; /* ارتفاع ثابت لضمان ظهور الصورة بوضوح */
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #f4f4f4;
+    background-size: cover; /* تغطية كامل المساحة */
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center; /* توسيط عمودي */
+    justify-content: center; /* توسيط أفقي */
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    margin-bottom: 30px;
+}
+
+/* طبقة التعتيم لجعل النص مقروءاً */
+.ad-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)); /* تدرج لوني */
+    z-index: 1;
+}
+
+/* المحتوى */
+.ad-content {
+    position: relative;
+    z-index: 2;
+    padding: 40px;
+    max-width: 800px;
+}
+
+.ad-content h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    color: #fff;
+}
+
+.ad-content p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    color: #f0f0f0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.ad-content button {
+    background: var(--accent-gold, #f0c14b);
+    color: #111;
+    border: none;
+    padding: 12px 35px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(240, 193, 75, 0.4);
+    transition: all 0.3s ease;
+}
+
+.ad-content button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(240, 193, 75, 0.6);
+    background: #ffdb72;
+}
+
+/* =========================================
+   Mobile Responsiveness (Add to style_AddADS.css)
+   ========================================= */
+
+@media (max-width: 600px) {
+    /* الحاوية الرئيسية */
+    .form-container {
+        padding: 15px;
+        margin: 10px auto;
+        border-radius: 8px;
+        border: none;
+    }
+
+    /* تكبير حقول الإدخال للمس */
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+        padding: 14px; /* مساحة أكبر للإصبع */
+        font-size: 16px; /* منع التكبير التلقائي في آيفون */
+    }
+
+    /* خيارات الألوان */
+    .color-options {
+        justify-content: space-between; /* توزيع الألوان */
+        flex-wrap: wrap;
+    }
+
+    .color-label {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* الأزرار */
+    .form-actions {
+        flex-direction: column; /* ترتيب عمودي */
+        gap: 10px;
+    }
+
+    .btn-save, .btn-cancel {
+        width: 100%; /* عرض كامل */
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .btn-cancel {
+        order: 2; /* جعل زر الإلغاء في الأسفل */
+        background: transparent;
+        color: #e74c3c;
+        border: 1px solid #e74c3c;
+    }
+
+    .ad-banner {
+        height: 300px;
+    }
+    .ad-content h3 {
+        font-size: 1.8rem;
+    }
+    .ad-content p {
+        font-size: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* إظهار سطرين فقط */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+}
