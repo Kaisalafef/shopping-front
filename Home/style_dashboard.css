@@ -230,17 +230,6 @@ body {
 /* الأزرار (Buttons) */
 .product-actions { margin-top: auto; }
 
-.btn-cart {
-    width: 100%;
-    background: rgb(1, 26, 17);
-    border: 1px solid #a88734;
-    border-radius: 20px;
-    padding: 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.btn-cart:hover { background: var(--accent-hover); }
 
 /* أزرار الأدمن */
 .admin-actions { display: flex; gap: 10px; }
@@ -268,19 +257,6 @@ body {
     align-items: center;
 }
 
-.btn-add {
-    background-color: var(--success);
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-.btn-add:hover { background-color: #219150; }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
@@ -367,9 +343,9 @@ body {
     display: flex;
     gap: 20px;
     padding: 15px 5px;
-    overflow-x: auto;
+    overflow-x:  auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* إخفاء شريط التمرير في فايرفوكس */
+    scrollbar-width: auto; /* إخفاء شريط التمرير في فايرفوكس */
 }
 
 .ads-section::-webkit-scrollbar {
@@ -379,7 +355,7 @@ body {
 /* ستايل البنر المطور */
 .ad-banner {
     position: relative;
-    min-width: 85%; /* للموبايل: يأخذ معظم الشاشة */
+    min-width: 55%; /* للموبايل: يأخذ معظم الشاشة */
     height: 180px;
     border-radius: 20px;
     overflow: hidden;
@@ -444,7 +420,6 @@ body {
 .ad-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to left, rgba(0,0,0,0.7), transparent);
     z-index: 1;
 }
 
@@ -506,16 +481,15 @@ body {
 .offer-white-card {
     background: #fff;
     border-radius: 12px;
-    padding: 20px;
+    padding: 15px;
     width: 200px;
-    height: 300px;
+    height: 320px;
     flex-shrink: 0;
     position: relative;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    transition: transform 0.2s;
+    gap: 12px;
 }
 
 .offer-white-card:hover {
@@ -551,6 +525,10 @@ body {
 
 .offer-details {
     text-align: right;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .offer-title {
@@ -561,11 +539,11 @@ body {
     text-overflow: ellipsis;
 }
 
+
 .offer-prices {
     display: flex;
     gap: 8px;
     align-items: center;
-    flex-wrap: wrap;
 }
 
 .new-price {
@@ -580,17 +558,7 @@ body {
     font-size: 0.85rem;
 }
 
-.add-cart-btn-mini {
-    background: #3b82f6;
-    color: white;
-    border: none;
-    width: 100%;
-    margin-top: 8px;
-    padding: 6px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.add-cart-btn-mini:hover { background: #2563eb; }
+
 /* تحسين التجاوب */
 @media (max-width: 600px) {
   .ad-banner {
@@ -855,35 +823,13 @@ body {
   }
 
   /* ===== Buttons ===== */
-  .btn-cart {
-    padding: 6px;
-    font-size: 0.8rem;
-  }
+  
+  
 
-  .admin-actions {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .btn-edit,
-  .btn-delete {
-    font-size: 0.8rem;
-    padding: 6px;
-  }
+ 
 
   /* ===== Admin Toolbar ===== */
-  .admin-toolbar {
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-  }
-
-  .btn-add {
-    width: 100%;
-    justify-content: center;
-    padding: 8px;
-    font-size: 0.85rem;
-  }
+  
 
   /* ===== Categories Nav ===== */
   .categories-list {

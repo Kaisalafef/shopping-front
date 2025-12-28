@@ -1,102 +1,103 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>المنتجات</title>
 
-    <title>المنتجات</title>
+        <!-- Icons -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <!-- Styles -->
+        <link rel="stylesheet" href="/Wedgit/style_header.css">
+        <link rel="stylesheet" href="products_styl.css">
+        <link rel="stylesheet" href="/Home/style_dashboard.css">
+    </head>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="/Wedgit/style_header.css">
-    <link rel="stylesheet" href="products_styl.css">
-    <link rel="stylesheet" href="/Home/style_dashboard.css">
-</head>
+    <body>
 
-<body>
+        <!-- ================= HEADER ================= -->
+        <header class="main-header">
+            <div class="header-container">
+                <div class="profile-menu">
+                    <button class="icon-btn" id="profileBtn" type="button"
+                        title="القائمة الشخصية">
+                        <i class="fas fa-user"></i>
+                    </button>
 
-    <!-- ================= HEADER ================= -->
-    <header class="main-header">
-        <div class="header-container">
-            <a href="/Home/client_dashboard.html" class="logo-link">
-                <img src="/images/logo.png" class="logo" alt="Logo">
-            </a>
-            <div class="search-box">
-                <input type="text" id="globalSearchInput" placeholder="ابحث عن منتجات..." autocomplete="off">
+                    <ul class="dropdown" id="desktopDropdown">
+                        <li>
+                            <a href="/Profile/Profile.html">
+                                <i class="fas fa-user-circle"></i> حسابي
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Cart/Cart.html">
+                                <i class="fas fa-shopping-cart"></i> سلتي
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Wedgit/About.html">
+                                <i class="fas fa-info-circle"></i> حول
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <button class="search-btn" type="submit" title="بحث">
-                    <i class="fas fa-search"></i>
-                </button>
+                <div class="search-box">
+                    <input type="text" id="globalSearchInput"
+                        placeholder="ابحث عن منتجات..." autocomplete="off">
 
-                <div id="searchResults" class="search-results-dropdown"></div>
-            </div>
-            <div class="profile-menu">
-                <button class="icon-btn" id="profileBtn" type="button" title="فتح القائمة">
-                    <i class="fas fa-user"></i>
-                </button>
+                    <button class="search-btn" type="submit" title="بحث">
+                        <i class="fas fa-search"></i>
+                    </button>
 
-                <ul class="dropdown" id="desktopDropdown">
-                    <li><a href="#"><i class="fas fa-user-circle"></i> حسابي</a></li>
-                    <li><a href="#"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
-                </ul>
-            </div>
+                    <div id="searchResults"
+                        class="search-results-dropdown"></div>
+                </div>
+                <a href="/Home/client_dashboard.html" class="logo-link">
+                    <img src="/images/logo.webp" class="logo" alt="Logo">
+                </a>
+
+            </header>
+
+        </header>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <div class="dashboard-container" style="margin-top: 30px;">
+            <main class="main-content">
+
+                <div class="section-header">
+                    <h2 id="pageTitle">جميع المنتجات</h2>
+
+                    <!-- زر العودة (سيُعدل تلقائياً في JS حسب role) -->
+                    <a href="/Home/client_dashboard.html"
+                        id="backToCategories"
+                        style="text-decoration:none; color:var(--blue-btn); font-weight:bold;">
+                        <i class="fas fa-arrow-right"></i> عودة للتصنيفات
+                    </a>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid" id="productsContainer">
+                    <!-- المنتجات تُحقن هنا عبر JS -->
+                </div>
+
+            </main>
         </div>
 
+        <!-- ================= SCRIPTS ================= -->
+        <script src="/Wedgit/script_header.js"></script>
+        <script src="products_logic.js"></script>
 
-    </header>
-
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#">الرئيسية</a>
-        <a href="#">حسابي</a>
-        <a href="#">سلتي</a>
-        <a href="#">تسجيل خروج</a>
-
-    </div>
-    </header>
-
-    <!-- ================= MOBILE MENU ================= -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="/Home/client_dashboard.html">الرئيسية</a>
-        <a href="#">حسابي</a>
-        <a href="#">سلتي</a>
-        <a href="#">تسجيل خروج</a>
-    </div>
-
-    <!-- ================= MAIN CONTENT ================= -->
-    <div class="dashboard-container" style="margin-top: 30px;">
-        <main class="main-content">
-
-            <div class="section-header">
-                <h2 id="pageTitle">جميع المنتجات</h2>
-
-                <!-- زر العودة (سيُعدل تلقائياً في JS حسب role) -->
-                <a href="/Home/client_dashboard.html" id="backToCategories"
-                    style="text-decoration:none; color:var(--blue-btn); font-weight:bold;">
-                    <i class="fas fa-arrow-right"></i> عودة للتصنيفات
-                </a>
-            </div>
-
-            <!-- Products Grid -->
-            <div class="products-grid" id="productsContainer">
-                <!-- المنتجات تُحقن هنا عبر JS -->
-            </div>
-
-        </main>
-    </div>
-
-    <!-- ================= SCRIPTS ================= -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="script_header.js"></script>
-
-    <script src="/Wedgit/script_header.js"></script>
-    <script src="products_logic.js"></script>
-
-</body>
-
+    </body>
 </html>

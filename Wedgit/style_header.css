@@ -1,275 +1,285 @@
-/* Global Reset - Be careful linking this if your other pages have their own reset */
-* {
-  box-sizing: border-box;
+/* style_header.css - Fully Responsive & Modern */
+
+:root {
+    --header-bg: #1e272e;       /* نفس الخلفية الداكنة لصفحة المنتج */
+    --header-text: #ffffff;
+    --accent-color: #FFC312;    /* الأصفر الذهبي */
+    --search-bg: #ffffff;
+    --border-color: #4b6584;
+}
+ 
+/* Reset for Header Elements */
+.main-header * {
+    
+    box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: 'Cairo', sans-serif;
-  overflow-x: hidden;
-}
-
-/* Header Main */
 .main-header {
+    
   background: linear-gradient(90deg, #eaeded , #f0c14b , #eaeded );
-  position: relative;
-
-  z-index: 1000; /* Ensures header stays on top */
+    color: var(--header-text);
+    position: sticky; /* تثبيت الهيدر عند السكرول */
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .header-container {
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 12px 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* يسمح بالعناصر بالنزول للسطر التالي في الموبايل */
+    gap: 15px;
 }
 
-/* Logo */
+/* ===========================
+   1. Logo
+   =========================== */
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0; /* منع اللوجو من الانكماش */
+}
+
 .logo {
-  height: 150px;
-  width: 150px;
-  }
+    margin: 0 0px ;
+    padding: 0 0px ;
+    height: 120px; /* حجم مناسب وموحد */
+    width: 120px;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+
 .logo:hover {
-  opacity: 0.7;
+    transform: scale(1.05);
 }
 
-/* Profile Area */
-.profile-menu {
-  position: absolute;
-  right: 15px;
-  z-index: 1001;
-
-}
-
-.icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #232f3e;
-  color: #f0c14b;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;          /* Centers the icon */
-  align-items: center;    /* Centers the icon */
-  justify-content: center;/* Centers the icon */
-}
-
-.icon-btn:hover {
-  background: transparent;
-  color: #232f3e;
-  border: 1px solid #232f3e; /* Added border so it doesn't disappear */
-}
-
-/* Desktop Dropdown */
-.dropdown {
-  position: absolute;
-  top: 55px; /* Adjusted slightly */
-  right: 0;
-  background: #fff;
-  width: 200px;
-  list-style: none;
-  padding: 8px 0;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  border-radius: 10px;
-  display: none; /* Hidden by default */
-  z-index: 1002;
-}
-
-.dropdown li a {
-  display: block;
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #232f3e;
-  font-size: 0.95rem;
-}
-
-.dropdown li a:hover {
-  background: #f5f5f5;
-}
-
-.divider {
-  height: 1px;
-  background: #eee;
-  margin: 5px 0;
-}
-
-/* Search Box */
-.search-wrapper {
-  padding: 10px 15px;
-  display: flex;
-  justify-content: center;
-}
-
+/* ===========================
+   2. Search Box (The Engine)
+   =========================== */
 .search-box {
-  position: relative;
-  width: 100%;
-  max-width: 600px; /* Limits width on big screens */
+    flex-grow: 1; /* يأخذ المساحة المتبقية في المنتصف */
+    position: relative;
+    max-width: 600px; /* لا يتوسع أكثر من اللازم */
+    margin: 0 20px;
 }
 
 .search-box input {
-  width: 100%;
-  height: 60px;
-  border-radius: 25px;
-  border: 1px solid #ddd;
-  padding: 0 45px 0 15px;
-  font-size: 16px;
-  outline: none;
+    width: 100%;
+    height: 42px;
+    padding: 0 50px 0 15px; /* مسافة للأيقونة */
+    border-radius: 25px; /* حواف دائرية عصرية */
+    border: 2px solid transparent;
+    background: var(--search-bg);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(255, 195, 18, 0.2);
 }
 
 .search-btn {
-  position: absolute;
-  left: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #232f3e;
-  color: #f0c14b;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: absolute;
+    left: 5px; /* RTL placement */
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--accent-color);
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--header-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
 }
 
-/* Mobile Menu */
-.mobile-menu {
-  position: fixed;
-  top: 0;
-  right: -100%; /* Hidden off-screen */
-  width: 75%;
-  height: 100vh;
-  background: #fff;
-  padding: 80px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  box-shadow: -5px 0 20px rgba(0,0,0,0.2);
-  transition: right 0.3s ease-in-out;
-  z-index: 2000;
+.search-btn:hover {
+    background: #e1b12c;
 }
 
-/* Class added by JS to show menu */
-.mobile-menu.active {
-  right: 0;
-}
-
-.mobile-menu a {
-  text-decoration: none;
-  color: #232f3e;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-/* تنسيقات قائمة نتائج البحث */
-
-
+/* Search Dropdown Results */
 .search-results-dropdown {
     position: absolute;
-    top: 100%; /* تظهر أسفل الحقل مباشرة */
+    top: 100%;
     left: 0;
-    width: 100%;
+    right: 0;
     background: #fff;
-    border-radius: 0 0 15px 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    z-index: 2000;
-    max-height: 400px;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    margin-top: 8px;
+    z-index: 1001;
+    max-height: 300px;
     overflow-y: auto;
-    display: none; /* مخفية افتراضياً */
-    border: 1px solid #eee;
-    border-top: none;
+    display: none; /* JS will toggle this */
 }
 
-/* تنسيق عنصر النتيجة الواحد */
-.search-box{
-  align-content: center;
+.search-results-dropdown.active {
+    display: block;
 }
+
+/* تصميم عناصر البحث الداخلي */
 .search-item {
     display: flex;
     align-items: center;
     padding: 10px 15px;
+    border-bottom: 1px solid #eee;
     text-decoration: none;
-    border-bottom: 1px solid #f5f5f5;
     transition: background 0.2s;
+    color: #2d3436;
+}
+.search-item:hover { background: #f5f6fa; }
+.search-item img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; margin-left: 10px; }
+.search-item-info { display: flex; flex-direction: column; }
+.search-item-title { font-weight: 600; font-size: 0.9rem; }
+.search-item-price { color: #e1b12c; font-weight: 700; font-size: 0.85rem; }
+
+/* ===========================
+   3. Profile Menu
+   =========================== */
+.profile-menu {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.icon-btn {
+    background: #1d1b1be3;
+    border: 2px solid #1d1b1b;
+    color: #FFC312;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
     cursor: pointer;
-}
-
-.search-item:last-child {
-    border-bottom: none;
-}
-
-.search-item:hover {
-    background-color: #f9f9f9;
-}
-
-
-/* صورة المنتج في البحث */
-.search-item img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-left: 10px; /* مسافة للصورة لأن الموقع RTL */
-}
-
-/* تفاصيل المنتج */
-.search-item-info {
+    font-size: 1.2rem;
+    transition: all 0.3s;
     display: flex;
-    flex-direction: column;
-    text-align: right;
+    align-items: center;
+    justify-content: center;
 }
 
-.search-item-title {
-    font-size: 0.9rem;
-    color: #232f3e;
-    font-weight: 600;
-    margin-bottom: 2px;
+.icon-btn:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--header-bg);
 }
 
-.search-item-price {
-    font-size: 0.8rem;
-    color: #B12704; /* لون السعر المميز */
-    font-weight: bold;
-}
-
-/* رسالة عدم وجود نتائج */
-.no-results {
-    padding: 15px;
-    text-align: center;
-    color: #777;
-    font-size: 0.9rem;
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-  .main-header{
-      background: linear-gradient(90deg, #f0c14b , #ffffff );
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-
-
-  }
-  .logo {
-    height: 80px;
-    width: 80px;
-  }
-  .icon-btn{
-    height: 30px;
-    width: 30px;  
-  }
-  .profile-menu {
+.dropdown {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 15px;
-  }
+    top: 120%;
+    left: 0; /* RTL alignment */
+    background: #fff;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    padding: 10px 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 1002;
+}
+/* سهم صغير للقائمة */
+.dropdown::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 15px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    transform: rotate(45deg);
+}
 
-  /* Force hide desktop dropdown on mobile */
-  .dropdown {
-    display: none !important;
-  }
+/* إظهار القائمة */
+.dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown li a {
+    display: block;
+    padding: 10px 20px;
+    color: #2d3436;
+    text-decoration: none;
+    font-size: 1.01rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.dropdown li a:hover {
+    background: #f5f6fa;
+    color: var(--accent-color); /* برتقالي عند التحويم */
+}
+.dropdown .divider {
+    height: 1px;
+    background: #eee;
+    margin: 5px 0;
+}
+
+/* ===========================
+   MOBILE RESPONSIVENESS (Magic Happens Here)
+   =========================== */
+@media (max-width: 768px) {
+  .main-header {
+      background: linear-gradient(90deg,  #f0c14b ,#eaeded );
+
+        padding: 10px 0;
+    }
+    .header-container {
+        padding: 10px 15px;
+        justify-content: space-between;
+    }
+
+    /* 1. Logo: Top Right */
+    .logo-link {
+        order: 1;
+    }
+    .logo {
+        height: 90px; /* أصغر قليلاً للموبايل */
+    }
+
+    /* 2. Profile: Top Left */
+    .icon-btn{
+        background-color: #eaeded;
+        color: #1d1b1b;
+        border-color:  #eaeded;
+    }
+    .icon-btn:hover{
+        background-color: white;
+        color:#f0c14b;
+        border-color: white;
+    }
+    .profile-menu {
+        
+        order: 2;
+    }
+
+    /* 3. Search Box: Full Width, Second Row */
+    .search-box {
+        order: 3;
+        width: 100%; /* عرض كامل */
+        margin: 5px 0 0 0; /* إلغاء الهوامش الجانبية */
+        max-width: none;
+    }
+    
+    .dropdown {
+        min-width: 150;
+    font-size: 0.5rem;
+        left: -10px; /* ضبط موضع القائمة لتكون داخل الشاشة */
+    }
 }
