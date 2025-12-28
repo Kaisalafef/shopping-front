@@ -179,7 +179,7 @@
     top: 120%;
     left: 0; /* RTL alignment */
     background: #fff;
-    min-width: 250px;
+    min-width: 200px;
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
     padding: 10px 0;
