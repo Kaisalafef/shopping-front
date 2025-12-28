@@ -124,3 +124,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+// تفعيل أزرار العين في صفحات Login و Sign_up
+document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', function() {
+        // البحث عن حقل الإدخال الموجود في نفس الحاوية (input-group أو password-container)
+        const input = this.parentElement.querySelector('input');
+        
+        if (input.type === "password") {
+            input.type = "text";
+            this.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+            input.type = "password";
+            this.classList.replace("fa-eye-slash", "fa-eye");
+        }
+    });
+});
