@@ -255,9 +255,9 @@
 
     /* 2. Profile: Top Left */
     .icon-btn{
-        background-color: white;
+        background-color: #eaeded;
         color: #1d1b1b;
-        border-color: white;
+        border-color:  #eaeded;
     }
     .icon-btn:hover{
         background-color: white;

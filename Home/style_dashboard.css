@@ -420,7 +420,6 @@ body {
 .ad-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to left, rgba(0,0,0,0.7));
     z-index: 1;
 }
 
