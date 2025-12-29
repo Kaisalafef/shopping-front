@@ -53,6 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("globalSearchInput");
     const searchResults = document.getElementById("searchResults");
     const API_URL = "http://127.0.0.1:8000/api/products"; 
+    /* ==========================================
+       2. Search Logic (Debounce & Fetch)
+       ========================================== */
     let debounceTimer;
 
     const getImageUrl = (path) => {
@@ -62,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (searchInput && searchResults) {
+        
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                 searchResults.classList.remove('active');
@@ -71,33 +75,51 @@ document.addEventListener("DOMContentLoaded", () => {
         searchInput.addEventListener("input", (e) => {
             const query = e.target.value.trim();
             clearTimeout(debounceTimer);
+
             if (query.length === 0) {
                 searchResults.classList.remove('active');
+                searchResults.innerHTML = "";
                 return;
             }
 
             debounceTimer = setTimeout(() => {
                 fetch(`${API_URL}?search=${encodeURIComponent(query)}`)
-                    .then(res => res.json())
+                    .then(res => {
+                        if(!res.ok) throw new Error("Network response was not ok");
+                        return res.json();
+                    })
                     .then(resData => {
                         const products = resData.data || resData; 
                         renderSearchResults(products);
                     })
-                    .catch(err => console.error("Search Error:", err));
+                    .catch(err => {
+                        console.error("Search Error:", err);
+                        searchResults.innerHTML = `<div class="search-item" style="animation: fadeInUp 0.3s forwards">خطأ في البحث</div>`;
+                        searchResults.classList.add('active');
+                    });
             }, 500); 
         });
     }
 
     function renderSearchResults(products) {
         searchResults.innerHTML = "";
+        
         if (!products || products.length === 0) {
-            searchResults.innerHTML = `<div class="search-item" style="justify-content:center; color:#999;">لا توجد نتائج</div>`;
+            searchResults.innerHTML = `
+                <div class="search-item" style="justify-content:center; color:#999; animation: fadeInUp 0.3s forwards">
+                    لا توجد نتائج
+                </div>`;
         } else {
+            // عرض أول 5 نتائج مع تأثير تتابعي (Staggered Animation)
             products.slice(0, 5).forEach((product, index) => {
                 const item = document.createElement("a");
                 item.href = `/Product/Product.html?id=${product.id}`;
                 item.className = "search-item";
+                
+                // إضافة تأخير زمني لكل عنصر بناءً على ترتيبه
+                // العنصر الأول يظهر فوراً، الثاني بعد 0.1 ثانية، وهكذا
                 item.style.animationDelay = `${index * 0.1}s`;
+
                 item.innerHTML = `
                     <div class="search-item-info">
                         <span class="search-item-title">${product.name}</span>
@@ -108,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 searchResults.appendChild(item);
             });
         }
+        
         searchResults.classList.add('active');
     }
 

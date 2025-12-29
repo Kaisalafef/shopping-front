@@ -13,12 +13,7 @@
     --warning: #f1c40f;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Cairo', 'Poppins', sans-serif;
-}
+
 
 body {
     min-height: 100vh;

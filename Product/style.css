@@ -16,9 +16,7 @@
 }
 
 /* Reset & base */
-* {
-    box-sizing: border-box;
-}
+
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -1070,6 +1068,12 @@ body {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+.rating-input .star {
+    font-size: 2rem;
+    cursor: pointer;
+    color: gold;
+    margin-right: 5px;
+}
 /* =========================================
    Mobile Responsiveness (Add to style_P.css)
    ========================================= */
@@ -1168,4 +1172,6 @@ body {
     .rating-star {
         font-size: 24px; /* تصغير النجوم قليلاً */
     }
+
+
 }
