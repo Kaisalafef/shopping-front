@@ -331,6 +331,7 @@ body {
 .offers-inner-grid::-webkit-scrollbar { display: none; }
 
 .offer-white-card {
+    cursor: pointer;
     background-color: #ffffff;
     border-radius: 20px;
     width: 200px;
