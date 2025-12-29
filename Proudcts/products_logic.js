@@ -195,11 +195,7 @@ function createProductCard(product, isAdmin) {
    إجراءات عامة
 ========================= */
 window.goToEditPage = (id) => {
-<<<<<<< HEAD
-    window.location.href = `/Add Proudct/add_Proudct.html?editId=${id}`;
-=======
     window.location.href = `/Edit_Product/Edit_Product.html?editId=${id}`;
->>>>>>> 06771b4719f75e41845da5d6f644ad783db440a2
 };
 
 window.deleteProduct = async (id) => {

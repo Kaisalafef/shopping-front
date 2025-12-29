@@ -53,11 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="offer-white-card" style="animation-delay: ${delay}s"  onclick="location.href='/Product/Product.html?id=${p.id}'">
                         <span class="discount-circle">${label}</span>
 
-<<<<<<< HEAD
-                        <div class="offer-img-box" >
-=======
                         <div class="offer-img-box" onclick ="window.location.href='/Product/Product.html?id=${p.id}'">
->>>>>>> 06771b4719f75e41845da5d6f644ad783db440a2
                             <img src="${img}" alt="${p.name}">
                         </div>
 
