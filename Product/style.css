@@ -1175,3 +1175,64 @@ body {
 
 
 }
+.reviews-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+/* صندوق التقييمات */
+.product-reviews-box {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.rating-summary {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avg-number {
+  font-size: 48px;
+  font-weight: bold;
+  color: #222;
+}
+
+.avg-stars {
+  font-size: 22px;
+  color: #f5b301;
+  margin: 5px 0;
+}
+
+.reviews-count {
+  color: #777;
+  font-size: 14px;
+}
+
+.review-item {
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.review-stars {
+  color: #f5b301;
+  font-size: 16px;
+}
+
+.review-comment {
+  margin-top: 6px;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* نموذج الإضافة */
+.review-form {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
