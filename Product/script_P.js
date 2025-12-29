@@ -41,6 +41,13 @@ const lightboxImg = document.getElementById("pw-lightbox-img");
 const lightboxClose = document.getElementById("pw-lightbox-close");
 
 /* ---------------------------
+   Review Elements
+---------------------------- */
+const reviewRatingValue = document.getElementById("review-rating-value");
+const reviewComment = document.getElementById("review-text");
+const reviewBtn = document.querySelector("#review-form .submit-btn");
+
+/* ---------------------------
    State
 ---------------------------- */
 let selectedColor = null;
@@ -61,8 +68,6 @@ async function loadProduct() {
   }
 }
 
-loadProduct();
-
 /* ---------------------------
    Render Product
 ---------------------------- */
@@ -71,7 +76,6 @@ function renderProduct(product) {
   priceEl.textContent = `${product.price} SYP`;
   descEl.textContent = product.description;
 
-  // الصورة الافتراضية
   if (product.image_url) {
     imageEl.src = product.image_url;
   }
@@ -110,7 +114,6 @@ function renderColors(images) {
       }
     });
 
-    // تحديد أول لون تلقائيًا
     if (index === 0) {
       swatch.classList.add("selected");
       selectedColor = img.color;
@@ -157,7 +160,7 @@ btnDec.addEventListener("click", () => {
 });
 
 /* ---------------------------
-   Lightbox
+   Add to Cart
 ---------------------------- */
 addBtn.addEventListener("click", () => {
   const quantity = parseInt(qtyInput.value || 1);
@@ -176,34 +179,34 @@ addBtn.addEventListener("click", () => {
     alert("يرجى اختيار المقاس");
     return;
   }
- const token = localStorage.getItem("token"); // تأكد أنك خزنته عند تسجيل الدخول
 
-  // أولاً نحصل على السلة الخاصة بالمستخدم
-  fetch('http://127.0.0.1:8000/api/my-cart', {
+  const token = localStorage.getItem("token");
+
+  fetch(`${API_BASE}/my-cart`, {
     headers: {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json"
     }
   })
-  .then(res => res.json())
-  .then(cart => {
-    const cartId = cart.id; // هذا هو cart_id الخاص بك
+    .then(res => res.json())
+    .then(cart => {
+      const cartId = cart.id;
 
-    // الآن يمكنك استخدامه لإضافة عنصر
-    const payload = {
-      product_id: productId,
-      quantity,
-      color: selectedColor,
-      size: sizeSelect.value || null
-    };
+      const payload = {
+        product_id: productId,
+        quantity,
+        color: selectedColor,
+        size: sizeSelect.value || null
+      };
 
-    fetch(`${API_BASE}/carts/${cartId}/items`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify(payload)
+      return fetch(`${API_BASE}/carts/${cartId}/items`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
     })
     .then(res => res.json())
     .then(item => {
@@ -212,23 +215,15 @@ addBtn.addEventListener("click", () => {
     })
     .catch(err => {
       console.error(err);
-      alert("حدث خطأ أثناء إضافة المنتج");
+      alert("حدث خطأ أثناء إضافة المنتج أو الحصول على السلة");
     });
-  })
-  .catch(err => {
-    console.error(err);
-    alert("تعذر الحصول على السلة");
-  });
 });
 
-////////////////////////////////////
-
-const reviewRatingValue = document.getElementById("review-rating-value"); // بدلاً من pw-review-rating
-const reviewComment = document.getElementById("review-text");
-const reviewBtn = document.querySelector("#review-form .submit-btn");
-
+/* ---------------------------
+   Submit Review
+---------------------------- */
 reviewBtn.addEventListener("click", (e) => {
-  e.preventDefault(); // منع إعادة تحميل الصفحة
+  e.preventDefault();
 
   const token = localStorage.getItem("token");
   if (!token) {
@@ -241,7 +236,7 @@ reviewBtn.addEventListener("click", (e) => {
     return;
   }
 
-  const rating = parseFloat(reviewRatingValue.value); // هنا نأخذ القيمة من hidden input
+  const rating = parseFloat(reviewRatingValue.value);
   const comment = reviewComment.value.trim();
 
   if (!rating || rating < 1 || rating > 5) {
@@ -264,39 +259,120 @@ reviewBtn.addEventListener("click", (e) => {
     },
     body: JSON.stringify(payload)
   })
-  .then(res => {
-    if (!res.ok) throw new Error("تعذر إرسال التقييم");
-    return res.json();
-  })
-  .then(data => {
-    console.log("تم إرسال التقييم:", data);
-    alert("تم إرسال التقييم بنجاح ✅");
-    reviewRatingValue.value = "";
-    reviewComment.value = "";
-    // إعادة تلوين النجوم
-    document.querySelectorAll("#rating-input .star").forEach(s => s.textContent = "☆");
-  })
-  .catch(err => {
-    console.error(err);
-    alert(err.message);
-  });
+    .then(res => {
+      if (!res.ok) throw new Error("تعذر إرسال التقييم");
+      return res.json();
+    })
+    .then(data => {
+      console.log("تم إرسال التقييم:", data);
+      alert("تم إرسال التقييم بنجاح ✅");
+      reviewRatingValue.value = "";
+      reviewComment.value = "";
+      document.querySelectorAll("#rating-input .star").forEach(s => s.textContent = "☆");
+
+      // تحديث التعليقات بعد الإرسال
+      loadReviews();
+    })
+    .catch(err => {
+      console.error(err);
+      alert(err.message);
+    });
 });
 
-////////////////////////////////////rate
+/* ---------------------------
+   Star Rating UI
+---------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   const stars = document.querySelectorAll("#rating-input .star");
-  const reviewRatingValue = document.getElementById("review-rating-value");
-
   stars.forEach(star => {
     star.addEventListener("click", () => {
       const rating = star.dataset.value;
       reviewRatingValue.value = rating;
 
-      // تلوين النجوم حسب الاختيار
-      stars.forEach(s => s.textContent = "☆"); // إعادة ضبط
+      stars.forEach(s => s.textContent = "☆");
       for (let i = 0; i < rating; i++) {
         stars[i].textContent = "★";
       }
     });
   });
+
+  // تحميل المنتج
+  loadProduct();
+
+  // تحميل التعليقات
+  loadReviews();
 });
+
+/* ---------------------------
+   Reviews
+---------------------------- */
+const reviewsApi = () => `${API_BASE}/reviews/product/${productId}`;
+
+async function loadReviews() {
+  if (!productId) return;
+
+  try {
+    const res = await fetch(reviewsApi());
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById("reviews-list").innerHTML =
+        "<p>لا توجد تقييمات بعد</p>";
+      document.getElementById("average-rating").textContent = "0.0";
+      document.getElementById("average-stars").textContent = "☆☆☆☆☆";
+      document.getElementById("reviews-count").textContent = "0 تقييم";
+      return;
+    }
+
+    renderAverageRating(data);
+    renderReviews(data);
+
+  } catch (err) {
+    console.error("خطأ في تحميل التقييمات", err);
+  }
+}
+
+function renderAverageRating(reviews) {
+  const total = reviews.reduce((sum, r) => sum + Number(r.rating), 0);
+  const avg = (total / reviews.length).toFixed(1);
+
+  // عرض الرقم فقط بدون النجوم
+  document.getElementById("average-rating").textContent =  'التقييم :'+avg ;
+
+  // إزالة عرض النجوم
+  document.getElementById("average-stars").textContent = '';
+
+  // إزالة نص عدد التقييمات
+  document.getElementById("reviews-count").textContent = '';
+}
+
+
+function generateStars(value) {
+  let stars = "";
+  const full = Math.floor(value);
+  for (let i = 1; i <= 5; i++) {
+    stars += i <= full ? "★" : "☆";
+  }
+  return stars;
+}
+
+function renderReviews(reviews) {
+  const container = document.getElementById("reviews-list");
+  container.innerHTML = "";
+
+  reviews.forEach(review => {
+    const div = document.createElement("div");
+    div.className = "review-item";
+
+    div.innerHTML = `
+      <div class="review-stars">
+        ${generateStars(review.rating)}
+      </div>
+      <div class="review-comment">
+        ${review.comment}
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
