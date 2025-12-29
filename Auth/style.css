@@ -90,20 +90,23 @@ h2 {
     font-size: 0.9rem;
 }
 
+/* إصلاح تباعد المجموعات */
 .input-group {
     margin-bottom: 20px;
-    position: relative;
+    text-align: right;
+    width: 100%;
 }
 
 .input-group label {
+    
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
-    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
 input {
-    width: 100%;
+    width: 90%;
     padding: 12px 16px;
     border: 2px solid #dfe6e9;
     border-radius: 12px;
@@ -116,16 +119,45 @@ input:focus {
     box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
 }
 
-.toggle-password {
+/* --- إصلاح أيقونة العين (Toggle Password) --- */
+.toggle-password, .toggle-password-2 {
     position: absolute;
-    left: 15px;
-    /* RTL fix */
-    top: 60px;
+    left: 15px; /* وضع الأيقونة على اليسار لأننا في RTL */
+    right: auto; 
+    top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: var(--text-muted);
+    font-size: 1.1rem;
+    z-index: 10;
+    transition: color 0.3s ease;
 }
 
+.toggle-password:hover, .toggle-password-2:hover {
+    color: var(--primary-color);
+}
+/* --- إصلاح حاوية الإدخال --- */
+.input-wrapper, .password-container {
+    position: relative; /* ضروري لكي تتموضع الأيقونة بالنسبة له */
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input, .password-container input {
+    width: 100%;
+    padding: 12px 15px;
+    padding-left: 45px; /* ترك مساحة للأيقونة على اليسار */
+     border: 2px solid #dfe6e9;
+    border-radius: 12px;
+    outline: none;
+    font-family: 'Cairo', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.input-wrapper input:focus, .password-container input:focus {
+    border-color: var(--primary-color);
+}
 /* Password Strength Meter */
 .strength-meter {
     height: 5px;
