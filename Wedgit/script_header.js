@@ -1,17 +1,58 @@
+/* ==========================================
+   SCRIPT HEADER - المطور والمعدل
+   ========================================== */
+
 document.addEventListener("DOMContentLoaded", () => {
     
-    /* ==========================================
-       1. Elements
-       ========================================== */
+    /* 1. إدارة الصلاحيات (Role Management) */
+    // قراءة البيانات بنفس التسميات المستخدمة في Auth.js
+    const userStr = localStorage.getItem("auth_user");
+    const user = userStr ? JSON.parse(userStr) : null;
+    const role = localStorage.getItem("auth_role"); // الرتبة المخزنة في Auth.js
+
+    // تحديد نوع المستخدم: إذا كان admin يبقى admin، وإلا فهو client
+    const userRole = (role === 'admin') ? 'admin' : 'client'; 
+// 1. التحكم في روابط الأدمن الإضافية
+    const adminFeatures = document.querySelectorAll(".admin-only");
+    const cartLink = document.getElementById("cart-link");
+
+    if (role === 'admin') {
+        // إظهار ميزات الأدمن
+        adminFeatures.forEach(el => el.style.display = "block");
+        // إخفاء السلة للأدمن (اختياري حسب رغبتك)
+        if (cartLink) cartLink.style.display = "none";
+    } else {
+        // إخفاء ميزات الأدمن للزبائن
+        adminFeatures.forEach(el => el.style.display = "none");
+        if (cartLink) cartLink.style.display = "block";
+    }
+
+    // 2. تحديث رابط اللوجو للعودة للداشبورد الصحيح
+    const logoLink = document.querySelector(".logo-link");
+    if (logoLink) {
+        logoLink.href = (role === 'admin') ? "/Home/admin_dashboard.html" : "/Home/client_dashboard.html";
+    }
+    // ب- تحديث زر العودة في صفحة المنتجات (إذا وجد)
+    const backBtn = document.getElementById("backToCategories");
+    if (backBtn) {
+        backBtn.href = targetDashboard;
+        if (userRole === 'admin') {
+            backBtn.innerHTML = '<i class="fas fa-arrow-right"></i> عودة للوحة الإدارة';
+        }
+    }
+
+    // ج- إخفاء "سلتي" للأدمن فقط
+    if (userRole === 'admin') {
+        const cartLink = document.querySelector('a[href="/Cart/Cart.html"]');
+        if (cartLink && cartLink.parentElement) {
+            cartLink.parentElement.style.display = 'none';
+        }
+    }
+
+    /* 3. منطق البحث (الحفاظ على الكود الأصلي) */
     const searchInput = document.getElementById("globalSearchInput");
     const searchResults = document.getElementById("searchResults");
-    
-    const profileBtn = document.getElementById("profileBtn");
-    const dropdown = document.getElementById("desktopDropdown");
-    const logoutBtn = document.getElementById("logoutBtn");
-
     const API_URL = "http://127.0.0.1:8000/api/products"; 
-
     /* ==========================================
        2. Search Logic (Debounce & Fetch)
        ========================================== */
@@ -93,16 +134,15 @@ document.addEventListener("DOMContentLoaded", () => {
         searchResults.classList.add('active');
     }
 
-    /* ==========================================
-       3. Mobile Menu / Dropdown Logic
-       ========================================== */
+    /* 4. فتح وإغلاق القائمة المنسدلة (Profile Menu) */
+    const profileBtn = document.getElementById("profileBtn");
+    const dropdown = document.getElementById("desktopDropdown");
+
     if (profileBtn && dropdown) {
-        
         profileBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             dropdown.classList.toggle("show");
         });
-
         document.addEventListener("click", (e) => {
             if (!profileBtn.contains(e.target) && !dropdown.contains(e.target)) {
                 dropdown.classList.remove("show");
@@ -110,14 +150,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* ==========================================
-       4. Logout Logic
-       ========================================== */
+    /* 5. تسجيل الخروج (يتوافق مع API الخاص بك) */
+    const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function (e) {
             e.preventDefault();
             const token = localStorage.getItem("token");
-            
             logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الخروج...';
 
             fetch("http://127.0.0.1:8000/api/logout", {
@@ -128,14 +166,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
             .then(() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                window.location.href = "/Auth/Log_in.html";
+                localStorage.clear(); // مسح الكل لضمان الأمان كما في Auth.js
+                window.location.href = "/Home/Login.html"; // تأكد من المسار الصحيح
             })
             .catch(err => {
                 console.error("Logout Error", err);
-                localStorage.removeItem("token");
-                window.location.href = "/Auth/Log_in.html";
+                localStorage.clear();
+                window.location.href = "/Home/Login.html";
             });
         });
     }
