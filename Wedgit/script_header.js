@@ -167,12 +167,12 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then(() => {
                 localStorage.clear(); // مسح الكل لضمان الأمان كما في Auth.js
-                window.location.href = "/Home/Login.html"; // تأكد من المسار الصحيح
+                window.location.href = "/Auth/Log_in.html"; // تأكد من المسار الصحيح
             })
             .catch(err => {
                 console.error("Logout Error", err);
                 localStorage.clear();
-                window.location.href = "/Home/Login.html";
+                window.location.href = "/Auth/Log_in.html";
             });
         });
     }
