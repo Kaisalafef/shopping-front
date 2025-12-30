@@ -435,7 +435,62 @@ body {
     font-size: 0.9rem;
 }
 
+/* =========================================
+   Admin Actions (Edit/Delete Buttons)
+   ========================================= */
 
+/* Make the card a flex container to push buttons to bottom */
+.offer-white-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 10px; /* Space for buttons */
+}
+
+.admin-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    width: 100%;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 6px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-edit {
+    background-color: #f0c14b; /* Amazon Yellow */
+    color: #111;
+}
+
+.btn-edit:hover {
+    background-color: #ddb347;
+}
+
+.btn-delete {
+    background-color: #fee2e2; /* Light Red */
+    color: #dc2626; /* Dark Red */
+}
+
+.btn-delete:hover {
+    background-color: #fecaca;
+    color: #b91c1c;
+}
 /* =========================================
    Responsive Adjustments (Mobile)
    ========================================= */
@@ -455,14 +510,14 @@ body {
         min-width: 85%; /* تكبير عرض الاعلان في الموبايل */
         height: 160px;
     }
-    
+    .offer-white-card {
+        height: auto; /* Let height grow with buttons */
+        min-height: 280px;
+    }
     .offers-inner-grid {
         gap: 15px;
     }
-    .offer-white-card {
-        width: 160px;
-        height: 250px;
-    }
+    
     .offer-img-box { height: 110px; }
     .offer-title { font-size: 0.9rem; height: 40px; }
 }
