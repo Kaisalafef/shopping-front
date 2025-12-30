@@ -1,31 +1,73 @@
-/* ضع هذا الكود في ملف JS الخاص بصفحة add_Proudct.html */
+/* ضع هذا الكود في ملف JS الخاص بصفحة add_Proudct.html / Edit_Product.html */
+
+// 1. تعريف قائمة الفئات (Categories)
+const categoryTitles = {
+    'electronics': 'الإلكترونيات',
+    'food': 'المواد الغذائية',
+    'meals': 'المأكولات',
+    'makeup': 'مستحضرات التجميل',
+    'men': 'أزياء رجالية',
+    'women': 'أزياء نسائية',
+    'perfume': 'العطور',
+    'cleaning': 'المنظفات',
+    'furniture': 'المفروشات',
+    'sweets': 'الحلويات'
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. التحقق من وجود editId في الرابط
+    // 2. تحميل الفئات داخل القائمة المنسدلة فور تحميل الصفحة
+    populateCategories();
+
+    // 3. التحقق من وجود editId في الرابط
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('editId');
 
-    // إذا كان هناك ID، فهذا يعني أننا في وضع "التعديل" وليس "الإضافة"
+    // إذا كان هناك ID، فهذا يعني أننا في وضع "التعديل"
     if (productId) {
         enableEditMode(productId);
+    } else {
+        // إضافة مستمع لزر الحفظ في حالة الإضافة الجديدة (اختياري حسب تصميمك)
+        const saveBtn = document.getElementById('saveBtn');
+        if(saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                // منطق الإضافة الجديدة هنا
+                alert('وضع الإضافة الجديدة'); 
+            });
+        }
     }
 });
 
+// دالة لتعبئة الـ Select بالخيارات
+function populateCategories() {
+    const categorySelect = document.getElementById('category');
+    
+    // التحقق من وجود العنصر لتجنب الأخطاء
+    if (!categorySelect) return;
+
+    // المرور على كل عنصر في القائمة وإنشاء Option له
+    for (const [key, title] of Object.entries(categoryTitles)) {
+        const option = document.createElement('option');
+        option.value = key;       // القيمة التي ستخزن في قاعدة البيانات (مثل electronics)
+        option.textContent = title; // النص الذي يظهر للمستخدم (مثل الإلكترونيات)
+        categorySelect.appendChild(option);
+    }
+}
+
 async function enableEditMode(id) {
-    // تغيير عنوان الصفحة وزر الحفظ ليعرف المستخدم أنه يعدل
-    const title = document.querySelector('h2') || document.getElementById('pageTitle'); // عدل الـ Selector حسب الـ HTML
-    const submitBtn = document.querySelector('button[type="submit"]');
+    // تغيير عنوان الصفحة وزر الحفظ
+    const title = document.querySelector('h1') || document.getElementById('pageTitle');
+    
+    // ملاحظة: قمت بتحديث هذا السطر ليتوافق مع الـ HTML الخاص بك (id="saveBtn")
+    const submitBtn = document.getElementById('saveBtn'); 
 
     if (title) title.textContent = "تعديل المنتج";
     if (submitBtn) submitBtn.textContent = "حفظ التعديلات";
 
     try {
-        // 2. جلب بيانات المنتج من السيرفر
-        // ملاحظة: تأكد من أن رابط الـ API صحيح
+        // جلب بيانات المنتج من السيرفر
         const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
             headers: {
                 'Accept': 'application/json',
-                // أضف التوكن إذا كان مطلوباً للعرض
                 // 'Authorization': `Bearer ${localStorage.getItem("token")}` 
             }
         });
@@ -33,10 +75,9 @@ async function enableEditMode(id) {
         if (!response.ok) throw new Error('فشل جلب بيانات المنتج');
 
         const result = await response.json();
-        // قد تكون البيانات داخل result أو result.data حسب الـ API الخاص بك
         const product = result.data || result;
 
-        // 3. تعبئة الحقول بالبيانات (غير الـ IDs لتناسب الـ HTML الخاص بك)
+        // تعبئة الحقول بالبيانات
         const titleInput = document.getElementById('title');
         if (titleInput) titleInput.value = product.name;
 
@@ -46,21 +87,17 @@ async function enableEditMode(id) {
         const descInput = document.getElementById('description');
         if (descInput) descInput.value = product.description;
 
+        // تحديد الفئة المختارة (سيعمل الآن لأن الخيارات تم تحميلها بواسطة populateCategories)
         const categorySelect = document.getElementById('category');
         if (categorySelect) categorySelect.value = product.category;
 
         const brandInput = document.getElementById('brand');
         if (brandInput) brandInput.value = product.brand;
 
-        // عرض الصورة الحالية إن وجدت
-        const imgPreview = document.getElementById('imagePreview'); // افترض وجود عنصر لعرض الصورة
-        if (imgPreview && product.image_url) {
-            imgPreview.src = product.image_url;
-            imgPreview.style.display = 'block';
+        // تفعيل زر الحفظ للتعديل
+        if(submitBtn) {
+            setupUpdateAction(id, submitBtn);
         }
-
-        // 4. تعديل سلوك زر الحفظ ليقوم بـ (UPDATE) بدلاً من (CREATE)
-        setupUpdateAction(id, submitBtn);
 
     } catch (error) {
         console.error('Error fetching product:', error);
@@ -69,31 +106,37 @@ async function enableEditMode(id) {
 }
 
 function setupUpdateAction(id, btn) {
-    // نقوم باستبدال دالة الإرسال لتكون PUT بدلاً من POST
-    const form = document.querySelector('form'); // أو ID الفورم الخاص بك
-
-    form.onsubmit = async (e) => {
+    // إزالة أي أحداث سابقة لتجنب التكرار
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    
+    newBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-
-        // تجهيز البيانات (FormData يستخدم لرفع الصور والبيانات)
+        
+        const form = document.getElementById('productForm');
         const formData = new FormData(form);
-
-        // لارافيل أحياناً تحتاج لتحديد الميثود داخل الـ Body عند استخدام FormData
         formData.append('_method', 'PUT');
 
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
-                method: 'POST', // نستخدم POST مع _method: PUT لأن المتصفحات لا تدعم PUT مع FormData مباشرة أحياناً
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                    // لا تضع Content-Type عند استخدام FormData، المتصفح يضعه تلقائياً
                 },
                 body: formData
             });
 
             if (response.ok) {
-                alert('تم تعديل المنتج بنجاح');
-                window.location.href = '/Products.html?role=admin'; // العودة للمنتجات
+                // إظهار التنبيه (Toast)
+                const toast = document.getElementById('toast');
+                toast.textContent = "تم تعديل المنتج بنجاح";
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 3000);
+                
+                // إعادة التوجيه بعد ثانية
+                setTimeout(() => {
+                    window.location.href = '/Products.html?role=admin';
+                }, 1000);
             } else {
                 const err = await response.json();
                 alert('فشل التعديل: ' + (err.message || 'تأكد من البيانات'));
@@ -102,5 +145,5 @@ function setupUpdateAction(id, btn) {
             console.error(error);
             alert('خطأ في الاتصال');
         }
-    };
+    });
 }
