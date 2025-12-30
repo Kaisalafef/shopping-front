@@ -15,15 +15,15 @@ async function enableEditMode(id) {
     // تغيير عنوان الصفحة وزر الحفظ ليعرف المستخدم أنه يعدل
     const title = document.querySelector('h2') || document.getElementById('pageTitle'); // عدل الـ Selector حسب الـ HTML
     const submitBtn = document.querySelector('button[type="submit"]');
-    
-    if(title) title.textContent = "تعديل المنتج";
-    if(submitBtn) submitBtn.textContent = "حفظ التعديلات";
+
+    if (title) title.textContent = "تعديل المنتج";
+    if (submitBtn) submitBtn.textContent = "حفظ التعديلات";
 
     try {
         // 2. جلب بيانات المنتج من السيرفر
         // ملاحظة: تأكد من أن رابط الـ API صحيح
         const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
-             headers: {
+            headers: {
                 'Accept': 'application/json',
                 // أضف التوكن إذا كان مطلوباً للعرض
                 // 'Authorization': `Bearer ${localStorage.getItem("token")}` 
@@ -34,14 +34,24 @@ async function enableEditMode(id) {
 
         const result = await response.json();
         // قد تكون البيانات داخل result أو result.data حسب الـ API الخاص بك
-        const product = result.data || result; 
+        const product = result.data || result;
 
         // 3. تعبئة الحقول بالبيانات (غير الـ IDs لتناسب الـ HTML الخاص بك)
-        document.getElementById('productName').value = product.name;
-        document.getElementById('productPrice').value = product.price;
-        document.getElementById('productDescription').value = product.description;
-        document.getElementById('productCategory').value = product.category;
-        
+        const titleInput = document.getElementById('title');
+        if (titleInput) titleInput.value = product.name;
+
+        const priceInput = document.getElementById('price');
+        if (priceInput) priceInput.value = product.price;
+
+        const descInput = document.getElementById('description');
+        if (descInput) descInput.value = product.description;
+
+        const categorySelect = document.getElementById('category');
+        if (categorySelect) categorySelect.value = product.category;
+
+        const brandInput = document.getElementById('brand');
+        if (brandInput) brandInput.value = product.brand;
+
         // عرض الصورة الحالية إن وجدت
         const imgPreview = document.getElementById('imagePreview'); // افترض وجود عنصر لعرض الصورة
         if (imgPreview && product.image_url) {
@@ -61,15 +71,15 @@ async function enableEditMode(id) {
 function setupUpdateAction(id, btn) {
     // نقوم باستبدال دالة الإرسال لتكون PUT بدلاً من POST
     const form = document.querySelector('form'); // أو ID الفورم الخاص بك
-    
+
     form.onsubmit = async (e) => {
         e.preventDefault();
-        
+
         // تجهيز البيانات (FormData يستخدم لرفع الصور والبيانات)
         const formData = new FormData(form);
-        
+
         // لارافيل أحياناً تحتاج لتحديد الميثود داخل الـ Body عند استخدام FormData
-        formData.append('_method', 'PUT'); 
+        formData.append('_method', 'PUT');
 
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
