@@ -28,9 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function isAdminUser() {
     const token = localStorage.getItem("token");
-     localStorage.getItem("role") === 'admin'
-    return !!token; // For now, we assume if they are on dashboard, they are admin
-}
+    const role = localStorage.getItem("auth_role");
+    return role === 'admin' && !!token;
+  }
     /* ==============================
        1️⃣ جلب وعرض العروض اليومية
     ============================== */
