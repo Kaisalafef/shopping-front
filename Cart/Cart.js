@@ -6,7 +6,7 @@ const token = localStorage.getItem("token");
 
 if (!token) {
     alert("يرجى تسجيل الدخول أولاً");
-    window.location.href = "/login.html";
+    window.location.href = "/Auth/log_in.html";
 }
 
 const headers = {
