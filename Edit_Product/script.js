@@ -135,7 +135,7 @@ function setupUpdateAction(id, btn) {
                 
                 // إعادة التوجيه بعد ثانية
                 setTimeout(() => {
-                    window.location.href = '/Products.html?role=admin';
+                    window.location.href = '/Proudcts/Products.html?role=admin';
                 }, 1000);
             } else {
                 const err = await response.json();
