@@ -26,64 +26,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const BASE_URL = "http://127.0.0.1:8000";
 
-  
+  function isAdminUser() {
+    const token = localStorage.getItem("token");
+     localStorage.getItem("role") === 'admin'
+    return !!token; // For now, we assume if they are on dashboard, they are admin
+}
     /* ==============================
        1️⃣ جلب وعرض العروض اليومية
     ============================== */
-    const loadDailyOffers = async () => {
-        const offersContainer = document.getElementById("offersContainer");
-        if (!offersContainer) return;
+   const loadDailyOffers = async () => {
+    const offersContainer = document.getElementById("offersContainer");
+    if (!offersContainer) return;
 
-        // تأثير تحميل بسيط
-        offersContainer.innerHTML = '<div style="padding:20px; width:100%; text-align:center;">جاري تحميل العروض...</div>';
+    offersContainer.innerHTML = '<div style="padding:20px; width:100%; text-align:center;">جاري تحميل العروض...</div>';
 
-        try {
-            const res = await fetch(`${BASE_URL}/api/offers`);
-            const json = await res.json();
+    try {
+        const res = await fetch(`http://127.0.0.1:8000/api/offers`);
+        const json = await res.json();
+        const offers = json.offers || [];
 
-            const offers = json.offers || [];
+        if (!offers.length) {
+            offersContainer.innerHTML = '<div style="padding:20px;">لا توجد عروض حالياً</div>';
+            return;
+        }
 
-            if (!offers.length) {
-                offersContainer.innerHTML = '<div style="padding:20px;">لا توجد عروض حالياً</div>';
-                return;
+        offersContainer.innerHTML = "";
+        const isAdmin = isAdminUser(); // Check permission
+
+        offers.forEach((o, index) => {
+            const p = o.product;
+            if (!p) return;
+
+            /* Image Logic */
+            let img = p.image_url || "/images/CLE.jpg";
+
+            /* Price Calculation */
+            const basePrice = Number(p.price);
+            let finalPrice = basePrice;
+            let label = "";
+
+            if (o.discount_percentage) {
+                finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
+                label = `-${o.discount_percentage}%`;
+            } else if (o.discount_price) {
+                finalPrice = basePrice - o.discount_price;
+                label = "Sale";
             }
 
-            offersContainer.innerHTML = "";
+            const delay = index * 0.1;
 
-            offers.forEach((o, index) => {
-                const p = o.product;
-                if (!p) return;
-
-                /* ✅ الصورة الصحيحة */
-                let img = "/images/CLE.jpg";
-                if (p.image_url) {
-                    img = p.image_url;
-                }
-
-                /* السعر */
-                const basePrice = Number(p.price);
-                let finalPrice = basePrice;
-                let label = "";
-
-                if (o.discount_percentage) {
-                    finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
-                    label = `-${o.discount_percentage}%`;
-                }
-
-                // حساب التأخير الزمني لكل كارت (index * 0.1s)
-                const delay = index * 0.1;
-            
+            // 🟢 Create Admin Buttons HTML
+            let adminButtonsHtml = "";
+            if (isAdmin) {
                 adminButtonsHtml = `
                     <div class="admin-actions">
-                        <button class="action-btn btn-edit" onclick="redirectToEdit(${p.id}, event)">
-                            <i class="fas fa-edit"></i> تعديل
-                        </button>
+                        
                         <button class="action-btn btn-delete" onclick="deleteOffer(${o.id}, event)">
                             <i class="fas fa-trash"></i> حذف
                         </button>
                     </div>
                 `;
-            
+            }
 
                 offersContainer.insertAdjacentHTML("beforeend", `
                     <div class="offer-white-card" style="animation-delay: ${delay}s"  onclick="location.href='/Product/Product.html?id=${p.id}'">
