@@ -41,7 +41,32 @@ async function enableEditMode(id) {
         document.getElementById('productPrice').value = product.price;
         document.getElementById('productDescription').value = product.description;
         document.getElementById('productCategory').value = product.category;
-        
+        /* ========== CATEGORIES DATA ========== */
+  const categoryTitles = {
+    'electronics': 'الإلكترونيات',
+    'food': 'المواد الغذائية',
+    'meals': 'المأكولات',
+    'makeup': 'مستحضرات التجميل',
+    'men': 'أزياء رجالية',
+    'women': 'أزياء نسائية',
+    'perfume': 'العطور',
+    'cleaning': 'المنظفات',
+    'furniture': 'المفروشات',
+    'sweets': 'الحلويات'
+  };
+
+  /* ========== POPULATE CATEGORIES ========== */
+  const categorySelect = document.getElementById('category');
+  
+  // التأكد من أن العنصر موجود قبل محاولة إضافة الخيارات
+  if (categorySelect) {
+      Object.entries(categoryTitles).forEach(([key, label]) => {
+          const option = document.createElement('option');
+          option.value = key;       // القيمة التي ستُرسل للسيرفر (مثلاً: electronics)
+          option.textContent = label; // النص الذي يظهر للمستخدم (مثلاً: الإلكترونيات)
+          categorySelect.appendChild(option);
+      });
+  }
         // عرض الصورة الحالية إن وجدت
         const imgPreview = document.getElementById('imagePreview'); // افترض وجود عنصر لعرض الصورة
         if (imgPreview && product.image_url) {
