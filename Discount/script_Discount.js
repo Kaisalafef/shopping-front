@@ -2,6 +2,7 @@ function getAuthToken() {
   return localStorage.getItem("token");
 }
 
+
 /**
  * Discount Management Script
  * Connected to Laravel Offers API
