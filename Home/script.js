@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const delay = index * 0.1;
 
                 offersContainer.insertAdjacentHTML("beforeend", `
-                    <div class="offer-white-card" style="animation-delay: ${delay}s">
+                    <div class="offer-white-card" style="animation-delay: ${delay}s"  onclick="location.href='/Product/Product.html?id=${p.id}'">
                         <span class="discount-circle">${label}</span>
 
                         <div class="offer-img-box" onclick ="window.location.href='/Product/Product.html?id=${p.id}'">
@@ -61,7 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             <h4 class="offer-title">${p.name}</h4>
 
                             <div class="offer-prices">
-                                <span class="new-price">${Math.round(finalPrice)} L.S</span>
+                                <span class="new-price">SYP</span>
+                                <span class="new-price">${Math.round(finalPrice)}</span>
                                 <span class="old-price">${basePrice}</span>
                             </div>
                         </div>
