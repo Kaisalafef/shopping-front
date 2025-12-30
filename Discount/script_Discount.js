@@ -2,6 +2,7 @@ function getAuthToken() {
   return localStorage.getItem("token");
 }
 
+
 /**
  * Discount Management Script
  * Connected to Laravel Offers API
@@ -115,38 +116,56 @@ function getAuthToken() {
     const hasOffer = !!product.discount;
 
     const payload = {
-      product_id: productId,
-      discount_percentage: type === "percent" ? value : null,
-      discount_price: type === "fixed" ? value : null,
-      is_active: true,
+        product_id: productId,
+        discount_percentage: type === "percent" ? value : null,
+        discount_price: type === "fixed" ? value : null,
+        is_active: true,
     };
 
     const url = hasOffer
-      ? API_URLS.UPDATE_OFFER(product.discount.offerId)
-      : API_URLS.CREATE_OFFER;
+        ? API_URLS.UPDATE_OFFER(product.discount.offerId)
+        : API_URLS.CREATE_OFFER;
 
     const method = hasOffer ? "PUT" : "POST";
 
     try {
-      const res = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-        body: JSON.stringify(payload),
-      });
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${getAuthToken()}`,
+            },
+            body: JSON.stringify(payload),
+        });
 
-      if (!res.ok) throw new Error();
+        // تحويل الرد إلى JSON لقراءة رسالة الخطأ
+        const data = await res.json();
 
-      toast("تم حفظ الخصم بنجاح");
-      closeModal();
-      fetchProducts();
-    } catch {
-      toast("فشل حفظ الخصم", "error");
+        if (!res.ok) {
+            // حالة 403: ليس لديه صلاحيات أدمن
+            if (res.status === 403) {
+                return toast("عذراً، لا تملك صلاحيات مسؤول للقيام بهذا الإجراء", "error");
+            }
+            // حالة 422: أخطاء التحقق (مثلاً المنتج عليه خصم مسبقاً)
+            if (res.status === 422) {
+                return toast(data.message || "المنتج يمتلك عرضاً نشطاً بالفعل", "error");
+            }
+            // حالة 401: غير مسجل دخول
+            if (res.status === 401) {
+                return toast("يرجى تسجيل الدخول أولاً", "error");
+            }
+            
+            throw new Error(data.message || "فشل حفظ الخصم");
+        }
+
+        toast("تم حفظ الخصم بنجاح");
+        closeModal();
+        fetchProducts();
+    } catch (err) {
+        toast(err.message || "حدث خطأ غير متوقع", "error");
     }
-  }
+}
 
   async function removeDiscount(productId) {
     const product = state.products.find((p) => p.id == productId);

@@ -1,53 +1,92 @@
 // script.js - With Staggered Animations
+
+  async function removeDiscount(productId) {
+    const product = state.products.find((p) => p.id == productId);
+    if (!product?.discount) return;
+
+    try {
+      await fetch(API_URLS.DELETE_OFFER(product.discount.offerId), {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      });
+
+      toast("تم حذف الخصم");
+      closeModal();
+      fetchProducts();
+    } catch {
+      toast("فشل حذف الخصم", "error");
+    }
+  }
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const BASE_URL = "http://127.0.0.1:8000";
 
+  function isAdminUser() {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("auth_role");
+    return role === 'admin' && !!token;
+  }
     /* ==============================
        1️⃣ جلب وعرض العروض اليومية
     ============================== */
-    const loadDailyOffers = async () => {
-        const offersContainer = document.getElementById("offersContainer");
-        if (!offersContainer) return;
+   const loadDailyOffers = async () => {
+    const offersContainer = document.getElementById("offersContainer");
+    if (!offersContainer) return;
 
-        // تأثير تحميل بسيط
-        offersContainer.innerHTML = '<div style="padding:20px; width:100%; text-align:center;">جاري تحميل العروض...</div>';
+    offersContainer.innerHTML = '<div style="padding:20px; width:100%; text-align:center;">جاري تحميل العروض...</div>';
 
-        try {
-            const res = await fetch(`${BASE_URL}/api/offers`);
-            const json = await res.json();
+    try {
+        const res = await fetch(`http://127.0.0.1:8000/api/offers`);
+        const json = await res.json();
+        const offers = json.offers || [];
 
-            const offers = json.offers || [];
+        if (!offers.length) {
+            offersContainer.innerHTML = '<div style="padding:20px;">لا توجد عروض حالياً</div>';
+            return;
+        }
 
-            if (!offers.length) {
-                offersContainer.innerHTML = '<div style="padding:20px;">لا توجد عروض حالياً</div>';
-                return;
+        offersContainer.innerHTML = "";
+        const isAdmin = isAdminUser(); // Check permission
+
+        offers.forEach((o, index) => {
+            const p = o.product;
+            if (!p) return;
+
+            /* Image Logic */
+            let img = p.image_url || "/images/CLE.jpg";
+
+            /* Price Calculation */
+            const basePrice = Number(p.price);
+            let finalPrice = basePrice;
+            let label = "";
+
+            if (o.discount_percentage) {
+                finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
+                label = `-${o.discount_percentage}%`;
+            } else if (o.discount_price) {
+                finalPrice = basePrice - o.discount_price;
+                label = "Sale";
             }
 
-            offersContainer.innerHTML = "";
+            const delay = index * 0.1;
 
-            offers.forEach((o, index) => {
-                const p = o.product;
-                if (!p) return;
-
-                /* ✅ الصورة الصحيحة */
-                let img = "/images/CLE.jpg";
-                if (p.image_url) {
-                    img = p.image_url;
-                }
-
-                /* السعر */
-                const basePrice = Number(p.price);
-                let finalPrice = basePrice;
-                let label = "";
-
-                if (o.discount_percentage) {
-                    finalPrice = basePrice - (basePrice * o.discount_percentage / 100);
-                    label = `-${o.discount_percentage}%`;
-                }
-
-                // حساب التأخير الزمني لكل كارت (index * 0.1s)
-                const delay = index * 0.1;
+            // 🟢 Create Admin Buttons HTML
+            let adminButtonsHtml = "";
+            if (isAdmin) {
+                adminButtonsHtml = `
+                    <div class="admin-actions">
+                        
+                        <button class="action-btn btn-delete" onclick="deleteOffer(${o.id}, event)">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+            }
 
                 offersContainer.insertAdjacentHTML("beforeend", `
                     <div class="offer-white-card" style="animation-delay: ${delay}s"  onclick="location.href='/Product/Product.html?id=${p.id}'">
@@ -66,6 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <span class="old-price">${basePrice}</span>
                             </div>
                         </div>
+                        ${adminButtonsHtml}
+                        
                     </div>
                 `);
             });
@@ -121,7 +162,44 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(err);
         }
     };
+/* ==============================
+   3️⃣ Functions for Buttons
+============================== */
 
+// Function to handle Delete
+window.deleteOffer = async (offerId, event) => {
+    event.stopPropagation(); // Stop card from being clicked
+    
+    if (!confirm("هل أنت متأكد من حذف هذا العرض؟")) return;
+
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`http://127.0.0.1:8000/api/offers/${offerId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Accept": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            alert("تم حذف العرض بنجاح");
+            loadDailyOffers(); // Reload the list
+        } else {
+            alert("فشل الحذف، يرجى المحاولة لاحقاً");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("حدث خطأ في الاتصال");
+    }
+};
+
+// Function to handle Edit (Redirect to Discount Page)
+window.redirectToEdit = (productId, event) => {
+    event.stopPropagation(); // Stop card click
+    // Send the product ID to the Discount page to open modal automatically
+    window.location.href = `/Discount/Add_Discount.html?search=${productId}`;
+};
     loadDailyOffers();
     loadAds();
 });
