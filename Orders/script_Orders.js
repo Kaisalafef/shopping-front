@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const API_BASE_URL = "http://127.0.0.1:8000/api";
 
     // Redirect if not logged in
-   
+
 
     const tableBody = document.getElementById("orders-table-body");
     const loadingSpinner = document.getElementById("loading-spinner");
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             // Fetching all orders (Assuming Admin Endpoint)
-            const res = await fetch(`${API_BASE_URL}/orders`, {
+            const res = await fetch(`${API_BASE_URL}/admin/orders`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -101,38 +101,39 @@ document.addEventListener("DOMContentLoaded", () => {
        3. UPDATE STATUS (API)
     ================================ */
     window.updateOrderStatus = async function (orderId, newStatus) {
-        if (!confirm(`هل أنت متأكد أنك تريد تغيير حالة الطلب إلى "${translateStatus(newStatus)}"?`)) return;
+    if (!confirm(`هل أنت متأكد أنك تريد تغيير حالة الطلب إلى "${translateStatus(newStatus)}"?`)) return;
 
-        try {
-            const res = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
-                method: "PUT", // Or POST depending on your Laravel Route
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ status: newStatus })
-            });
+    try {
+        const res = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
 
-            if (res.ok) {
-                // Update local data to reflect change immediately
-                const orderIndex = allOrders.findIndex(o => o.id === orderId);
-                if (orderIndex > -1) {
-                    allOrders[orderIndex].status = newStatus;
-                    
-                    // Re-render based on current active filter
-                    const activeFilter = document.querySelector(".filter-btn.active").dataset.filter;
-                    filterOrders(activeFilter);
-                    updateStats(allOrders);
-                }
-                alert("تم تحديث الحالة بنجاح");
-            } else {
-                alert("فشل تحديث الحالة");
+        const data = await res.json();
+
+        if (res.ok) {
+            const orderIndex = allOrders.findIndex(o => o.id === orderId);
+            if (orderIndex !== -1) {
+                allOrders[orderIndex].status = newStatus;
             }
-        } catch (error) {
-            console.error(error);
-            alert("حدث خطأ في الاتصال");
+
+            const activeFilter = document.querySelector(".filter-btn.active").dataset.filter;
+            filterOrders(activeFilter);
+            updateStats(allOrders);
+
+            alert("تم تحديث الحالة بنجاح");
+        } else {
+            alert(data.message || "فشل تحديث الحالة");
         }
-    };
+    } catch (error) {
+        console.error(error);
+        alert("حدث خطأ في الاتصال بالخادم");
+    }
+};
 
     /* ===============================
        4. MODAL LOGIC
@@ -154,13 +155,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // Render Items
         const itemsContainer = document.getElementById("modal-items-list");
         itemsContainer.innerHTML = "";
-        
+
         if (order.order_item && order.order_item.length > 0) {
-            order.order_item.forEach(item => {
+    order.order_item.forEach(item => {
+
                 // Check if product exists, otherwise handle gracefully
                 const prodName = item.product ? item.product.name : "منتج محذوف";
                 const prodImg = item.product ? item.product.image_url : "/images/no-image.png";
-                
+
                 itemsContainer.innerHTML += `
                     <div class="order-item-card">
                         <img src="${prodImg}" alt="${prodName}" class="item-img" onerror="this.src='/images/logo.webp'">
@@ -207,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ===============================
        5. UTILITIES & FILTERS
     ================================ */
-    
+
     // Filters Click Event
     filterBtns.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -215,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
             filterBtns.forEach(b => b.classList.remove("active"));
             // Add to clicked
             btn.classList.add("active");
-            
+
             filterOrders(btn.dataset.filter);
         });
     });
@@ -236,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function formatDate(dateString) {
-        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };
+        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         return new Date(dateString).toLocaleDateString('ar-EG', options);
     }
 
@@ -245,18 +247,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const className = `status-${status}`;
         return `<span class="status-badge ${className}">${text}</span>`;
     }
-
     function translateStatus(status) {
         const map = {
-            'pending': 'قيد الانتظار',
-            'processing': 'جاري التحضير',
-            'completed': 'مكتمل',
-            'delivered': 'تم التوصيل',
-            'cancelled': 'ملغى',
-            'refused': 'مرفوض'
+            pending: "قيد الانتظار",
+            processing: "تمت الموافقة",
+            cancelled: "مرفوض"
         };
         return map[status] || status;
     }
+
 
     // Init
     fetchOrders();
