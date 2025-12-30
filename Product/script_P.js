@@ -67,21 +67,50 @@ async function loadProduct() {
     alert("تعذر تحميل بيانات المنتج");
   }
 }
+/* ---------------------------
+   Calculate Discounted Price
+---------------------------- */
+function calcDiscountedPrice(price, offer) {
+  if (!offer) return price;
+
+  // خصم بالنسبة المئوية
+  if (offer.discount_percentage) {
+    return Math.round(price - price * (offer.discount_percentage / 100));
+  }
+
+  // خصم بقيمة ثابتة
+  if (offer.discount_price) {
+    return price - offer.discount_price;
+  }
+
+  return price;
+}
 
 /* ---------------------------
    Render Product
 ---------------------------- */
 function renderProduct(product) {
-  titleEl.textContent = product.name;
-  priceEl.textContent = `${product.price} SYP`;
-  descEl.textContent = product.description;
+  console.log("PRODUCT DATA 👉", product);
 
-  if (product.image_url) {
-    imageEl.src = product.image_url;
+  titleEl.textContent = product.name;
+
+  const price = Number(product.price);
+  const discount = Number(product.discount_percentage || 0);
+
+  if (discount > 0) {
+    const finalPrice = Math.round(price - price * (discount / 100));
+
+    priceEl.innerHTML = `
+      <span class="old-price">${price} SYP</span>
+      <span class="new-price">${finalPrice} SYP</span>
+      <span class="discount-badge">-${discount}%</span>
+    `;
+  } else {
+    priceEl.innerHTML = `<span class="new-price">${price} SYP</span>`;
   }
 
-  renderColors(product.images || []);
-  renderSizes(product.sizes || []);
+  descEl.textContent = product.description;
+  imageEl.src = product.image_url;
 }
 
 /* ---------------------------
@@ -104,7 +133,7 @@ function renderColors(images) {
     swatch.addEventListener("click", () => {
       document
         .querySelectorAll(".pw__color-swatch")
-        .forEach(el => el.classList.remove("selected"));
+        .forEach((el) => el.classList.remove("selected"));
 
       swatch.classList.add("selected");
       selectedColor = img.color;
@@ -139,7 +168,7 @@ function renderSizes(sizes) {
   sizeGroup.classList.remove("pw--hidden");
   sizeSelect.innerHTML = `<option value="">اختر المقاس</option>`;
 
-  sizes.forEach(size => {
+  sizes.forEach((size) => {
     const opt = document.createElement("option");
     opt.value = size.size;
     opt.textContent = size.size;
@@ -184,36 +213,36 @@ addBtn.addEventListener("click", () => {
 
   fetch(`${API_BASE}/my-cart`, {
     headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
   })
-    .then(res => res.json())
-    .then(cart => {
+    .then((res) => res.json())
+    .then((cart) => {
       const cartId = cart.id;
 
       const payload = {
         product_id: productId,
         quantity,
         color: selectedColor,
-        size: sizeSelect.value || null
+        size: sizeSelect.value || null,
       };
 
       return fetch(`${API_BASE}/carts/${cartId}/items`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
     })
-    .then(res => res.json())
-    .then(item => {
+    .then((res) => res.json())
+    .then((item) => {
       console.log("تمت إضافة المنتج:", item);
       alert("تمت إضافة المنتج إلى السلة بنجاح ✅");
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
       alert("حدث خطأ أثناء إضافة المنتج أو الحصول على السلة");
     });
@@ -247,33 +276,35 @@ reviewBtn.addEventListener("click", (e) => {
   const payload = {
     product_id: productId,
     rating,
-    comment
+    comment,
   };
 
   fetch(`${API_BASE}/reviews`, {
     method: "POST",
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
-    .then(res => {
+    .then((res) => {
       if (!res.ok) throw new Error("تعذر إرسال التقييم");
       return res.json();
     })
-    .then(data => {
+    .then((data) => {
       console.log("تم إرسال التقييم:", data);
       alert("تم إرسال التقييم بنجاح ✅");
       reviewRatingValue.value = "";
       reviewComment.value = "";
-      document.querySelectorAll("#rating-input .star").forEach(s => s.textContent = "☆");
+      document
+        .querySelectorAll("#rating-input .star")
+        .forEach((s) => (s.textContent = "☆"));
 
       // تحديث التعليقات بعد الإرسال
       loadReviews();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
       alert(err.message);
     });
@@ -284,12 +315,12 @@ reviewBtn.addEventListener("click", (e) => {
 ---------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   const stars = document.querySelectorAll("#rating-input .star");
-  stars.forEach(star => {
+  stars.forEach((star) => {
     star.addEventListener("click", () => {
       const rating = star.dataset.value;
       reviewRatingValue.value = rating;
 
-      stars.forEach(s => s.textContent = "☆");
+      stars.forEach((s) => (s.textContent = "☆"));
       for (let i = 0; i < rating; i++) {
         stars[i].textContent = "★";
       }
@@ -326,7 +357,6 @@ async function loadReviews() {
 
     renderAverageRating(data);
     renderReviews(data);
-
   } catch (err) {
     console.error("خطأ في تحميل التقييمات", err);
   }
@@ -337,15 +367,14 @@ function renderAverageRating(reviews) {
   const avg = (total / reviews.length).toFixed(1);
 
   // عرض الرقم فقط بدون النجوم
-  document.getElementById("average-rating").textContent =  'التقييم :'+avg ;
+  document.getElementById("average-rating").textContent = "التقييم :" + avg;
 
   // إزالة عرض النجوم
-  document.getElementById("average-stars").textContent = '';
+  document.getElementById("average-stars").textContent = "";
 
   // إزالة نص عدد التقييمات
-  document.getElementById("reviews-count").textContent = '';
+  document.getElementById("reviews-count").textContent = "";
 }
-
 
 function generateStars(value) {
   let stars = "";
@@ -360,7 +389,7 @@ function renderReviews(reviews) {
   const container = document.getElementById("reviews-list");
   container.innerHTML = "";
 
-  reviews.forEach(review => {
+  reviews.forEach((review) => {
     const div = document.createElement("div");
     div.className = "review-item";
 

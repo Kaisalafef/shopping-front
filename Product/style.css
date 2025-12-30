@@ -381,9 +381,9 @@ body {
 }
 
 /* Ensure the main widget section still looks good */
-.product-widget {
+/*.product-widget {*/
     /* ... (Your existing styles here) ... */
-}
+/*}
 
 /* --- General Section Styling --- */
 .section-title {
@@ -1236,3 +1236,24 @@ body {
   padding: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
+.old-price {
+  color: #888;
+  text-decoration: line-through;
+  margin-left: 10px;
+}
+
+.new-price {
+  color: #e63946;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.discount-badge {
+  background: #e63946;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
