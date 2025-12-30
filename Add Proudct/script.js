@@ -23,7 +23,7 @@ const getAuthHeaders = () => ({
     { label: "بيج", value: "beige" },
     { label: "بني", value: "brown" },
   ];
-/* ========== CATEGORIES DATA ========== */
+  /* ========== CATEGORIES DATA ========== */
   const categoryTitles = {
     'electronics': 'الإلكترونيات',
     'food': 'المواد الغذائية',
@@ -39,15 +39,15 @@ const getAuthHeaders = () => ({
 
   /* ========== POPULATE CATEGORIES ========== */
   const categorySelect = document.getElementById('category');
-  
+
   // التأكد من أن العنصر موجود قبل محاولة إضافة الخيارات
   if (categorySelect) {
-      Object.entries(categoryTitles).forEach(([key, label]) => {
-          const option = document.createElement('option');
-          option.value = key;       // القيمة التي ستُرسل للسيرفر (مثلاً: electronics)
-          option.textContent = label; // النص الذي يظهر للمستخدم (مثلاً: الإلكترونيات)
-          categorySelect.appendChild(option);
-      });
+    Object.entries(categoryTitles).forEach(([key, label]) => {
+      const option = document.createElement('option');
+      option.value = key;       // القيمة التي ستُرسل للسيرفر (مثلاً: electronics)
+      option.textContent = label; // النص الذي يظهر للمستخدم (مثلاً: الإلكترونيات)
+      categorySelect.appendChild(option);
+    });
   }
   /* ========== STATE ========== */
   const state = {
@@ -85,31 +85,31 @@ const getAuthHeaders = () => ({
 
   /* ========== ADD COLOR ========== */
   /* ========== ADD COLOR ========== */
-const addColorRow = (data = {}) => {
-  const id = ++state.colorId;
+  const addColorRow = (data = {}) => {
+    const id = ++state.colorId;
 
-  // التحقق مما إذا كانت هناك صورة موجودة مسبقاً (حالة التعديل)
-  const initialImage = data.image || "";
-  const shouldShowImage = initialImage !== "";
+    // التحقق مما إذا كانت هناك صورة موجودة مسبقاً (حالة التعديل)
+    const initialImage = data.image || "";
+    const shouldShowImage = initialImage !== "";
 
-  const color = {
-    id,
-    value: data.color || "",
-    file: null,
-    image: initialImage,
-  };
+    const color = {
+      id,
+      value: data.color || "",
+      file: null,
+      image: initialImage,
+    };
 
-  state.colors.push(color);
+    state.colors.push(color);
 
-  const row = document.createElement("div");
-  row.className = "option-item";
+    const row = document.createElement("div");
+    row.className = "option-item";
 
-  row.innerHTML = `
+    row.innerHTML = `
       <select class="form-select" style="margin-bottom: 0.5rem ;">
           <option value="">اختر لون</option>
           ${COLORS.map(
-            (c) => `<option value="${c.value}">${c.label}</option>`
-          ).join("")}
+      (c) => `<option value="${c.value}">${c.label}</option>`
+    ).join("")}
       </select>
       
       <div class="preview-container" style="text-align: center; margin-bottom: 10px;">
@@ -128,63 +128,63 @@ const addColorRow = (data = {}) => {
       <button type="button" class="btn-remove" style="position: absolute; left: 10px; top: 10px;">&times;</button>
   `;
 
-  // تعريف العناصر
-  const select = row.querySelector("select");
-  const fileInput = row.querySelector("input[type=file]");
-  const uploadLabel = row.querySelector(".custom-file-upload");
-  const uploadText = row.querySelector(".upload-text");
-  const uploadIcon = row.querySelector(".custom-file-upload i");
-  const imgPreview = row.querySelector(".img-preview"); // عنصر الصورة
-  const remove = row.querySelector(".btn-remove");
+    // تعريف العناصر
+    const select = row.querySelector("select");
+    const fileInput = row.querySelector("input[type=file]");
+    const uploadLabel = row.querySelector(".custom-file-upload");
+    const uploadText = row.querySelector(".upload-text");
+    const uploadIcon = row.querySelector(".custom-file-upload i");
+    const imgPreview = row.querySelector(".img-preview"); // عنصر الصورة
+    const remove = row.querySelector(".btn-remove");
 
-  // تعيين القيمة الابتدائية للون
-  select.value = color.value;
+    // تعيين القيمة الابتدائية للون
+    select.value = color.value;
 
-  // عند تغيير اللون
-  select.onchange = (e) => (color.value = e.target.value);
+    // عند تغيير اللون
+    select.onchange = (e) => (color.value = e.target.value);
 
-  // === الجزء المسؤول عن المعاينة ===
-  fileInput.onchange = (e) => {
-    const file = e.target.files[0];
-    color.file = file;
+    // === الجزء المسؤول عن المعاينة ===
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      color.file = file;
 
-    if (file) {
-      // 1. قراءة الملف وعرضه
-      const reader = new FileReader();
-      
-      reader.onload = function(e) {
+      if (file) {
+        // 1. قراءة الملف وعرضه
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
           imgPreview.src = e.target.result; // وضع الرابط في الصورة
           imgPreview.style.display = "block"; // إظهار الصورة
-      }
-      
-      reader.readAsDataURL(file); // بدء القراءة
+        }
 
-      // 2. تحديث شكل الزر
-      uploadLabel.classList.add("uploaded");
-      uploadText.textContent = file.name.length > 20 
-          ? file.name.substring(0, 20) + "..." 
+        reader.readAsDataURL(file); // بدء القراءة
+
+        // 2. تحديث شكل الزر
+        uploadLabel.classList.add("uploaded");
+        uploadText.textContent = file.name.length > 20
+          ? file.name.substring(0, 20) + "..."
           : file.name;
-      uploadIcon.className = "fas fa-check-circle";
+        uploadIcon.className = "fas fa-check-circle";
 
-    } else {
-      // في حالة إلغاء الاختيار ولم تكن هناك صورة قديمة
-      if (!initialImage) {
+      } else {
+        // في حالة إلغاء الاختيار ولم تكن هناك صورة قديمة
+        if (!initialImage) {
           imgPreview.style.display = "none";
           uploadLabel.classList.remove("uploaded");
           uploadText.textContent = "اختر صورة للون";
           uploadIcon.className = "fas fa-cloud-upload-alt";
+        }
       }
-    }
-  };
+    };
 
-  // عند الحذف
-  remove.onclick = () => {
-    row.remove();
-    state.colors = state.colors.filter((c) => c.id !== id);
-  };
+    // عند الحذف
+    remove.onclick = () => {
+      row.remove();
+      state.colors = state.colors.filter((c) => c.id !== id);
+    };
 
-  els.colorsList.appendChild(row);
-};
+    els.colorsList.appendChild(row);
+  };
 
   /* ========== ADD SIZE ========== */
   const addSizeRow = (value = "") => {
