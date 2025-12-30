@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const titleInput = document.getElementById("titleInput");
   const descInput = document.getElementById("descInput"); // للمعاينة فقط
-  const btnInput = document.getElementById("btnInput"); // للمعاينة فقط
   const imageInput = document.getElementById("imageInput");
 
   /* ===============================
@@ -26,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const previewBox = document.getElementById("livePreview");
   const prevTitle = document.getElementById("prevTitle");
   const prevDesc = document.getElementById("prevDesc");
-  const prevBtn = document.getElementById("prevBtn");
 
   /* ===============================
        3. تحديث المعاينة النصية
@@ -34,12 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function updatePreviewText() {
     prevTitle.textContent = titleInput.value || "عنوان الإعلان";
     prevDesc.textContent = descInput.value || "وصف الإعلان سيظهر هنا";
-    prevBtn.textContent = btnInput.value || "تسوق الآن";
   }
 
   titleInput.addEventListener("input", updatePreviewText);
   descInput.addEventListener("input", updatePreviewText);
-  btnInput.addEventListener("input", updatePreviewText);
 
   /* ===============================
        4. تحديث معاينة الصورة
@@ -71,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData();
     formData.append("title", titleInput.value);
     formData.append("description", descInput.value); // إضافة الوصف
-    formData.append("btn_text", btnInput.value); // إضافة نص الزر
     formData.append("image", imageInput.files[0]);
     try {
       const response = await fetch("http://127.0.0.1:8000/api/ads", {
@@ -87,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         alert("تم نشر الإعلان بنجاح");
-        window.location.href = "ADS.html";
+        window.location.href = "Add_ADS.html";
       } else {
         alert(result.message || "حدث خطأ أثناء الحفظ");
       }
