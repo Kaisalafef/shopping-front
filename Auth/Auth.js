@@ -48,10 +48,11 @@ if (loginForm) {
         localStorage.setItem("auth_user", JSON.stringify(data.user));
 
         if (data.user.role === "admin") {
-          window.location.href = "/Home/admin_dashboard.html";
-        } else {
-          window.location.href = "/Home/client_dashboard.html";
-        }
+  window.location.replace("/Home/admin_dashboard.html");
+} else {
+  window.location.replace("/Home/client_dashboard.html");
+}
+
       } else {
         errorMsg.textContent = data.message || "Login failed";
       }

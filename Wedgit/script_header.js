@@ -165,9 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type": "application/json"
                 }
             })
-            .then(() => {
+            .finally(() => {
                 localStorage.clear(); // مسح الكل لضمان الأمان كما في Auth.js
-                window.location.href = "/Auth/Log_in.html"; // تأكد من المسار الصحيح
+                sessionStorage.clear();
+                window.location.replace("/Auth/Log_in.html"); // تأكد من المسار الصحيح
             })
             .catch(err => {
                 console.error("Logout Error", err);
