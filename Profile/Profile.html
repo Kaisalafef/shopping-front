@@ -95,22 +95,15 @@
             <label for="edit-pass">كلمة المرور</label>
             <p id="info-pass">********</p>
             <div class="pass-wrapper edit-input">
-              <input type="password" name="password" id="edit-pass"
-                placeholder="أدخل كلمة المرور"
-                title="كلمة المرور"
-                aria-describedby="info-pass">
-              <i class="fas fa-eye toggle-pass"
-                onclick="togglePassword()" role="button"
-                aria-label="إظهار أو إخفاء كلمة المرور"></i>
-            </div>
-            <div class="pass-wrapper edit-input">
-              <input type="password" id="edit-pass-confirm"
-                placeholder="تأكيد كلمة المرور">
+  <input type="password" id="edit-pass" placeholder="أدخل كلمة المرور">
+  <i class="fas fa-eye toggle-pass" data-target="edit-pass"></i>
+</div>
 
-              <i class="fas fa-eye toggle-pass"
-                onclick="togglePassword()" role="button"
-                aria-label="إظهار أو إخفاء كلمة المرور"></i>
-            </div>
+<div class="pass-wrapper edit-input">
+  <input type="password" id="edit-pass-confirm" placeholder="تأكيد كلمة المرور">
+  <i class="fas fa-eye toggle-pass" data-target="edit-pass-confirm"></i>
+</div>
+
           </div>
 
           <div class="profile-actions">

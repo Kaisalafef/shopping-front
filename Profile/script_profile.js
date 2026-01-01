@@ -188,38 +188,81 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleEditMode(true);
   });
 
+
   /* زر حفظ */
   saveBtn.addEventListener("click", async () => {
-    const updatedData = {
-      name: document.getElementById("edit-fullname").value,
-      email: document.getElementById("edit-email").value,
-      phone: document.getElementById("edit-phone").value,
-    };
+  const password = document.getElementById("edit-pass").value.trim();
+  const passwordConfirm = document.getElementById("edit-pass-confirm").value.trim();
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
+  if (password || passwordConfirm) {
+    if (password.length < 8) {
+      alert("كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+      return;
+    }
 
-      if (!res.ok) throw new Error();
+    if (password !== passwordConfirm) {
+      alert("كلمتا المرور غير متطابقتين");
+      return;
+    }
+  }
 
-      const result = await res.json();
-      const user = result.data || result;
+  const updatedData = {
+    name: document.getElementById("edit-fullname").value,
+    email: document.getElementById("edit-email").value,
+    phone: document.getElementById("edit-phone").value,
+  };
 
-      document.getElementById("info-fullname").innerText = user.name;
-      document.getElementById("display-name").innerText = user.name;
-      document.getElementById("info-email").innerText = user.email;
-      document.getElementById("info-phone").innerText = user.phone;
+  if (password) {
+    updatedData.password = password;
+    updatedData.password_confirmation = passwordConfirm;
+  }
 
-      toggleEditMode(false);
-      alert("تم تحديث البيانات بنجاح");
-    } catch {
-      alert("فشل تحديث البيانات");
+  try {
+    const res = await fetch(`${API_BASE_URL}/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!res.ok) throw new Error();
+
+    const result = await res.json();
+    const user = result.data || result;
+
+    document.getElementById("info-fullname").innerText = user.name;
+    document.getElementById("display-name").innerText = user.name;
+    document.getElementById("info-email").innerText = user.email;
+    document.getElementById("info-phone").innerText = user.phone;
+
+    toggleEditMode(false);
+    alert("تم تحديث البيانات بنجاح");
+  } catch {
+    alert("فشل تحديث البيانات");
+  }
+});
+
+
+document.querySelectorAll(".toggle-pass").forEach(icon => {
+  icon.addEventListener("click", () => {
+    const inputId = icon.getAttribute("data-target");
+    const input = document.getElementById(inputId);
+
+    if (!input) return;
+
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
     }
   });
+});
+
+
 });
