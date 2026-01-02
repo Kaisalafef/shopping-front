@@ -8,8 +8,7 @@ const CSRF_TOKEN = document
    LOGIN
 ========================= */
 const loginForm = document.getElementById("loginForm");
-const errorMsg = document.getElementById("errorMsg");
-
+const generalError = document.getElementById("generalError");
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -17,13 +16,18 @@ if (loginForm) {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    if (!email.includes("@")) {
-      errorMsg.textContent = "Invalid email";
-      return;
-    }
-
     if (password.length < 6) {
       errorMsg.textContent = "Password too short";
+
+      return;
+    }
+    // 1. إعادة تعيين الرسائل وإخفاؤها عند كل محاولة جديدة
+    generalError.style.display = "none";
+    generalError.textContent = "";
+
+    // تحقق مبدئي بسيط
+    if (!email || !password) {
+      showError("الرجاء إدخال البريد الإلكتروني وكلمة المرور");
       return;
     }
 
@@ -48,17 +52,20 @@ if (loginForm) {
         localStorage.setItem("auth_user", JSON.stringify(data.user));
 
         if (data.user.role === "admin") {
-  window.location.replace("/Home/admin_dashboard.html");
-} else {
-  window.location.replace("/Home/client_dashboard.html");
-}
-
+          window.location.replace("/Home/admin_dashboard.html");
+        } else {
+          window.location.replace("/Home/client_dashboard.html");
+        }
       } else {
-        errorMsg.textContent = data.message || "Login failed";
+        const msg =
+          data.message || "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+        showError(msg);
       }
     } catch (err) {
       console.error(err);
-      errorMsg.textContent = "Server error";
+      showError(
+        "عذراً، يوجد مشكلة في الاتصال بالسيرفر. تأكد من تشغيل الـ Backend."
+      );
     }
   });
 }
@@ -73,15 +80,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
+    if (signupError) {
+      signupError.style.display = "none";
+      signupError.textContent = "";
+    }
     const name = document.getElementById("fullname").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const passwordcomf = document.getElementById("passwordcomf").value;
     const phone = document.getElementById("phone").value;
-
+    if (!name || !email || !password || !phone) {
+      showSignupError("الرجاء ملء جميع الحقول المطلوبة");
+      return;
+    }
     if (password !== passwordcomf) {
-      alert("Passwords do not match");
+      showSignupError("كلمتا المرور غير متطابقتين");
       return;
     }
 
@@ -117,26 +130,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
         window.location.href = "/Home/client_dashboard.html";
       } else {
-        alert(data.message || "Registration failed");
+        // --- فشل التسجيل (بيانات مكررة أو غير صالحة) ---
+        // عرض الرسالة القادمة من الباك إند أو رسالة افتراضية
+        let msg = data.message || "فشل إنشاء الحساب، يرجى المحاولة مرة أخرى";
+
+        // تحسين: لو الباك إند يرجع أخطاء تفصيلية (Validation Errors)
+        if (data.errors) {
+          // نأخذ أول خطأ موجود ونعرضه
+          msg = Object.values(data.errors).flat()[0];
+        }
+        showSignupError(msg);
       }
     } catch (err) {
       console.error(err);
-      alert("Server error");
+      showSignupError("عذراً، لا يمكن الاتصال بالسيرفر حالياً");
     }
   });
 });
 // تفعيل أزرار العين في صفحات Login و Sign_up
-document.querySelectorAll('.toggle-password').forEach(icon => {
-    icon.addEventListener('click', function() {
-        // البحث عن حقل الإدخال الموجود في نفس الحاوية (input-group أو password-container)
-        const input = this.parentElement.querySelector('input');
-        
-        if (input.type === "password") {
-            input.type = "text";
-            this.classList.replace("fa-eye", "fa-eye-slash");
-        } else {
-            input.type = "password";
-            this.classList.replace("fa-eye-slash", "fa-eye");
-        }
-    });
+document.querySelectorAll(".toggle-password").forEach((icon) => {
+  icon.addEventListener("click", function () {
+    // البحث عن حقل الإدخال الموجود في نفس الحاوية (input-group أو password-container)
+    const input = this.parentElement.querySelector("input");
+
+    if (input.type === "password") {
+      input.type = "text";
+      this.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+      input.type = "password";
+      this.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  });
 });
+function showSignupError(message) {
+  if (signupError) {
+    signupError.textContent = message;
+    signupError.style.display = "block";
+  } else {
+    alert(message);
+  }
+}
+// دالة مساعدة لإظهار الخطأ
+function showError(message) {
+  if (generalError) {
+    generalError.textContent = message;
+    generalError.style.display = "block"; // هذا السطر مهم لأن CSS يجعله مخفياً
+    generalError.style.color = "#d63031"; // لون أحمر للتأكيد
+  } else {
+    alert(message); // احتياطي لو العنصر غير موجود
+  }
+}

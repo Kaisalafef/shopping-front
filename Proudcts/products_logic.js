@@ -150,46 +150,55 @@ document.addEventListener("DOMContentLoaded", () => {
 /* =========================
    بطاقة المنتج
 ========================= */
+/* =========================
+   بطاقة المنتج (محدثة)
+========================= */
 function createProductCard(product, isAdmin) {
   const priceFormatted = new Intl.NumberFormat("ar-SY").format(product.price);
-  const finalFormatted = product.finalPrice
-    ? new Intl.NumberFormat("ar-SY").format(product.finalPrice)
-    : null;
+  
+  // حساب السعر النهائي إذا كان موجوداً، وإلا استخدام السعر الأصلي
+  const finalPriceVal = product.finalPrice ? product.finalPrice : product.price;
+  const finalFormatted = new Intl.NumberFormat("ar-SY").format(finalPriceVal);
+
+  // منطق عرض السعر
+  let priceHtml = '';
+  if (product.discount > 0) {
+      // حالة وجود خصم: عرض السعر القديم مشطوب + الجديد
+      priceHtml = `
+        <div class="price-container">
+            <span class="new-price">${finalFormatted} ل.س</span>
+            <span class="old-price">${priceFormatted} ل.س</span>
+        </div>
+      `;
+  } else {
+      // حالة السعر العادي
+      priceHtml = `<span class="regular-price">${priceFormatted} ل.س</span>`;
+  }
+
+  // عرض شارة نسبة الخصم
+  const discountBadge = (product.discount > 0) 
+    ? `<span class="discount-badge">خصم ${product.discount}%</span>` 
+    : "";
 
   return `
     <div class="product-card">
-        <a href="/Product/Product.html?id=${
-          product.id
-        }" class="card-link-wrapper">
-
+        <a href="/Product/Product.html?id=${product.id}" class="card-link-wrapper">
+            
             <div class="product-img-wrapper">
-                <img src="${product.img}" alt="${product.name}">
-                ${
-                  product.discount
-                    ? `<span class="discount-badge">-${product.discount}%</span>`
-                    : ""
-                }
+                ${discountBadge}
+                <img src="${product.img}" alt="${product.name}" loading="lazy">
             </div>
 
             <div class="product-info">
-                <div class="product-title">${product.name}</div>
-
+                <div class="product-title" title="${product.name}">${product.name}</div>
                 <div class="product-price">
-                    ${
-                      product.discount
-                        ? `
-                                <span class="old-price">${priceFormatted} SYP</span>
-                                <span class="new-price">${finalFormatted} SYP</span>
-                              `
-                        : `${priceFormatted} SYP`
-                    }
+                    ${priceHtml}
                 </div>
             </div>
         </a>
     </div>
     `;
 }
-
 /* =========================
    إجراءات عامة
 ========================= */

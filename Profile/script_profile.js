@@ -16,6 +16,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentUserId = null;
 
+   
+  // 1. دالة عرض الإشعارات (Toast)
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
   /* ===============================
      1. PROFILE
   ================================ */
@@ -47,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       checkAdminOrUser();
     } catch {
-      alert("فشل تحميل الملف الشخصي");
+      showToast("فشل تحميل الملف الشخصي","error");
     }
   }
 
@@ -196,12 +225,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (password || passwordConfirm) {
     if (password.length < 8) {
-      alert("كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+      showToast("كلمة المرور يجب أن تكون 8 أحرف على الأقل","warning");
       return;
     }
 
     if (password !== passwordConfirm) {
-      alert("كلمتا المرور غير متطابقتين");
+      showToast("كلمتا المرور غير متطابقتين","warning");
       return;
     }
   }
@@ -238,9 +267,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("info-phone").innerText = user.phone;
 
     toggleEditMode(false);
-    alert("تم تحديث البيانات بنجاح");
+    showToast("تم تحديث البيانات بنجاح","success");
   } catch {
-    alert("فشل تحديث البيانات");
+    showToast("فشل تحديث البيانات","error");
   }
 });
 

@@ -57,7 +57,7 @@
 
       
     </header>
-
+<div id="toast-box"></div>
     <div class="dashboard-container">
       <main class="main-content">
         <div class="section-header">
@@ -142,6 +142,36 @@
             <p>جميع الحقوق محفوظة &copy; <span id="year"></span> لمتجرنا الإلكتروني.</p>
         </div>
     </footer>
+    <div id="checkoutModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeCheckoutModal()" type="button" title="إغلاق">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>تفاصيل التوصيل</h3>
+            </div>
+
+            <form id="checkoutForm" onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label for="orderAddress">العنوان / الموقع بالتفصيل</label>
+                    <textarea 
+                        id="orderAddress" 
+                        rows="4" 
+                        placeholder="المدينة، الحي، الشارع، رقم المبنى..." 
+                        required></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeCheckoutModal()">إلغاء</button>
+                    <button type="submit" class="btn-confirm-order">
+                        <i class="fas fa-paper-plane"></i> إرسال الطلب
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
             <script src="/Auth/auth_guard.js"></script>
      <script
             src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

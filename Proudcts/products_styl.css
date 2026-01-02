@@ -5,77 +5,102 @@
 
 :root {
     --card-bg: #ffffff;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-    --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
-    --primary-blue: #007185;
-    --primary-hover: #005a6a;
-    --delete-red: #d63031;
-    --delete-hover: #c0392b;
-    --edit-blue: #3498db;
-    --edit-hover: #2980b9;
-    --gold: #f0c14b;
-    --text-dark: #0F1111;
-    --text-gray: #565959;
+    --shadow-sm: 0 4px 15px rgba(0,0,0,0.05);
+    --shadow-md: 0 10px 25px rgba(0,0,0,0.1);
+    --primary-color: #2c3e50;
+    --accent-gold: #f0c14b;
+    --red-danger: #e74c3c;
+    --text-dark: #2d3436;
+    --text-gray: #636e72;
+    --border-radius: 12px;
 }
 
 body {
     font-family: 'Cairo', sans-serif;
-    background-color: #eaeded; /* Matches Dashboard */
+    background-color: #f8f9fa;
+    margin: 0;
 }
 
-/* Grid Layout */
+/* --- تنسيق الشبكة --- */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 10px 0;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+    padding: 20px 0;
 }
 
-/* ===== PERFECT PRODUCT CARD ===== */
-/* تحسين حاوية الكرت */
+/* --- بطاقة المنتج --- */
 .product-card {
     background: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden; /* لمنع الصورة من الخروج عن الزوايا المنحنية */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: var(--border-radius);
+    position: relative; /* ضروري لتموضع شارة الخصم */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    height: 100%; /* لتوحيد أطوال الكروت */
-    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    height: 100%;
 }
 
-/* تحسين حاوية الصورة - الجزء الأهم */
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(0,0,0,0.1);
+}
+
+/* رابط يغطي الكرت بالكامل */
+.card-link-wrapper {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* --- حاوية الصورة --- */
 .product-img-wrapper {
     width: 100%;
-    height: 200px; /* تحديد ارتفاع ثابت ومنظم */
-    background-color: #f8f9fa;
+    height: 220px;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    overflow: hidden;
+    padding: 20px;
+    position: relative; /* للعناصر العائمة داخل الصورة */
+    box-sizing: border-box;
+    border-bottom: 1px solid #f1f1f1;
 }
 
 .product-img-wrapper img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* هذا يضمن بقاء الصورة كاملة داخل الإطار دون قص أو تشويه */
+    object-fit: contain;
     transition: transform 0.5s ease;
 }
 
-/* تأثير عند تمرير الماوس */
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+.product-card:hover .product-img-wrapper img {
+    transform: scale(1.08);
 }
 
-.product-card:hover img {
-    transform: scale(1.08); /* تكبير بسيط للصورة داخل إطارها */
+/* --- شارة الخصم (مهمة جداً) --- */
+.discount-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px; /* في وضع RTL سيظهر يمين */
+    background: var(--red-danger);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 2px 5px rgba(231, 76, 60, 0.4);
+    z-index: 10;
 }
 
-/* تنسيق المعلومات تحت الصورة */
+/* --- تفاصيل المنتج --- */
 .product-info {
-    padding: 15px;
+    padding: 20px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -83,240 +108,103 @@ body {
 }
 
 .product-title {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 8px;
-    /* تحديد عدد الأسطر لسطرين فقط لتوحيد الشكل */
+    margin-bottom: 10px;
+    line-height: 1.5;
+    /* تحديد سطرين للنص */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 2.8em; 
+    height: 3em; 
 }
 
-
-.product-rating {
-    color: #ffa41c;
-    font-size: 0.8rem;
-    margin-bottom: 8px;
-}
-
+/* --- السعر والخصم --- */
 .product-price {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column; /* ترتيب السعر القديم فوق الجديد */
+    gap: 2px;
+}
+
+/* السعر العادي (بدون خصم) */
+.regular-price {
     font-size: 1.2rem;
     font-weight: 800;
-    color: #B12704;
-    margin-bottom: 15px;
+    color: var(--primary-color);
 }
 
-/* ===== BUTTONS STYLING ===== */
-
-/* Client Add to Cart */
-.product-actions {
-    margin-top: auto;
-}
-
-.btn-cart {
-    width: 100%;
-    background:  var(--gold);
-    border: 1px solid #a88734;
-    padding: 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    font-family: 'Cairo', sans-serif;
-}
-
-.btn-cart:hover {
-    transform: translateY(3);
-    background-color: #f4d078;
-}
-
-/* Admin Action Buttons Container */
-.admin-actions {
+/* حاوية الأسعار عند وجود خصم */
+.price-container {
     display: flex;
+    align-items: center;
     gap: 10px;
-    margin-top: auto;
+    flex-wrap: wrap;
 }
 
-/* General Button Styles */
-.btn-edit, .btn-delete {
-    flex: 1;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.9rem;
+.old-price {
+    text-decoration: line-through;
+    color: #95a5a6;
+    font-size: 0.95rem;
     font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    transition: background-color 0.2s, transform 0.1s;
-    font-family: 'Cairo', sans-serif;
 }
 
-/* Edit Button (Blue) */
-.btn-edit {
-    background-color: var(--edit-blue);
-    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+.new-price {
+    color: var(--red-danger);
+    font-weight: 800;
+    font-size: 1.3rem;
 }
 
-.btn-edit:hover {
-    background-color: var(--edit-hover);
-}
-
-/* Delete Button (Red) */
-.btn-delete {
-    background-color: var(--delete-red);
-    box-shadow: 0 2px 5px rgba(214, 48, 49, 0.3);
-}
-
-.btn-delete:hover {
-    background-color: var(--delete-hover);
-}
-
-.btn-edit:active, .btn-delete:active {
-    transform: scale(0.95);
-}
-/* ... existing styles ... */
-
-/* Improved Header Link */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: var(--shadow-sm);
-}
-
-/* No Results Message */
+/* --- رسائل الخطأ والبحث --- */
 .no-results {
     grid-column: 1 / -1;
     text-align: center;
-    padding: 50px;
+    padding: 60px;
     background: white;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     color: var(--text-gray);
     font-size: 1.2rem;
-    border: 2px dashed #ccc;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-/* Ensure images don't overflow */
-.product-image {
-    max-width: 100%;
-    max-height: 80%;
-    object-fit: cover;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Product Price Styling */
-.product-price small {
-    font-size: 0.8rem;
-    color: var(--text-gray);
-    margin-right: 4px;
-}
-
-/* Responsive Fix */
-/* =========================================
-   Mobile Responsiveness (Replace existing query in products_styl.css)
-   ========================================= */
-
+/* --- استجابة للجوال --- */
 @media (max-width: 600px) {
-    /* الشبكة: عرض منتجين دائماً */
     .products-grid {
-        grid-template-columns: repeat(2, 1fr); /* عمودين إجباري */
-        gap: 10px; /* تقليل المسافة */
-        padding: 5px;
-    }
-
-    .product-card {
-        border-radius: 10px;
-    }
-
-    /* تصغير مساحة الصورة */
-   .product-img-wrapper {
-        height: 140px; /* ارتفاع مناسب للجوال */
-        padding: 5px;
-    }
-    
-    .product-title {
-        font-size: 0.85rem;
-        height: 2.4em;
-    }
-    /* النصوص */
-    .product-info {
+        grid-template-columns: repeat(2, 1fr); /* عمودين */
+        gap: 12px;
         padding: 10px;
+    }
+
+    .product-img-wrapper {
+        height: 150px;
+        padding: 10px;
+    }
+
+    .product-info {
+        padding: 12px;
     }
 
     .product-title {
         font-size: 0.9rem;
-        height: 36px; /* ارتفاع لسطرين */
-        margin-bottom: 4px;
+        height: 2.8em;
     }
 
-    .product-price {
-        font-size: 1rem;
-        margin-bottom: 10px;
-    }
-
-    /* أزرار الإجراءات (Edit/Delete) */
-    .admin-actions {
-        flex-direction: row; /* الحفاظ على الأزرار بجانب بعض */
-        gap: 5px;
-    }
-
-    .btn-edit, .btn-delete {
-        font-size: 0; /* إخفاء النص */
-        padding: 8px 0;
-    }
-
-    /* إظهار الأيقونة فقط وتكبيرها */
-    .btn-edit i, .btn-delete i {
-        font-size: 1.1rem; 
-        margin: 0;
+    .new-price {
+        font-size: 1.1rem;
     }
     
-    
-    .btn-edit, .btn-delete {
-        font-size: 0.75rem;
-        padding: 6px;
-    }
-    
-
-    /* زر الإضافة للسلة للعميل */
-    .btn-cart {
-        font-size: 0.85rem;
-        padding: 8px;
-    }
-
     .old-price {
-    text-decoration: line-through;
-    color: #999;
-    font-size: 14px;
-    margin-left: 6px;
-}
+        font-size: 0.85rem;
+    }
 
-.new-price {
-    color: #e53935;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.discount-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #e53935;
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 13px;
-    z-index: 2;
-}
-
+    .discount-badge {
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        top: 8px;
+        right: 8px;
+    }
 }

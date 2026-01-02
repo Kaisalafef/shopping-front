@@ -266,3 +266,221 @@ body {
     font-size: 4rem;
     color: #eee;
 } 
+/* --- تنسيق نافذة الدفع (Modal) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 62, 80, 0.7); /* لون خلفية معتم */
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px); /* تأثير ضبابي للخلفية */
+    display: none; /* مخفي افتراضياً */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    border-top: 5px solid var(--accent-gold);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px; /* لأنه عربي RTL */
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-grey);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal-btn:hover {
+    color: var(--red-danger);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.modal-header i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    background: var(--bg-light);
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+}
+
+.modal-header h3 {
+    color: var(--text-dark);
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* تنسيق النموذج داخل النافذة */
+.form-group {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: none;
+    transition: border-color 0.3s;
+    outline: none;
+    box-sizing: border-box; /* مهم جداً */
+}
+
+.form-group textarea:focus {
+    border-color: var(--accent-gold);
+}
+
+/* أزرار النافذة */
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-confirm-order {
+    flex: 2;
+    background: var(--green-success);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-confirm-order:hover {
+    background: var(--green-hover);
+}
+
+.btn-cancel {
+    flex: 1;
+    background: var(--bg-light);
+    color: var(--text-grey);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-cancel:hover {
+    background: #eee;
+    color: var(--text-dark);
+}
+
+/* تصميم الإشعار الواحد */
+.toast {
+    width: 350px;
+    height: 70px;
+    background: #fff;
+    font-weight: 600;
+    margin: 10px 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    position: relative;
+    transform: translateX(-100%); /* البداية خارج الشاشة */
+    animation: slideIn 0.5s forwards; /* حركة الدخول */
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: 'Cairo', sans-serif;
+}
+
+/* الأيقونة واللون حسب نوع الإشعار */
+.toast i {
+    font-size: 24px;
+    margin: 0 15px;
+}
+
+/* نجاح */
+.toast.success { border-right: 6px solid #2ecc71; }
+.toast.success i { color: #2ecc71; }
+
+/* خطأ */
+.toast.error { border-right: 6px solid #e74c3c; }
+.toast.error i { color: #e74c3c; }
+
+/* تحذير */
+.toast.warning { border-right: 6px solid #f1c40f; }
+.toast.warning i { color: #f1c40f; }
+
+/* خط فاصل صغير */
+.toast::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(0,0,0,0.05);
+    animation: timeOut 4s linear forwards; /* شريط الوقت */
+}
+
+/* حركات الأنيميشن */
+@keyframes slideIn {
+    100% { transform: translateX(0); }
+}
+
+@keyframes timeOut {
+    100% { width: 0; }
+}
+
+/* عند الإخفاء */
+.toast.hide {
+    animation: slideOut 0.5s forwards;
+}
+
+@keyframes slideOut {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-200%); opacity: 0; }
+}

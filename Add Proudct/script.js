@@ -1,4 +1,3 @@
-
 /**
  * Product Management Script
  * Colors (with images) + Sizes (separate)
@@ -25,26 +24,26 @@ const getAuthHeaders = () => ({
   ];
   /* ========== CATEGORIES DATA ========== */
   const categoryTitles = {
-    'electronics': 'الإلكترونيات',
-    'food': 'المواد الغذائية',
-    'meals': 'المأكولات',
-    'makeup': 'مستحضرات التجميل',
-    'men': 'أزياء رجالية',
-    'women': 'أزياء نسائية',
-    'perfume': 'العطور',
-    'cleaning': 'المنظفات',
-    'furniture': 'المفروشات',
-    'sweets': 'الحلويات'
+    electronics: "الإلكترونيات",
+    food: "المواد الغذائية",
+    meals: "المأكولات",
+    makeup: "مستحضرات التجميل",
+    men: "أزياء رجالية",
+    women: "أزياء نسائية",
+    perfume: "العطور",
+    cleaning: "المنظفات",
+    furniture: "المفروشات",
+    sweets: "الحلويات",
   };
 
   /* ========== POPULATE CATEGORIES ========== */
-  const categorySelect = document.getElementById('category');
+  const categorySelect = document.getElementById("category");
 
   // التأكد من أن العنصر موجود قبل محاولة إضافة الخيارات
   if (categorySelect) {
     Object.entries(categoryTitles).forEach(([key, label]) => {
-      const option = document.createElement('option');
-      option.value = key;       // القيمة التي ستُرسل للسيرفر (مثلاً: electronics)
+      const option = document.createElement("option");
+      option.value = key; // القيمة التي ستُرسل للسيرفر (مثلاً: electronics)
       option.textContent = label; // النص الذي يظهر للمستخدم (مثلاً: الإلكترونيات)
       categorySelect.appendChild(option);
     });
@@ -71,17 +70,39 @@ const getAuthHeaders = () => ({
     addColorBtn: document.getElementById("addColorBtn"),
     addSizeBtn: document.getElementById("addSizeBtn"),
     saveBtn: document.getElementById("saveBtn"),
-    toast: document.getElementById("toast"),
     pageTitle: document.querySelector(".page-header h1"),
   };
 
   /* ========== TOAST ========== */
-  const toast = (msg, error = false) => {
-    els.toast.textContent = msg;
-    els.toast.style.background = error ? "#ef4444" : "#1f2937";
-    els.toast.classList.remove("hidden");
-    setTimeout(() => els.toast.classList.add("hidden"), 3000);
-  };
+  
+  // 1. دالة عرض الإشعارات (Toast)
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
 
   /* ========== ADD COLOR ========== */
   /* ========== ADD COLOR ========== */
@@ -108,21 +129,27 @@ const getAuthHeaders = () => ({
       <select class="form-select" style="margin-bottom: 0.5rem ;">
           <option value="">اختر لون</option>
           ${COLORS.map(
-      (c) => `<option value="${c.value}">${c.label}</option>`
-    ).join("")}
+            (c) => `<option value="${c.value}">${c.label}</option>`
+          ).join("")}
       </select>
       
       <div class="preview-container" style="text-align: center; margin-bottom: 10px;">
           <img class="img-preview" 
                src="${initialImage}" 
                alt="معاينة الصورة" 
-               style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; border: 1px solid #e5e7eb; padding: 4px; display: ${shouldShowImage ? 'block' : 'none'};">
+               style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; border: 1px solid #e5e7eb; padding: 4px; display: ${
+                 shouldShowImage ? "block" : "none"
+               };">
       </div>
 
       <label class="custom-file-upload">
           <input type="file" accept="image/*">
-          <i class="${shouldShowImage ? 'fas fa-check-circle' : 'fas fa-cloud-upload-alt'}"></i>
-          <span class="upload-text">${shouldShowImage ? 'تغيير الصورة' : 'اختر صورة للون'}</span>
+          <i class="${
+            shouldShowImage ? "fas fa-check-circle" : "fas fa-cloud-upload-alt"
+          }"></i>
+          <span class="upload-text">${
+            shouldShowImage ? "تغيير الصورة" : "اختر صورة للون"
+          }</span>
       </label>
 
       <button type="button" class="btn-remove" style="position: absolute; left: 10px; top: 10px;">&times;</button>
@@ -155,17 +182,17 @@ const getAuthHeaders = () => ({
         reader.onload = function (e) {
           imgPreview.src = e.target.result; // وضع الرابط في الصورة
           imgPreview.style.display = "block"; // إظهار الصورة
-        }
+        };
 
         reader.readAsDataURL(file); // بدء القراءة
 
         // 2. تحديث شكل الزر
         uploadLabel.classList.add("uploaded");
-        uploadText.textContent = file.name.length > 20
-          ? file.name.substring(0, 20) + "..."
-          : file.name;
+        uploadText.textContent =
+          file.name.length > 20
+            ? file.name.substring(0, 20) + "..."
+            : file.name;
         uploadIcon.className = "fas fa-check-circle";
-
       } else {
         // في حالة إلغاء الاختيار ولم تكن هناك صورة قديمة
         if (!initialImage) {
@@ -220,17 +247,17 @@ const getAuthHeaders = () => ({
   /* ========== SAVE ========== */
   const saveProduct = async () => {
     if (!localStorage.getItem("token")) {
-      toast("يرجى تسجيل الدخول", true);
+      showToast("يرجى تسجيل الدخول", 'warning');
       return;
     }
 
     if (!els.title.value || !els.price.value || !els.category.value) {
-      toast("يرجى ملء الحقول الأساسية", true);
+      showToast("يرجى ملء الحقول الأساسية", 'warning');
       return;
     }
 
     if (!state.colors.length) {
-      toast("أضف لونًا واحدًا على الأقل مع صورة", true);
+      showToast("أضف لونًا واحدًا على الأقل مع صورة", 'warning');
       return;
     }
 
@@ -268,21 +295,23 @@ const getAuthHeaders = () => ({
       });
 
       if (res.ok) {
-        toast("تم حفظ المنتج بنجاح ✅");
+        showToast("تمت إضافة المنتج بنجاح!", "success");
         setTimeout(() => location.reload(), 1500);
       } else {
         const err = await res.json();
         console.error("Laravel Validation Error:", err);
+        showToast('حدث خطأ أثناء إضافة المنتج', 'error');
         if (err.errors) {
           const firstError = Object.values(err.errors)[0][0];
-          toast(firstError, true);
         } else {
-          toast("خطأ غير متوقع", true);
+          showToast("خطأ غير متوقع", 'error');
         }
       }
     } catch (e) {
-      console.error(e);
-      toast("فشل الاتصال بالخادم", true);
+      
+      // ❌ خطأ في الاتصال
+        console.error(err);
+        showToast('فشل الاتصال بالسيرفر!', 'error');
     }
   };
 
