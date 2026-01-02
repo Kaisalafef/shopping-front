@@ -154,51 +154,60 @@ document.addEventListener("DOMContentLoaded", () => {
    بطاقة المنتج (محدثة)
 ========================= */
 function createProductCard(product, isAdmin) {
-  const priceFormatted = new Intl.NumberFormat("ar-SY").format(product.price);
-  
-  // حساب السعر النهائي إذا كان موجوداً، وإلا استخدام السعر الأصلي
-  const finalPriceVal = product.finalPrice ? product.finalPrice : product.price;
-  const finalFormatted = new Intl.NumberFormat("ar-SY").format(finalPriceVal);
+  const priceFormatted = new Intl.NumberFormat("en-US").format(product.price);
+  const finalPriceVal = product.finalPrice ?? product.price;
+  const finalFormatted = new Intl.NumberFormat("en-US").format(finalPriceVal);
 
-  // منطق عرض السعر
-  let priceHtml = '';
-  if (product.discount > 0) {
-      // حالة وجود خصم: عرض السعر القديم مشطوب + الجديد
-      priceHtml = `
-        <div class="price-container">
-            <span class="new-price">${finalFormatted} ل.س</span>
-            <span class="old-price">${priceFormatted} ل.س</span>
-        </div>
-      `;
-  } else {
-      // حالة السعر العادي
-      priceHtml = `<span class="regular-price">${priceFormatted} ل.س</span>`;
-  }
+  let priceHtml = product.discount > 0
+    ? `
+      <div class="price-container">
+        <span class="new-price">${finalFormatted} SYP</span>
+        <span class="old-price">${priceFormatted} SYP</span>
+      </div>
+    `
+    : `<span class="regular-price">${priceFormatted} SYP</span>`;
 
-  // عرض شارة نسبة الخصم
-  const discountBadge = (product.discount > 0) 
-    ? `<span class="discount-badge">خصم ${product.discount}%</span>` 
+  const discountBadge = product.discount > 0
+    ? `<span class="discount-badge">-${product.discount}%</span>`
+    : "";
+
+  const adminActions = isAdmin
+    ? `
+      <div class="admin-actions">
+  <button class="admin-btn edit-btn" onclick="goToEditPage(${product.id})">
+    <i class="fa fa-edit"></i>
+    <span>تعديل</span>
+  </button>
+
+  <button class="admin-btn delete-btn" onclick="deleteProduct(${product.id})">
+    <i class="fa fa-trash"></i>
+    <span>حذف</span>
+  </button>
+</div>
+
+    `
     : "";
 
   return `
     <div class="product-card">
-        <a href="/Product/Product.html?id=${product.id}" class="card-link-wrapper">
-            
-            <div class="product-img-wrapper">
-                ${discountBadge}
-                <img src="${product.img}" alt="${product.name}" loading="lazy">
-            </div>
 
-            <div class="product-info">
-                <div class="product-title" title="${product.name}">${product.name}</div>
-                <div class="product-price">
-                    ${priceHtml}
-                </div>
-            </div>
-        </a>
+      <a href="/Product/Product.html?id=${product.id}" class="card-link-wrapper">
+        <div class="product-img-wrapper">
+          ${discountBadge}
+          <img src="${product.img}" alt="${product.name}">
+        </div>
+
+        <div class="product-info">
+          <div class="product-title">${product.name}</div>
+          <div class="product-price">${priceHtml}</div>
+        </div>
+      </a>
+
+      ${adminActions}
     </div>
-    `;
+  `;
 }
+
 /* =========================
    إجراءات عامة
 ========================= */
