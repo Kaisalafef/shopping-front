@@ -208,3 +208,70 @@ body {
         right: 8px;
     }
 }
+/* ===== ADMIN ACTIONS ===== */
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* زر عام */
+.admin-btn {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.25s ease;
+}
+
+/* زر تعديل */
+.edit-btn {
+    background: rgba(52, 152, 219, 0.12);
+    color: #2980b9;
+}
+
+.edit-btn:hover {
+    background: #3498db;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* زر حذف */
+.delete-btn {
+    background: rgba(231, 76, 60, 0.12);
+    color: #c0392b;
+}
+
+.delete-btn:hover {
+    background: #e74c3c;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* أيقونات */
+.admin-btn i {
+    font-size: 0.9rem;
+}
+
+/* ===== موبايل ===== */
+@media (max-width: 600px) {
+    .admin-btn span {
+        display: none; /* إخفاء النص */
+    }
+
+    .admin-btn {
+        padding: 8px;
+    }
+
+    .admin-btn i {
+        font-size: 1rem;
+    }
+}
