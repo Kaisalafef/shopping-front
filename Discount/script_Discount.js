@@ -46,23 +46,42 @@ function getAuthToken() {
     suffix: document.getElementById("valueSuffix"),
 
     closeBtns: document.querySelectorAll(".close-modal"),
-    toast: document.getElementById("toast"),
   };
 
   /* ================= HELPERS ================= */
+    function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
   const getCsrfToken = () =>
     document.querySelector('meta[name="csrf-token"]')?.content || "";
 
   const format = (n) => new Intl.NumberFormat("en-US").format(n);
 
-  const toast = (msg, type = "success") => {
-    els.toast.textContent = msg;
-    els.toast.style.background = type === "error" ? "#dc2626" : "#111827";
-    els.toast.classList.remove("hidden");
-    setTimeout(() => els.toast.classList.add("hidden"), 3000);
-  };
-
+  
   const calcPrice = (base, type, value) => {
     if (type === "percent") {
       return Math.max(0, base - base * (value / 100));
@@ -145,25 +164,25 @@ function getAuthToken() {
         if (!res.ok) {
             // حالة 403: ليس لديه صلاحيات أدمن
             if (res.status === 403) {
-                return toast("عذراً، لا تملك صلاحيات مسؤول للقيام بهذا الإجراء", "error");
+                return showToast("عذراً، لا تملك صلاحيات مسؤول للقيام بهذا الإجراء", "error");
             }
             // حالة 422: أخطاء التحقق (مثلاً المنتج عليه خصم مسبقاً)
             if (res.status === 422) {
-                return toast(data.message || "المنتج يمتلك عرضاً نشطاً بالفعل", "error");
+                return showToast(data.message || "المنتج يمتلك عرضاً نشطاً بالفعل", "error");
             }
             // حالة 401: غير مسجل دخول
             if (res.status === 401) {
-                return toast("يرجى تسجيل الدخول أولاً", "error");
+                return showToast("يرجى تسجيل الدخول أولاً", "error");
             }
             
             throw new Error(data.message || "فشل حفظ الخصم");
         }
 
-        toast("تم حفظ الخصم بنجاح");
+        showToast("تم حفظ الخصم بنجاح", 'success');
         closeModal();
         fetchProducts();
     } catch (err) {
-        toast(err.message || "حدث خطأ غير متوقع", "error");
+        showToast(err.message || "حدث خطأ غير متوقع", "error");
     }
 }
 
@@ -180,11 +199,11 @@ function getAuthToken() {
         },
       });
 
-      toast("تم حذف الخصم");
+      showToast("تم حذف الخصم", "success");
       closeModal();
       fetchProducts();
     } catch {
-      toast("فشل حذف الخصم", "error");
+      showToast("فشل حذف الخصم", "error");
     }
   }
 
@@ -290,9 +309,9 @@ function getAuthToken() {
     const type = [...els.radios].find((r) => r.checked).value;
     const value = Number(els.mValue.value);
 
-    if (value <= 0) return toast("قيمة غير صحيحة", "error");
+    if (value <= 0) return showToast("قيمة غير صحيحة", "error");
     if (type === "percent" && value > 100)
-      return toast("النسبة لا تتجاوز 100%", "error");
+      return showToast("النسبة لا تتجاوز 100%", "error");
 
     saveDiscount(id, type, value);
   });

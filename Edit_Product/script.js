@@ -13,7 +13,36 @@ const categoryTitles = {
     'furniture': 'المفروشات',
     'sweets': 'الحلويات'
 };
+/* ========== TOAST ========== */
+  
+  // 1. دالة عرض الإشعارات (Toast)
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
 document.addEventListener('DOMContentLoaded', async () => {
     // 2. تحميل الفئات داخل القائمة المنسدلة فور تحميل الصفحة
     populateCategories();
@@ -31,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(saveBtn) {
             saveBtn.addEventListener('click', () => {
                 // منطق الإضافة الجديدة هنا
-                alert('وضع الإضافة الجديدة'); 
+                showToast('وضع الإضافة الجديدة', 'warning');
             });
         }
     }
@@ -101,7 +130,7 @@ async function enableEditMode(id) {
 
     } catch (error) {
         console.error('Error fetching product:', error);
-        alert('حدث خطأ أثناء تحميل بيانات المنتج للتعديل');
+        showToast('حدث خطأ أثناء تحميل بيانات المنتج للتعديل',"error");
     }
 }
 
@@ -127,23 +156,18 @@ function setupUpdateAction(id, btn) {
             });
 
             if (response.ok) {
-                // إظهار التنبيه (Toast)
-                const toast = document.getElementById('toast');
-                toast.textContent = "تم تعديل المنتج بنجاح";
-                toast.classList.remove('hidden');
-                setTimeout(() => toast.classList.add('hidden'), 3000);
-                
+                showToast('"تم تعديل المنتج بنجاح','success')
                 // إعادة التوجيه بعد ثانية
                 setTimeout(() => {
                     window.location.href = '/Proudcts/Products.html?role=admin';
                 }, 1000);
             } else {
                 const err = await response.json();
-                alert('فشل التعديل: ' + (err.message || 'تأكد من البيانات'));
+                showToast('فشل التعديل: ' + (err.message || 'تأكد من البيانات'),'error');
             }
         } catch (error) {
             console.error(error);
-            alert('خطأ في الاتصال');
+            showToast('خطأ في الاتصال','error');
         }
     });
 }

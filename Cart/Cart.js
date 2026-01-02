@@ -5,7 +5,7 @@ const API_URL = "http://127.0.0.1:8000/api";
 const token = localStorage.getItem("token");
 
 if (!token) {
-    alert("يرجى تسجيل الدخول أولاً");
+    showToast("يرجى تسجيل الدخول أولاً","warning");
     window.location.href = "/Auth/log_in.html";
 }
 
@@ -16,6 +16,36 @@ const headers = {
 
 let CURRENT_CART_ID = null;
 
+  /* ========== TOAST ========== */
+  
+  // 1. دالة عرض الإشعارات (Toast)
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
 /************************************
  * Get My Cart (by token)
  ************************************/
@@ -41,7 +71,7 @@ async function getUserCart() {
 
     } catch (error) {
         console.error(error);
-        alert("حدث خطأ أثناء تحميل السلة");
+        showToast("حدث خطأ أثناء تحميل السلة",'error');
     }
 }
 
@@ -110,7 +140,7 @@ async function updateQuantity(itemId, quantity) {
 
     } catch (error) {
         console.error(error);
-        alert("فشل تحديث الكمية");
+        showToast("فشل تحديث الكمية","error");
     }
 }
 
@@ -138,7 +168,7 @@ async function removeItem(itemId) {
 
     } catch (error) {
         console.error(error);
-        alert("فشل حذف المنتج");
+        showToast("فشل حذف المنتج","error");
     }
 }
 
@@ -153,10 +183,81 @@ function updateTotal(total) {
  * Checkout
  ************************************/
 function checkoutAll() {
-    alert("سيتم تحويلك إلى صفحة الدفع لاحقًا");
-    // مستقبلاً: POST /orders
+    const modal = document.getElementById("checkoutModal");
+    if (modal) {
+        modal.classList.add("active");
+        // مسح الحقل عند الفتح
+        document.getElementById("orderAddress").value = "";
+    }
+}
+// 2. إغلاق النافذة
+function closeCheckoutModal() {
+    const modal = document.getElementById("checkoutModal");
+    if (modal) {
+        modal.classList.remove("active");
+    }
 }
 
+// إغلاق النافذة عند الضغط خارج المربع
+window.onclick = function(event) {
+    const modal = document.getElementById("checkoutModal");
+    if (event.target === modal) {
+        closeCheckoutModal();
+    }
+}
+
+// 3. إرسال الطلب للسيرفر
+async function submitOrder(event) {
+    event.preventDefault(); // منع إعادة تحميل الصفحة
+    
+    const address = document.getElementById("orderAddress").value;
+    const submitBtn = document.querySelector(".btn-confirm-order");
+    
+    // التحقق من أن العنوان ليس فارغاً
+    if (!address.trim()) {
+        showToast("يرجى إدخال العنوان","warning");
+        return;
+    }
+
+    // تغيير نص الزر ليشعر المستخدم بالتحميل
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+    submitBtn.disabled = true;
+
+    try {
+        // ملاحظة: تأكد من أن الـ Endpoint صحيح في الباك إند
+        // عادة يكون /orders ويأخذ العنوان والجسم
+        const res = await fetch(`${API_URL}/orders`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+                address: address,
+                // cart_id: CURRENT_CART_ID // في بعض الأنظمة قد تحتاج إرسال رقم السلة، وفي أنظمة أخرى يأخذها تلقائياً من المستخدم
+            })
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || "فشل إنشاء الطلب");
+        }
+
+        // نجاح العملية
+        showToast("تم استلام طلبك بنجاح! سيتم التواصل معك قريباً.","success");
+        closeCheckoutModal();
+        
+        // إعادة تحميل السلة (التي يجب أن تكون فارغة الآن) أو التوجيه لصفحة الطلبات
+        getUserCart(); 
+        // window.location.href = "/Orders/Orders.html"; // خيار: توجيه المستخدم لصفحة طلباته
+
+    } catch (error) {
+        console.error(error);
+        showToast(error.message || "حدث خطأ أثناء إرسال الطلب","error");
+    } finally {
+        // إعادة الزر لوضعه الطبيعي
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+    }
+}
 /************************************
  * Init
  ************************************/

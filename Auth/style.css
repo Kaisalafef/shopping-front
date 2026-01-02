@@ -210,6 +210,30 @@ input.invalid {
     text-decoration: none;
     font-weight: 600;
 }
+/* style.css - إضافات جديدة */
+
+/* تنسيق رسالة الخطأ العامة التي تظهر فوق الزر */
+.general-error {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: var(--error);
+    background-color: rgba(214, 48, 49, 0.1); /* خلفية حمراء خفيفة */
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--error);
+    display: none; /* مخفية افتراضياً */
+}
+
+/* تحسين ظهور رسائل الخطأ تحت الحقول */
+.error-msg {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none; /* مخفية وتظهر عبر JS */
+    font-weight: 600;
+}
 @media (max-width: 700px) {
     .body{
         display: block;
