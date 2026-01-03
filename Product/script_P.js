@@ -93,13 +93,15 @@ function renderProduct(product) {
   console.log("PRODUCT DATA 👉", product);
 
   titleEl.textContent = product.name;
+  descEl.textContent = product.description;
+  imageEl.src = product.image_url;
 
+  /* السعر */
   const price = Number(product.price);
   const discount = Number(product.discount_percentage || 0);
 
   if (discount > 0) {
     const finalPrice = Math.round(price - price * (discount / 100));
-
     priceEl.innerHTML = `
       <span class="old-price">${price} SYP</span>
       <span class="new-price">${finalPrice} SYP</span>
@@ -109,9 +111,13 @@ function renderProduct(product) {
     priceEl.innerHTML = `<span class="new-price">${price} SYP</span>`;
   }
 
-  descEl.textContent = product.description;
-  imageEl.src = product.image_url;
+  /* ✅ عرض الألوان */
+  renderColors(product.images || []);
+
+  /* ✅ عرض المقاسات */
+  renderSizes(product.sizes || []);
 }
+
 
 /* ---------------------------
    Colors
