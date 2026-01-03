@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ================================ */
   async function checkAdminOrUser() {
     try {
-      const res = await fetch(`${API_BASE_URL}/orders`, {
+      const res = await fetch(`${API_BASE_URL}/orders/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -152,7 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const res = await fetch(`${API_BASE_URL}/orders`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+           Authorization: `Bearer ${token}` },
       });
 
       const orders = await res.json();

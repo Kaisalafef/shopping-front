@@ -231,7 +231,7 @@ async function submitOrder(event) {
             method: "POST",
             headers,
             body: JSON.stringify({
-                address: address,
+                shipping_address: address,
                 // cart_id: CURRENT_CART_ID // في بعض الأنظمة قد تحتاج إرسال رقم السلة، وفي أنظمة أخرى يأخذها تلقائياً من المستخدم
             })
         });

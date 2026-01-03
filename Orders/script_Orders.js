@@ -101,39 +101,39 @@ document.addEventListener("DOMContentLoaded", () => {
        3. UPDATE STATUS (API)
     ================================ */
     window.updateOrderStatus = async function (orderId, newStatus) {
-    if (!confirm(`هل أنت متأكد أنك تريد تغيير حالة الطلب إلى "${translateStatus(newStatus)}"?`)) return;
+        if (!confirm(`هل أنت متأكد أنك تريد تغيير حالة الطلب إلى "${translateStatus(newStatus)}"?`)) return;
 
-    try {
-        const res = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({ status: newStatus })
-        });
+        try {
+            const res = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
 
-        const data = await res.json();
+            const data = await res.json();
 
-        if (res.ok) {
-            const orderIndex = allOrders.findIndex(o => o.id === orderId);
-            if (orderIndex !== -1) {
-                allOrders[orderIndex].status = newStatus;
+            if (res.ok) {
+                const orderIndex = allOrders.findIndex(o => o.id === orderId);
+                if (orderIndex !== -1) {
+                    allOrders[orderIndex].status = newStatus;
+                }
+
+                const activeFilter = document.querySelector(".filter-btn.active").dataset.filter;
+                filterOrders(activeFilter);
+                updateStats(allOrders);
+
+                alert("تم تحديث الحالة بنجاح");
+            } else {
+                alert(data.message || "فشل تحديث الحالة");
             }
-
-            const activeFilter = document.querySelector(".filter-btn.active").dataset.filter;
-            filterOrders(activeFilter);
-            updateStats(allOrders);
-
-            alert("تم تحديث الحالة بنجاح");
-        } else {
-            alert(data.message || "فشل تحديث الحالة");
+        } catch (error) {
+            console.error(error);
+            alert("حدث خطأ في الاتصال بالخادم");
         }
-    } catch (error) {
-        console.error(error);
-        alert("حدث خطأ في الاتصال بالخادم");
-    }
-};
+    };
 
     /* ===============================
        4. MODAL LOGIC
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         itemsContainer.innerHTML = "";
 
         if (order.order_item && order.order_item.length > 0) {
-    order.order_item.forEach(item => {
+            order.order_item.forEach(item => {
 
                 // Check if product exists, otherwise handle gracefully
                 const prodName = item.product ? item.product.name : "منتج محذوف";
