@@ -226,7 +226,6 @@ addBtn.addEventListener("click", () => {
     .then((res) => res.json())
     .then((cart) => {
       const cartId = cart.id;
-
       const payload = {
         product_id: productId,
         quantity,
