@@ -181,10 +181,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return (
       {
         pending: "قيد الانتظار",
-        processing: "جاري التحضير",
-        completed: "مكتمل",
+        processing: "تمت الموافقة",
         cancelled: "ملغى",
-        delivered: "تم التوصيل",
       }[s] || s
     );
   }

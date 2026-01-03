@@ -162,12 +162,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Check if product exists, otherwise handle gracefully
                 const prodName = item.product ? item.product.name : "منتج محذوف";
                 const prodImg = item.product ? item.product.image_url : "/images/no-image.png";
+                const prodcol = item.color;
+                const prodsiz = item.size;
+
 
                 itemsContainer.innerHTML += `
                     <div class="order-item-card">
                         <img src="${prodImg}" alt="${prodName}" class="item-img" onerror="this.src='/images/logo.webp'">
                         <div class="item-details">
                             <h5>${prodName}</h5>
+                            <h7>  color : ${prodcol}  </h7>
+                            <br>
+                            <h7> size :${prodsiz}</h7>
                             <div class="item-meta">
                                 الكمية: <strong>${item.quantity}</strong> | السعر: ${Number(item.price).toLocaleString()}
                             </div>
