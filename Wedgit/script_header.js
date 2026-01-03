@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 item.innerHTML = `
                     <div class="search-item-info">
                         <span class="search-item-title">${product.name}</span>
-                        <span class="search-item-price">${Number(product.price).toLocaleString()} SYP</span>
+                    <!--    <span class="search-item-price">${Number(product.price).toLocaleString()} SYP</span> -->
                     </div>
                     <img src="${getImageUrl(product.image_url)}" alt="${product.name}">
                 `;
