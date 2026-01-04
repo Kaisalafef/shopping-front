@@ -242,25 +242,35 @@ window.goToEditPage = (id) => {
 };
 
 window.deleteProduct = async (id) => {
+  // 1. التأكيد قبل الحذف
   if (!confirm("هل أنت متأكد من حذف المنتج؟")) return;
 
   try {
     const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
       method: "DELETE",
       headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json", // إضافة نوع المحتوى
+        "Accept": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     });
 
     if (response.ok) {
-      ("تم حذف المنتج بنجاح");
-      location.reload();
+      // 2. تصحيح السطر المعطل (استخدام showToast بدلاً من النص العائم)
+      showToast("تم حذف المنتج بنجاح", "success");
+
+      // 3. تأخير إعادة التحميل قليلاً ليتمكن المستخدم من رؤية الرسالة
+      setTimeout(() => {
+        location.reload();
+      }, 1000); 
+      
     } else {
-      showToast("فشل الحذف","error");
+      // محاولة استخراج رسالة الخطأ من السيرفر إذا وجدت
+      const errorData = await response.json();
+      showToast(errorData.message || "فشل الحذف", "error");
     }
   } catch (error) {
-    console.error(error);
-    showToast("حدث خطأ في النظام","error");
+    console.error("Error details:", error);
+    showToast("حدث خطأ في الاتصال بالسيرفر", "error");
   }
 };
