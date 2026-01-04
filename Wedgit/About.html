@@ -14,7 +14,7 @@
         .about-hero {
             background: linear-gradient(135deg, var(--dark-blue), var(--light-blue));
             color: white;
-            padding: 80px 20px;
+            padding: 50px 20px;
             text-align: center;
             border-bottom-left-radius: 50px;
             border-bottom-right-radius: 50px;
@@ -80,6 +80,89 @@
             line-height: 30px;
             margin-left: 10px;
         }
+
+        /* --- تنسيقات قسم فريق العمل الجديد --- */
+        .team-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .company-title {
+            color: var(--dark-blue);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .company-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .team-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .team-card {
+            background: white;
+            padding: 25px 15px;
+            border-radius: 15px;
+            height: 100px;
+            width: 100px; /* عرض ثابت للبطاقة */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: rgb(242, 214, 57);
+        }
+
+        .member-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--dark-blue), var(--light-blue));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .member-name {
+            color: var(--dark-blue);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.4;
+        }
+        
+        .company-badge {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            display: block;
+        }
+
     </style>
     </head>
     <body>
@@ -155,7 +238,34 @@
                     الإنترنت. نوفر لك تشكيلة واسعة من الأقسام التي تلبي كافة
                     احتياجاتك، من الإلكترونيات وحتى الحلويات، مع ضمان تجربة
                     مستخدم سلسة وآمنة.</p>
-            </div>
+                
+                <div class="team-section">
+                    <h3 class="company-title"> تم التصميم والتطوير بواسطة شركة <a href="https://www.facebook.com/share/1CyXgSej5y/"> CYBER NST</a></h3>
+                    <div class="team-grid">
+                        
+                        <div class="team-card" onclick="window.location.href='';">
+                            <h4 class="member-name">المهندس<br>غيث رؤوف كحل</h4>
+                        </div>
+
+                        <div class="team-card" onclick="window.location.href='';">
+                            <h4 class="member-name">المهندسة<br>حلا سامر هلال</h4>
+                        </div>
+
+                        <div class="team-card" onclick="window.location.href='https://www.linkedin.com/in/kais-alafef-b5b238249/';">
+                            <h4 class="member-name">المهندس<br>قيس أيمن العفيف</h4>
+                        </div>
+
+                        <div class="team-card" onclick="window.location.href='';">
+                            <h4 class="member-name">المهندس<br>أمير سلام دواره</h4>
+                        </div>
+
+                        <div class="team-card" onclick="window.location.href='';">
+                            <h4 class="member-name">المهندسة<br>دلع وائل عدوان</h4>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
 
             <div class="features-grid">
                 <div class="feature-item">
@@ -287,12 +397,5 @@
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
-        <script>
-        // أنيميشن بسيط عند دخول الصفحة
-        window.onload = () => {
-            gsap.from(".info-card", { opacity: 0, y: 30, duration: 1, stagger: 0.3 });
-            gsap.from(".feature-item", { opacity: 0, scale: 0.8, duration: 0.8, delay: 0.5, stagger: 0.2 });
-        };
-    </script>
     </body>
 </html>
