@@ -1,6 +1,4 @@
-/************************************
- * Configuration
- ************************************/
+
 const API_URL = "http://127.0.0.1:8000/api";
 const token = localStorage.getItem("token");
 
@@ -16,17 +14,17 @@ const headers = {
 
 let CURRENT_CART_ID = null;
 
-  /* ========== TOAST ========== */
   
-  // 1. دالة عرض الإشعارات (Toast)
+  
+  
   function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
 
-    // إنشاء العنصر
+    
     let toast = document.createElement("div");
     toast.classList.add("toast", type);
 
-    // تحديد الأيقونة بناءً على النوع
+    
     let icon = "";
     if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
     if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
@@ -35,20 +33,18 @@ let CURRENT_CART_ID = null;
 
     toast.innerHTML = `${icon} ${msg}`;
 
-    // إضافته للصفحة
+    
     toastBox.appendChild(toast);
 
-    // حذفه بعد 4 ثواني
+    
     setTimeout(() => {
-      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.classList.add("hide"); 
       toast.addEventListener("animationend", () => {
-        toast.remove(); // الحذف الفعلي من الـ DOM
+        toast.remove(); 
       });
     }, 4000);
   }
-/************************************
- * Get My Cart (by token)
- ************************************/
+
 async function getUserCart() {
     try {
         const res = await fetch(`${API_URL}/cart`, {
@@ -60,13 +56,13 @@ async function getUserCart() {
 
         const cart = await res.json();
 
-        // حفظ ID السلة لاستخدامه في التحديث والحذف
+        
         CURRENT_CART_ID = cart.id;
 
-        // عرض العناصر
+        
         renderCartItems(cart.cart_item || []);
 
-        // تحديث الإجمالي
+        
         updateTotal(cart.total_price || 0);
 
     } catch (error) {
@@ -75,9 +71,7 @@ async function getUserCart() {
     }
 }
 
-/************************************
- * Render Cart Items
- ************************************/
+
 function renderCartItems(items) {
     const grid = document.querySelector(".products-grid");
     grid.innerHTML = "";
@@ -117,9 +111,7 @@ function renderCartItems(items) {
     });
 }
 
-/************************************
- * Update Quantity
- ************************************/
+
 async function updateQuantity(itemId, quantity) {
     if (!CURRENT_CART_ID || quantity < 1) return;
 
@@ -135,7 +127,7 @@ async function updateQuantity(itemId, quantity) {
 
         if (!res.ok) throw new Error();
 
-        // تحديث السلة بعد التعديل
+        
         getUserCart();
 
     } catch (error) {
@@ -144,9 +136,7 @@ async function updateQuantity(itemId, quantity) {
     }
 }
 
-/************************************
- * Remove Item
- ************************************/
+
 async function removeItem(itemId) {
     if (!CURRENT_CART_ID) return;
 
@@ -163,7 +153,7 @@ async function removeItem(itemId) {
 
         if (!res.ok) throw new Error();
 
-        // تحديث السلة بعد الحذف
+        
         getUserCart();
 
     } catch (error) {
@@ -172,25 +162,21 @@ async function removeItem(itemId) {
     }
 }
 
-/************************************
- * Update Total
- ************************************/
+
 function updateTotal(total) {
     document.getElementById("cartTotal").innerText = `${total} ₪`;
 }
 
-/************************************
- * Checkout
- ************************************/
+
 function checkoutAll() {
     const modal = document.getElementById("checkoutModal");
     if (modal) {
         modal.classList.add("active");
-        // مسح الحقل عند الفتح
+        
         document.getElementById("orderAddress").value = "";
     }
 }
-// 2. إغلاق النافذة
+
 function closeCheckoutModal() {
     const modal = document.getElementById("checkoutModal");
     if (modal) {
@@ -198,7 +184,7 @@ function closeCheckoutModal() {
     }
 }
 
-// إغلاق النافذة عند الضغط خارج المربع
+
 window.onclick = function(event) {
     const modal = document.getElementById("checkoutModal");
     if (event.target === modal) {
@@ -206,33 +192,33 @@ window.onclick = function(event) {
     }
 }
 
-// 3. إرسال الطلب للسيرفر
+
 async function submitOrder(event) {
-    event.preventDefault(); // منع إعادة تحميل الصفحة
+    event.preventDefault(); 
     
     const address = document.getElementById("orderAddress").value;
     const submitBtn = document.querySelector(".btn-confirm-order");
     
-    // التحقق من أن العنوان ليس فارغاً
+    
     if (!address.trim()) {
         showToast("يرجى إدخال العنوان","warning");
         return;
     }
 
-    // تغيير نص الزر ليشعر المستخدم بالتحميل
+    
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
     submitBtn.disabled = true;
 
     try {
-        // ملاحظة: تأكد من أن الـ Endpoint صحيح في الباك إند
-        // عادة يكون /orders ويأخذ العنوان والجسم
+        
+        
         const res = await fetch(`${API_URL}/orders`, {
             method: "POST",
             headers,
             body: JSON.stringify({
                 shipping_address: address,
-                // cart_id: CURRENT_CART_ID // في بعض الأنظمة قد تحتاج إرسال رقم السلة، وفي أنظمة أخرى يأخذها تلقائياً من المستخدم
+                
             })
         });
 
@@ -241,27 +227,24 @@ async function submitOrder(event) {
             throw new Error(errorData.message || "فشل إنشاء الطلب");
         }
 
-        // نجاح العملية
+        
         showToast("تم استلام طلبك بنجاح! سيتم التواصل معك قريباً.","success");
         closeCheckoutModal();
         
-        // إعادة تحميل السلة (التي يجب أن تكون فارغة الآن) أو التوجيه لصفحة الطلبات
+        
         getUserCart(); 
-        // window.location.href = "/Orders/Orders.html"; // خيار: توجيه المستخدم لصفحة طلباته
+        
 
     } catch (error) {
         console.error(error);
         showToast(error.message || "حدث خطأ أثناء إرسال الطلب","error");
     } finally {
-        // إعادة الزر لوضعه الطبيعي
+        
         submitBtn.innerHTML = originalBtnText;
         submitBtn.disabled = false;
     }
 }
-/************************************
- * Init
- ************************************/
+
 document.addEventListener("DOMContentLoaded", () => {
     getUserCart();
-}); 
-
+});

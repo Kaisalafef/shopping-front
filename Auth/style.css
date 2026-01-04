@@ -1,4 +1,4 @@
-/* style.css */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cairo:wght@400;700&display=swap');
 
 :root {
@@ -24,7 +24,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Animation Blob */
+
 .background-blob {
     position: absolute;
     width: 500px;
@@ -90,7 +90,7 @@ h2 {
     font-size: 0.9rem;
 }
 
-/* إصلاح تباعد المجموعات */
+
 .input-group {
     margin-bottom: 20px;
     text-align: right;
@@ -119,10 +119,10 @@ input:focus {
     box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
 }
 
-/* --- إصلاح أيقونة العين (Toggle Password) --- */
+
 .toggle-password, .toggle-password-2 {
     position: absolute;
-    left: 15px; /* وضع الأيقونة على اليسار لأننا في RTL */
+    left: 15px; 
     right: auto; 
     top: 50%;
     transform: translateY(-50%);
@@ -136,9 +136,9 @@ input:focus {
 .toggle-password:hover, .toggle-password-2:hover {
     color: var(--primary-color);
 }
-/* --- إصلاح حاوية الإدخال --- */
+
 .input-wrapper, .password-container {
-    position: relative; /* ضروري لكي تتموضع الأيقونة بالنسبة له */
+    position: relative; 
     width: 100%;
     display: flex;
     align-items: center;
@@ -147,7 +147,7 @@ input:focus {
 .input-wrapper input, .password-container input {
     width: 100%;
     padding: 12px 15px;
-    padding-left: 45px; /* ترك مساحة للأيقونة على اليسار */
+    padding-left: 45px; 
      border: 2px solid #dfe6e9;
     border-radius: 12px;
     outline: none;
@@ -158,7 +158,7 @@ input:focus {
 .input-wrapper input:focus, .password-container input:focus {
     border-color: var(--primary-color);
 }
-/* Password Strength Meter */
+
 .strength-meter {
     height: 5px;
     width: 100%;
@@ -210,28 +210,28 @@ input.invalid {
     text-decoration: none;
     font-weight: 600;
 }
-/* style.css - إضافات جديدة */
 
-/* تنسيق رسالة الخطأ العامة التي تظهر فوق الزر */
+
+
 .general-error {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 15px;
     font-weight: 700;
     color: var(--error);
-    background-color: rgba(214, 48, 49, 0.1); /* خلفية حمراء خفيفة */
+    background-color: rgba(214, 48, 49, 0.1); 
     padding: 10px;
     border-radius: 8px;
     border: 1px solid var(--error);
-    display: none; /* مخفية افتراضياً */
+    display: none; 
 }
 
-/* تحسين ظهور رسائل الخطأ تحت الحقول */
+
 .error-msg {
     color: var(--error);
     font-size: 0.85rem;
     margin-top: 5px;
-    display: none; /* مخفية وتظهر عبر JS */
+    display: none; 
     font-weight: 600;
 }
 @media (max-width: 700px) {

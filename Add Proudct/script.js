@@ -1,7 +1,4 @@
-/**
- * Product Management Script
- * Colors (with images) + Sizes (separate)
- */
+
 const getAuthHeaders = () => ({
   Accept: "application/json",
   Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -10,7 +7,6 @@ const getAuthHeaders = () => ({
 (function () {
   "use strict";
 
-  /* ========== COLORS LIST ========== */
   const COLORS = [
     { label: "أسود", value: "black" },
     { label: "أبيض", value: "white" },
@@ -34,7 +30,6 @@ const getAuthHeaders = () => ({
     { label: "عنابي", value: "maroon" },
     { label: "كستنائي", value: "chestnut" },
   ];
-  /* ========== CATEGORIES DATA ========== */
   const categoryTitles = {
     electronics: "الإلكترونيات",
     food: "المواد الغذائية",
@@ -48,19 +43,16 @@ const getAuthHeaders = () => ({
     sweets: "الحلويات",
   };
 
-  /* ========== POPULATE CATEGORIES ========== */
   const categorySelect = document.getElementById("category");
 
-  // التأكد من أن العنصر موجود قبل محاولة إضافة الخيارات
   if (categorySelect) {
     Object.entries(categoryTitles).forEach(([key, label]) => {
       const option = document.createElement("option");
-      option.value = key; // القيمة التي ستُرسل للسيرفر (مثلاً: electronics)
-      option.textContent = label; // النص الذي يظهر للمستخدم (مثلاً: الإلكترونيات)
+      option.value = key; 
+      option.textContent = label; 
       categorySelect.appendChild(option);
     });
   }
-  /* ========== STATE ========== */
   const state = {
     colors: [],
     sizes: [],
@@ -70,7 +62,6 @@ const getAuthHeaders = () => ({
     productId: null,
   };
 
-  /* ========== DOM ========== */
   const els = {
     title: document.getElementById("title"),
     price: document.getElementById("price"),
@@ -85,17 +76,14 @@ const getAuthHeaders = () => ({
     pageTitle: document.querySelector(".page-header h1"),
   };
 
-  /* ========== TOAST ========== */
 
-  // 1. دالة عرض الإشعارات (Toast)
   function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
 
-    // إنشاء العنصر
+ 
     let toast = document.createElement("div");
     toast.classList.add("toast", type);
 
-    // تحديد الأيقونة بناءً على النوع
     let icon = "";
     if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
     if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
@@ -104,24 +92,19 @@ const getAuthHeaders = () => ({
 
     toast.innerHTML = `${icon} ${msg}`;
 
-    // إضافته للصفحة
     toastBox.appendChild(toast);
 
-    // حذفه بعد 4 ثواني
     setTimeout(() => {
-      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.classList.add("hide"); 
       toast.addEventListener("animationend", () => {
-        toast.remove(); // الحذف الفعلي من الـ DOM
+        toast.remove(); 
       });
     }, 4000);
   }
 
-  /* ========== ADD COLOR ========== */
-  /* ========== ADD COLOR ========== */
   const addColorRow = (data = {}) => {
     const id = ++state.colorId;
 
-    // التحقق مما إذا كانت هناك صورة موجودة مسبقاً (حالة التعديل)
     const initialImage = data.image || "";
     const shouldShowImage = initialImage !== "";
 
@@ -167,38 +150,32 @@ const getAuthHeaders = () => ({
       <button type="button" class="btn-remove" style="position: absolute; left: 10px; top: 10px;">&times;</button>
   `;
 
-    // تعريف العناصر
     const select = row.querySelector("select");
     const fileInput = row.querySelector("input[type=file]");
     const uploadLabel = row.querySelector(".custom-file-upload");
     const uploadText = row.querySelector(".upload-text");
     const uploadIcon = row.querySelector(".custom-file-upload i");
-    const imgPreview = row.querySelector(".img-preview"); // عنصر الصورة
+    const imgPreview = row.querySelector(".img-preview"); 
     const remove = row.querySelector(".btn-remove");
 
-    // تعيين القيمة الابتدائية للون
     select.value = color.value;
 
-    // عند تغيير اللون
     select.onchange = (e) => (color.value = e.target.value);
 
-    // === الجزء المسؤول عن المعاينة ===
     fileInput.onchange = (e) => {
       const file = e.target.files[0];
       color.file = file;
 
       if (file) {
-        // 1. قراءة الملف وعرضه
         const reader = new FileReader();
 
         reader.onload = function (e) {
-          imgPreview.src = e.target.result; // وضع الرابط في الصورة
-          imgPreview.style.display = "block"; // إظهار الصورة
+          imgPreview.src = e.target.result; 
+          imgPreview.style.display = "block";
         };
 
-        reader.readAsDataURL(file); // بدء القراءة
+        reader.readAsDataURL(file); 
 
-        // 2. تحديث شكل الزر
         uploadLabel.classList.add("uploaded");
         uploadText.textContent =
           file.name.length > 20
@@ -206,7 +183,6 @@ const getAuthHeaders = () => ({
             : file.name;
         uploadIcon.className = "fas fa-check-circle";
       } else {
-        // في حالة إلغاء الاختيار ولم تكن هناك صورة قديمة
         if (!initialImage) {
           imgPreview.style.display = "none";
           uploadLabel.classList.remove("uploaded");
@@ -216,7 +192,6 @@ const getAuthHeaders = () => ({
       }
     };
 
-    // عند الحذف
     remove.onclick = () => {
       row.remove();
       state.colors = state.colors.filter((c) => c.id !== id);
@@ -225,7 +200,6 @@ const getAuthHeaders = () => ({
     els.colorsList.appendChild(row);
   };
 
-  /* ========== ADD SIZE ========== */
   const addSizeRow = (value = "") => {
     const id = ++state.sizeId;
 
@@ -256,7 +230,6 @@ const getAuthHeaders = () => ({
     els.sizesList.appendChild(row);
   };
 
-  /* ========== SAVE ========== */
   const saveProduct = async () => {
     if (!localStorage.getItem("token")) {
       showToast("يرجى تسجيل الدخول", "warning");
@@ -320,17 +293,15 @@ const getAuthHeaders = () => ({
         }
       }
     } catch (e) {
-      // ❌ خطأ في الاتصال
       console.error(err);
       showToast("فشل الاتصال بالسيرفر!", "error");
     }
   };
 
-  /* ========== INIT ========== */
   els.addColorBtn.onclick = () => addColorRow();
   els.addSizeBtn.onclick = () => addSizeRow();
   els.saveBtn.onclick = saveProduct;
 
-  addColorRow(); // لون افتراضي
-  addSizeRow(); // مقاس افتراضي
+  addColorRow(); 
+  addSizeRow(); 
 })();

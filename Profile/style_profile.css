@@ -1,4 +1,4 @@
-/* style_profile.css */
+
 
 body {
     background-color: #f4f7f6;
@@ -56,7 +56,7 @@ body {
 }
 
 .edit-input {
-    display: none; /* مخفي افتراضياً */
+    display: none; 
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -76,7 +76,7 @@ body {
 .btn-secondary { background: #e7e7e7; color: #333; }
 .btn-cart { background: #232f3e; color: #fff; }
 
-/* جداول البيانات */
+
 .role-section {
     background: #fff;
     padding: 20px;
@@ -108,15 +108,15 @@ body {
     color: #27ae60;
     font-weight: bold;
 }
-/* Ensure error messages are visible when triggered */
+
 .error-message {
     color: #e74c3c;
     font-size: 0.8rem;
     margin-top: 5px;
-    display: none; /* Controlled by JS */
+    display: none; 
 }
 
-/* Fix for the pass-wrapper display */
+
 .pass-wrapper {
     position: relative;
     display: none; 
@@ -129,17 +129,17 @@ body {
 @media (max-width: 600px) {
     .info-grid { grid-template-columns: 1fr; }
 }
-/* تحسينات إضافية على style_profile.css */
+
 
 .pass-wrapper {
     position: relative;
-    display: none; /* يظهر فقط عند التعديل */
+    display: none; 
 }
 
 .pass-wrapper input {
     width: 90%;
     padding: 10px;
-    padding-left: 35px; /* مساحة للأيقونة */
+    padding-left: 35px; 
     border: 1px solid #ddd;
     border-radius: 8px;
 }
@@ -160,25 +160,25 @@ body {
     border: 1px solid #eee;
     min-height: 45px;
 }
-/* تمييز الحقل عند وجود خطأ */
+
 .edit-input.is-invalid {
     border-color: #e74c3c !important;
     background-color: #fdf2f2;
 }
 
-/* نص رسالة الخطأ */
+
 .error-message {
     color: #e74c3c;
     font-size: 0.75rem;
     margin-top: 5px;
-    display: none; /* مخفي افتراضياً */
+    display: none; 
 }
 
-/* حاوية الإشعارات - تظهر في أعلى اليسار */
+
 #toast-box {
     position: fixed;
     top: 30px;
-    left: 30px; /* لليسار لأن الموقع عربي RTL */
+    left: 30px; 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -186,7 +186,7 @@ body {
     z-index: 9999;
 }
 
-/* تصميم الإشعار الواحد */
+
 .toast {
     width: 350px;
     height: 70px;
@@ -197,32 +197,32 @@ body {
     display: flex;
     align-items: center;
     position: relative;
-    transform: translateX(-100%); /* البداية خارج الشاشة */
-    animation: slideIn 0.5s forwards; /* حركة الدخول */
+    transform: translateX(-100%); 
+    animation: slideIn 0.5s forwards; 
     border-radius: 8px;
     overflow: hidden;
     font-family: 'Cairo', sans-serif;
 }
 
-/* الأيقونة واللون حسب نوع الإشعار */
+
 .toast i {
     font-size: 24px;
     margin: 0 15px;
 }
 
-/* نجاح */
+
 .toast.success { border-right: 6px solid #2ecc71; }
 .toast.success i { color: #2ecc71; }
 
-/* خطأ */
+
 .toast.error { border-right: 6px solid #e74c3c; }
 .toast.error i { color: #e74c3c; }
 
-/* تحذير */
+
 .toast.warning { border-right: 6px solid #f1c40f; }
 .toast.warning i { color: #f1c40f; }
 
-/* خط فاصل صغير */
+
 .toast::after {
     content: '';
     position: absolute;
@@ -231,10 +231,10 @@ body {
     width: 100%;
     height: 3px;
     background: rgba(0,0,0,0.05);
-    animation: timeOut 4s linear forwards; /* شريط الوقت */
+    animation: timeOut 4s linear forwards; 
 }
 
-/* حركات الأنيميشن */
+
 @keyframes slideIn {
     100% { transform: translateX(0); }
 }
@@ -243,7 +243,7 @@ body {
     100% { width: 0; }
 }
 
-/* عند الإخفاء */
+
 .toast.hide {
     animation: slideOut 0.5s forwards;
 }
@@ -253,9 +253,7 @@ body {
     100% { transform: translateX(-200%); opacity: 0; }
 }
 
-/* =========================================
-   Mobile Responsiveness (Add to style_profile.css)
-   ========================================= */
+
 
 @media (max-width: 768px) {
     .profile-container {
@@ -267,20 +265,20 @@ body {
         padding: 20px;
     }
 
-    /* شبكة المعلومات */
+    
     .info-grid {
-        grid-template-columns: 1fr; /* عمود واحد */
+        grid-template-columns: 1fr; 
         gap: 15px;
     }
 
-    /* التعامل مع الجداول الكبيرة */
+    
     .role-section {
         padding: 15px;
-        overflow-x: auto; /* السماح بالسكرول الأفقي للجدول */
+        overflow-x: auto; 
     }
 
     .data-table {
-        min-width: 600px; /* إجبار الجدول على الحفاظ على عرضه ليظهر السكرول */
+        min-width: 600px; 
     }
 
     .data-table th, .data-table td {
@@ -288,7 +286,7 @@ body {
         font-size: 0.9rem;
     }
 
-    /* الأزرار في الهيدر */
+    
     .section-header {
         flex-direction: column;
         align-items: flex-start;

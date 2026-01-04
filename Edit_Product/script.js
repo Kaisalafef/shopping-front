@@ -1,6 +1,6 @@
-/* ضع هذا الكود في ملف JS الخاص بصفحة add_Proudct.html / Edit_Product.html */
 
-// 1. تعريف قائمة الفئات (Categories)
+
+
 const categoryTitles = {
     'electronics': 'الإلكترونيات',
     'food': 'المواد الغذائية',
@@ -13,17 +13,17 @@ const categoryTitles = {
     'furniture': 'المفروشات',
     'sweets': 'الحلويات'
 };
-/* ========== TOAST ========== */
+
   
-  // 1. دالة عرض الإشعارات (Toast)
+  
   function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
 
-    // إنشاء العنصر
+    
     let toast = document.createElement("div");
     toast.classList.add("toast", type);
 
-    // تحديد الأيقونة بناءً على النوع
+    
     let icon = "";
     if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
     if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
@@ -32,72 +32,72 @@ const categoryTitles = {
 
     toast.innerHTML = `${icon} ${msg}`;
 
-    // إضافته للصفحة
+    
     toastBox.appendChild(toast);
 
-    // حذفه بعد 4 ثواني
+    
     setTimeout(() => {
-      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.classList.add("hide"); 
       toast.addEventListener("animationend", () => {
-        toast.remove(); // الحذف الفعلي من الـ DOM
+        toast.remove(); 
       });
     }, 4000);
   }
 document.addEventListener('DOMContentLoaded', async () => {
-    // 2. تحميل الفئات داخل القائمة المنسدلة فور تحميل الصفحة
+    
     populateCategories();
 
-    // 3. التحقق من وجود editId في الرابط
+    
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('editId');
 
-    // إذا كان هناك ID، فهذا يعني أننا في وضع "التعديل"
+    
     if (productId) {
         enableEditMode(productId);
     } else {
-        // إضافة مستمع لزر الحفظ في حالة الإضافة الجديدة (اختياري حسب تصميمك)
+        
         const saveBtn = document.getElementById('saveBtn');
         if(saveBtn) {
             saveBtn.addEventListener('click', () => {
-                // منطق الإضافة الجديدة هنا
+                
                 showToast('وضع الإضافة الجديدة', 'warning');
             });
         }
     }
 });
 
-// دالة لتعبئة الـ Select بالخيارات
+
 function populateCategories() {
     const categorySelect = document.getElementById('category');
     
-    // التحقق من وجود العنصر لتجنب الأخطاء
+    
     if (!categorySelect) return;
 
-    // المرور على كل عنصر في القائمة وإنشاء Option له
+    
     for (const [key, title] of Object.entries(categoryTitles)) {
         const option = document.createElement('option');
-        option.value = key;       // القيمة التي ستخزن في قاعدة البيانات (مثل electronics)
-        option.textContent = title; // النص الذي يظهر للمستخدم (مثل الإلكترونيات)
+        option.value = key;       
+        option.textContent = title; 
         categorySelect.appendChild(option);
     }
 }
 
 async function enableEditMode(id) {
-    // تغيير عنوان الصفحة وزر الحفظ
+    
     const title = document.querySelector('h1') || document.getElementById('pageTitle');
     
-    // ملاحظة: قمت بتحديث هذا السطر ليتوافق مع الـ HTML الخاص بك (id="saveBtn")
+    
     const submitBtn = document.getElementById('saveBtn'); 
 
     if (title) title.textContent = "تعديل المنتج";
     if (submitBtn) submitBtn.textContent = "حفظ التعديلات";
 
     try {
-        // جلب بيانات المنتج من السيرفر
+        
         const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
             headers: {
                 'Accept': 'application/json',
-                // 'Authorization': `Bearer ${localStorage.getItem("token")}` 
+                
             }
         });
 
@@ -106,7 +106,7 @@ async function enableEditMode(id) {
         const result = await response.json();
         const product = result.data || result;
 
-        // تعبئة الحقول بالبيانات
+        
         const titleInput = document.getElementById('title');
         if (titleInput) titleInput.value = product.name;
 
@@ -116,14 +116,14 @@ async function enableEditMode(id) {
         const descInput = document.getElementById('description');
         if (descInput) descInput.value = product.description;
 
-        // تحديد الفئة المختارة (سيعمل الآن لأن الخيارات تم تحميلها بواسطة populateCategories)
+        
         const categorySelect = document.getElementById('category');
         if (categorySelect) categorySelect.value = product.category;
 
         const brandInput = document.getElementById('brand');
         if (brandInput) brandInput.value = product.brand;
 
-        // تفعيل زر الحفظ للتعديل
+        
         if(submitBtn) {
             setupUpdateAction(id, submitBtn);
         }
@@ -135,7 +135,7 @@ async function enableEditMode(id) {
 }
 
 function setupUpdateAction(id, btn) {
-    // إزالة أي أحداث سابقة لتجنب التكرار
+    
     const newBtn = btn.cloneNode(true);
     btn.parentNode.replaceChild(newBtn, btn);
     
@@ -157,7 +157,7 @@ function setupUpdateAction(id, btn) {
 
             if (response.ok) {
                 showToast('"تم تعديل المنتج بنجاح','success')
-                // إعادة التوجيه بعد ثانية
+                
                 setTimeout(() => {
                     window.location.href = '/Proudcts/Products.html?role=admin';
                 }, 1000);

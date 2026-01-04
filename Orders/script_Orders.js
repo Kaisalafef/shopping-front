@@ -2,20 +2,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     const API_BASE_URL = "http://127.0.0.1:8000/api";
 
-    // Redirect if not logged in
+    
 
 
-  /* ========== TOAST ========== */
   
-  // 1. دالة عرض الإشعارات (Toast)
+  
+  
   function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
 
-    // إنشاء العنصر
+    
     let toast = document.createElement("div");
     toast.classList.add("toast", type);
 
-    // تحديد الأيقونة بناءً على النوع
+    
     let icon = "";
     if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
     if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
@@ -24,14 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toast.innerHTML = `${icon} ${msg}`;
 
-    // إضافته للصفحة
+    
     toastBox.appendChild(toast);
 
-    // حذفه بعد 4 ثواني
+    
     setTimeout(() => {
-      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.classList.add("hide"); 
       toast.addEventListener("animationend", () => {
-        toast.remove(); // الحذف الفعلي من الـ DOM
+        toast.remove(); 
       });
     }, 4000);
   }
@@ -40,18 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const noOrdersMsg = document.getElementById("no-orders-msg");
     const filterBtns = document.querySelectorAll(".filter-btn");
 
-    let allOrders = []; // Store fetched orders here
+    let allOrders = []; 
 
-    /* ===============================
-       1. FETCH ORDERS
-    ================================ */
+    
     async function fetchOrders() {
         loadingSpinner.style.display = "block";
         tableBody.innerHTML = "";
         noOrdersMsg.style.display = "none";
 
         try {
-            // Fetching all orders (Assuming Admin Endpoint)
+            
             const res = await fetch(`${API_BASE_URL}/admin/orders`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -62,13 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!res.ok) throw new Error("Failed to fetch");
 
             const result = await res.json();
-            // Handle both structure types: { data: [...] } or just [...]
+            
             allOrders = result.data ? result.data : result;
 
-            // Update Stats
+            
             updateStats(allOrders);
 
-            // Render All Initially
+            
             renderOrders(allOrders);
 
         } catch (error) {
@@ -79,9 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    /* ===============================
-       2. RENDER ORDERS
-    ================================ */
+    
     function renderOrders(orders) {
         tableBody.innerHTML = "";
 
@@ -95,14 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
         orders.forEach(order => {
             const tr = document.createElement("tr");
 
-            // Define Buttons based on Status
+            
             let actionButtons = `
                 <button class="action-btn btn-view" onclick="openOrderModal(${order.id})" title="عرض التفاصيل">
                     <i class="fas fa-eye"></i>
                 </button>
             `;
 
-            // Only show Accept/Refuse if status is pending
+            
             if (order.status === 'pending') {
                 actionButtons += `
                     <button class="action-btn btn-accept" onclick="updateOrderStatus(${order.id}, 'processing')" title="قبول الطلب">
@@ -127,9 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* ===============================
-       3. UPDATE STATUS (API)
-    ================================ */
+    
     window.updateOrderStatus = async function (orderId, newStatus) {
         if (!confirm(`هل أنت متأكد أنك تريد تغيير حالة الطلب إلى "${translateStatus(newStatus)}"?`)) return;
 
@@ -165,9 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    /* ===============================
-       4. MODAL LOGIC
-    ================================ */
+    
     const modal = document.getElementById("order-modal");
     const closeModalBtn = document.getElementById("closeModalBtn");
 
@@ -175,21 +167,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const order = allOrders.find(o => o.id === orderId);
         if (!order) return;
 
-        // Populate Modal Data
+        
         document.getElementById("modal-order-id").innerText = `تفاصيل الطلب #${order.id}`;
         document.getElementById("modal-customer-name").innerText = order.user?.name || "غير معروف";
         document.getElementById("modal-customer-phone").innerText = order.user?.profile?.phone || "غير متوفر";
         document.getElementById("modal-address").innerText = order.shipping_address;
         document.getElementById("modal-total-price").innerText = Number(order.total_price).toLocaleString() + " ل.س";
 
-        // Render Items
+        
         const itemsContainer = document.getElementById("modal-items-list");
         itemsContainer.innerHTML = "";
 
         if (order.order_item && order.order_item.length > 0) {
             order.order_item.forEach(item => {
 
-                // Check if product exists, otherwise handle gracefully
+                
                 const prodName = item.product ? item.product.name : "منتج محذوف";
                 const prodImg = item.product ? item.product.image_url : "/images/no-image.png";
                 const prodcol = item.color;
@@ -215,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
             itemsContainer.innerHTML = "<p>لا توجد منتجات في هذا الطلب.</p>";
         }
 
-        // Add Actions to Modal Footer if Pending
+        
         const modalActions = document.getElementById("modal-actions-container");
         modalActions.innerHTML = "";
         if (order.status === 'pending') {
@@ -229,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         }
 
-        // Show Modal
+        
         modal.classList.add("active");
     };
 
@@ -242,16 +234,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target === modal) closeModal();
     });
 
-    /* ===============================
-       5. UTILITIES & FILTERS
-    ================================ */
+    
 
-    // Filters Click Event
+    
     filterBtns.forEach(btn => {
         btn.addEventListener("click", () => {
-            // Remove active class from all
+            
             filterBtns.forEach(b => b.classList.remove("active"));
-            // Add to clicked
+            
             btn.classList.add("active");
 
             filterOrders(btn.dataset.filter);
@@ -293,6 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // Init
+    
     fetchOrders();
 });

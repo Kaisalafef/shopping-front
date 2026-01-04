@@ -1,12 +1,10 @@
-/* auth.js - FIXED & SAFE */
+
 
 const CSRF_TOKEN = document
   .querySelector('meta[name="csrf-token"]')
   ?.getAttribute("content");
 
-/* =========================
-   LOGIN
-========================= */
+
 const loginForm = document.getElementById("loginForm");
 const generalError = document.getElementById("generalError");
 if (loginForm) {
@@ -21,11 +19,11 @@ if (loginForm) {
 
       return;
     }
-    // 1. إعادة تعيين الرسائل وإخفاؤها عند كل محاولة جديدة
+    
     generalError.style.display = "none";
     generalError.textContent = "";
 
-    // تحقق مبدئي بسيط
+    
     if (!email || !password) {
       showError("الرجاء إدخال البريد الإلكتروني وكلمة المرور");
       return;
@@ -44,7 +42,7 @@ if (loginForm) {
       const data = await res.json();
 
       if (res.ok && data.token) {
-        // 🧹 تنظيف قديم
+        
         localStorage.clear();
 
         localStorage.setItem("token", data.token);
@@ -70,9 +68,7 @@ if (loginForm) {
   });
 }
 
-/* =========================
-   REGISTER
-========================= */
+
 document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signupForm");
 
@@ -117,26 +113,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok && data.token) {
-        // 🧹 تنظيف أي بيانات قديمة
+        
         localStorage.clear();
 
-        // ✅ تخزين صحيح
+        
         localStorage.setItem("token", data.token);
         localStorage.setItem(
           "auth_role",
-          data.user.role || "user" // افتراضي user
+          data.user.role || "user" 
         );
         localStorage.setItem("auth_user", JSON.stringify(data.user));
 
         window.location.href = "/Home/client_dashboard.html";
       } else {
-        // --- فشل التسجيل (بيانات مكررة أو غير صالحة) ---
-        // عرض الرسالة القادمة من الباك إند أو رسالة افتراضية
+        
+        
         let msg = data.message || "فشل إنشاء الحساب، يرجى المحاولة مرة أخرى";
 
-        // تحسين: لو الباك إند يرجع أخطاء تفصيلية (Validation Errors)
+        
         if (data.errors) {
-          // نأخذ أول خطأ موجود ونعرضه
+          
           msg = Object.values(data.errors).flat()[0];
         }
         showSignupError(msg);
@@ -147,10 +143,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-// تفعيل أزرار العين في صفحات Login و Sign_up
+
 document.querySelectorAll(".toggle-password").forEach((icon) => {
   icon.addEventListener("click", function () {
-    // البحث عن حقل الإدخال الموجود في نفس الحاوية (input-group أو password-container)
+    
     const input = this.parentElement.querySelector("input");
 
     if (input.type === "password") {
@@ -170,13 +166,13 @@ function showSignupError(message) {
     alert(message);
   }
 }
-// دالة مساعدة لإظهار الخطأ
+
 function showError(message) {
   if (generalError) {
     generalError.textContent = message;
-    generalError.style.display = "block"; // هذا السطر مهم لأن CSS يجعله مخفياً
-    generalError.style.color = "#d63031"; // لون أحمر للتأكيد
+    generalError.style.display = "block"; 
+    generalError.style.color = "#d63031"; 
   } else {
-    alert(message); // احتياطي لو العنصر غير موجود
+    alert(message); 
   }
 }
