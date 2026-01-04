@@ -1,4 +1,4 @@
-// script.js - With Staggered Animations
+
 
   async function removeDiscount(productId) {
     const product = state.products.find((p) => p.id == productId);
@@ -31,9 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const role = localStorage.getItem("auth_role");
     return role === 'admin' && !!token;
   }
-    /* ==============================
-       1️⃣ جلب وعرض العروض اليومية
-    ============================== */
+    
    const loadDailyOffers = async () => {
     const offersContainer = document.getElementById("offersContainer");
     if (!offersContainer) return;
@@ -51,16 +49,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         offersContainer.innerHTML = "";
-        const isAdmin = isAdminUser(); // Check permission
+        const isAdmin = isAdminUser(); 
 
         offers.forEach((o, index) => {
             const p = o.product;
             if (!p) return;
 
-            /* Image Logic */
+            
             let img = p.image_url || "/images/CLE.jpg";
 
-            /* Price Calculation */
+            
             const basePrice = Number(p.price);
             let finalPrice = basePrice;
             let label = "";
@@ -75,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const delay = index * 0.1;
 
-            // 🟢 Create Admin Buttons HTML
+            
             let adminButtonsHtml = "";
             if (isAdmin) {
                 adminButtonsHtml = `
@@ -118,9 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    /* ==============================
-       2️⃣ جلب الإعلانات
-    ============================== */
+    
     const loadAds = async () => {
         const adsContainer = document.getElementById("adsContainer");
         if (!adsContainer) return;
@@ -142,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ? `${BASE_URL}/storage/${ad.image}`
                     : "https://via.placeholder.com/800x300";
 
-                // تأخير زمني للإعلانات أيضاً
+                
                 const delay = index * 0.2;
 
                 adsContainer.insertAdjacentHTML("beforeend", `
@@ -162,13 +158,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(err);
         }
     };
-/* ==============================
-   3️⃣ Functions for Buttons
-============================== */
 
-// Function to handle Delete
+
+
 window.deleteOffer = async (offerId, event) => {
-    event.stopPropagation(); // Stop card from being clicked
+    event.stopPropagation(); 
     
     if (!confirm("هل أنت متأكد من حذف هذا العرض؟")) return;
 
@@ -184,7 +178,7 @@ window.deleteOffer = async (offerId, event) => {
 
         if (response.ok) {
             alert("تم حذف العرض بنجاح");
-            loadDailyOffers(); // Reload the list
+            loadDailyOffers(); 
         } else {
             alert("فشل الحذف، يرجى المحاولة لاحقاً");
         }
@@ -194,10 +188,10 @@ window.deleteOffer = async (offerId, event) => {
     }
 };
 
-// Function to handle Edit (Redirect to Discount Page)
+
 window.redirectToEdit = (productId, event) => {
-    event.stopPropagation(); // Stop card click
-    // Send the product ID to the Discount page to open modal automatically
+    event.stopPropagation(); 
+    
     window.location.href = `/Discount/Add_Discount.html?search=${productId}`;
 };
     loadDailyOffers();

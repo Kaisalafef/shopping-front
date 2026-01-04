@@ -1,8 +1,6 @@
-// products_logic.js
 
-/* =========================
-   إعدادات API
-========================= */
+
+
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 const API_URLS = {
@@ -15,9 +13,7 @@ const API_URLS = {
 const getCsrfToken = () =>
   document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
 
-/* =========================
-   Helper للصور
-========================= */
+
 const getImageUrl = (path) => {
   if (!path) return "/images/default.png";
   if (path.startsWith("http")) return path;
@@ -26,13 +22,11 @@ const getImageUrl = (path) => {
 
 let allProducts = [];
 
-/* =========================
-   عند تحميل الصفحة
-========================= */
+
 document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
 
-  const selectedCategory = urlParams.get("cat"); // clothes, food ...
+  const selectedCategory = urlParams.get("cat"); 
   const role = urlParams.get("role");
   const isAdmin = role === "admin";
 
@@ -41,9 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const searchBtn = document.getElementById("searchBtn");
 
-  /* =========================
-       عناوين الأقسام
-    ========================= */
+  
   const categoryTitles = {
     electronics: "الإلكترونيات",
     food: "المواد الغذائية",
@@ -69,11 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
 function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
 
-    // إنشاء العنصر
+    
     let toast = document.createElement("div");
     toast.classList.add("toast", type);
 
-    // تحديد الأيقونة بناءً على النوع
+    
     let icon = "";
     if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
     if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
@@ -82,20 +74,18 @@ function showToast(msg, type = "success") {
 
     toast.innerHTML = `${icon} ${msg}`;
 
-    // إضافته للصفحة
+    
     toastBox.appendChild(toast);
 
-    // حذفه بعد 4 ثواني
+    
     setTimeout(() => {
-      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.classList.add("hide"); 
       toast.addEventListener("animationend", () => {
-        toast.remove(); // الحذف الفعلي من الـ DOM
+        toast.remove(); 
       });
     }, 4000);
   }
-  /* =========================
-       جلب المنتجات
-    ========================= */
+  
   async function fetchProducts() {
     container.innerHTML =
       '<div style="grid-column:1/-1;text-align:center;padding:20px;">جاري تحميل المنتجات...</div>';
@@ -114,14 +104,14 @@ function showToast(msg, type = "success") {
       }
 
       const result = await response.json();
-      const data = result.data; // الوصول للمصفوفة الفعلية
+      const data = result.data; 
 
       allProducts = data.map((item) => ({
         id: item.id,
         name: item.name,
         price: item.price,
-        discount: item.discount_percentage, // ← هنا
-        finalPrice: item.final_price, // ← هذا صحيح
+        discount: item.discount_percentage, 
+        finalPrice: item.final_price, 
 
         currency: "SYP",
         img: item.image_url,
@@ -138,9 +128,7 @@ function showToast(msg, type = "success") {
     }
   }
 
-  /* =========================
-       عرض المنتجات
-    ========================= */
+  
   const renderProducts = (products) => {
     if (!products || products.length === 0) {
       container.innerHTML =
@@ -153,9 +141,7 @@ function showToast(msg, type = "success") {
       .join("");
   };
 
-  /* =========================
-       البحث
-    ========================= */
+  
   const handleSearch = () => {
     const term = searchInput.value.trim().toLowerCase();
     const filtered = allProducts.filter((p) =>
@@ -173,12 +159,8 @@ function showToast(msg, type = "success") {
   fetchProducts();
 });
 
-/* =========================
-   بطاقة المنتج
-========================= */
-/* =========================
-   بطاقة المنتج (محدثة)
-========================= */
+
+
 function createProductCard(product, isAdmin) {
   const priceFormatted = new Intl.NumberFormat("en-US").format(product.price);
   const finalPriceVal = product.finalPrice ?? product.price;
@@ -234,38 +216,36 @@ function createProductCard(product, isAdmin) {
   `;
 }
 
-/* =========================
-   إجراءات عامة
-========================= */
+
 window.goToEditPage = (id) => {
   window.location.href = `/Edit_Product/Edit_Product.html?editId=${id}`;
 };
 
 window.deleteProduct = async (id) => {
-  // 1. التأكيد قبل الحذف
+  
   if (!confirm("هل أنت متأكد من حذف المنتج؟")) return;
 
   try {
     const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json", // إضافة نوع المحتوى
+        "Content-Type": "application/json", 
         "Accept": "application/json",
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     });
 
     if (response.ok) {
-      // 2. تصحيح السطر المعطل (استخدام showToast بدلاً من النص العائم)
+      
       showToast("تم حذف المنتج بنجاح", "success");
 
-      // 3. تأخير إعادة التحميل قليلاً ليتمكن المستخدم من رؤية الرسالة
+      
       setTimeout(() => {
         location.reload();
       }, 1000); 
       
     } else {
-      // محاولة استخراج رسالة الخطأ من السيرفر إذا وجدت
+      
       const errorData = await response.json();
       showToast(errorData.message || "فشل الحذف", "error");
     }

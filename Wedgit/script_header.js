@@ -1,38 +1,36 @@
-/* ==========================================
-   SCRIPT HEADER - المطور والمعدل
-   ========================================== */
+
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    /* 1. إدارة الصلاحيات (Role Management) */
-    // قراءة البيانات بنفس التسميات المستخدمة في Auth.js
+    
+    
     const userStr = localStorage.getItem("auth_user");
     const user = userStr ? JSON.parse(userStr) : null;
-    const role = localStorage.getItem("auth_role"); // الرتبة المخزنة في Auth.js
+    const role = localStorage.getItem("auth_role"); 
 
-    // تحديد نوع المستخدم: إذا كان admin يبقى admin، وإلا فهو client
+    
     const userRole = (role === 'admin') ? 'admin' : 'client'; 
-// 1. التحكم في روابط الأدمن الإضافية
+
     const adminFeatures = document.querySelectorAll(".admin-only");
     const cartLink = document.getElementById("cart-link");
 
     if (role === 'admin') {
-        // إظهار ميزات الأدمن
+        
         adminFeatures.forEach(el => el.style.display = "block");
-        // إخفاء السلة للأدمن (اختياري حسب رغبتك)
+        
         if (cartLink) cartLink.style.display = "none";
     } else {
-        // إخفاء ميزات الأدمن للزبائن
+        
         adminFeatures.forEach(el => el.style.display = "none");
         if (cartLink) cartLink.style.display = "block";
     }
 
-    // 2. تحديث رابط اللوجو للعودة للداشبورد الصحيح
+    
     const logoLink = document.querySelector(".logo-link");
     if (logoLink) {
         logoLink.href = (role === 'admin') ? "/Home/admin_dashboard.html" : "/Home/client_dashboard.html";
     }
-    // ب- تحديث زر العودة في صفحة المنتجات (إذا وجد)
+    
     const backBtn = document.getElementById("backToCategories");
     if (backBtn) {
         backBtn.href = targetDashboard;
@@ -41,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ج- إخفاء "سلتي" للأدمن فقط
+    
     if (userRole === 'admin') {
         const cartLink = document.querySelector('a[href="/Cart/Cart.html"]');
         if (cartLink && cartLink.parentElement) {
@@ -49,13 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    /* 3. منطق البحث (الحفاظ على الكود الأصلي) */
+    
     const searchInput = document.getElementById("globalSearchInput");
     const searchResults = document.getElementById("searchResults");
     const API_URL = "http://127.0.0.1:8000/api/products"; 
-    /* ==========================================
-       2. Search Logic (Debounce & Fetch)
-       ========================================== */
+    
     let debounceTimer;
 
     const getImageUrl = (path) => {
@@ -110,14 +106,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     لا توجد نتائج
                 </div>`;
         } else {
-            // عرض أول 5 نتائج مع تأثير تتابعي (Staggered Animation)
+            
             products.slice(0, 5).forEach((product, index) => {
                 const item = document.createElement("a");
                 item.href = `/Product/Product.html?id=${product.id}`;
                 item.className = "search-item";
                 
-                // إضافة تأخير زمني لكل عنصر بناءً على ترتيبه
-                // العنصر الأول يظهر فوراً، الثاني بعد 0.1 ثانية، وهكذا
+                
+                
                 item.style.animationDelay = `${index * 0.1}s`;
 
                 item.innerHTML = `
@@ -134,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         searchResults.classList.add('active');
     }
 
-    /* 4. فتح وإغلاق القائمة المنسدلة (Profile Menu) */
+    
     const profileBtn = document.getElementById("profileBtn");
     const dropdown = document.getElementById("desktopDropdown");
 
@@ -150,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* 5. تسجيل الخروج (يتوافق مع API الخاص بك) */
+    
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function (e) {
@@ -166,9 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
             .finally(() => {
-                localStorage.clear(); // مسح الكل لضمان الأمان كما في Auth.js
+                localStorage.clear(); 
                 sessionStorage.clear();
-                window.location.replace("/Auth/Log_in.html"); // تأكد من المسار الصحيح
+                window.location.replace("/Auth/Log_in.html"); 
             })
             .catch(err => {
                 console.error("Logout Error", err);

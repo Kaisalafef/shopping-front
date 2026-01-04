@@ -1,16 +1,16 @@
-/* style_Orders.css */
+
 body {
     font-family: 'Cairo', sans-serif;
     margin: 0;
     padding: 0;
     direction: rtl;
     overflow-x: hidden;
-    /* تأثير ظهور الصفحة بالكامل */
+    
     animation: fadeInPage 0.8s ease-out;
 }
 
 
-/* تصميم الإشعار الواحد */
+
 .toast {
     width: 350px;
     height: 70px;
@@ -21,32 +21,32 @@ body {
     display: flex;
     align-items: center;
     position: relative;
-    transform: translateX(-100%); /* البداية خارج الشاشة */
-    animation: slideIn 0.5s forwards; /* حركة الدخول */
+    transform: translateX(-100%); 
+    animation: slideIn 0.5s forwards; 
     border-radius: 8px;
     overflow: hidden;
     font-family: 'Cairo', sans-serif;
 }
 
-/* الأيقونة واللون حسب نوع الإشعار */
+
 .toast i {
     font-size: 24px;
     margin: 0 15px;
 }
 
-/* نجاح */
+
 .toast.success { border-right: 6px solid #2ecc71; }
 .toast.success i { color: #2ecc71; }
 
-/* خطأ */
+
 .toast.error { border-right: 6px solid #e74c3c; }
 .toast.error i { color: #e74c3c; }
 
-/* تحذير */
+
 .toast.warning { border-right: 6px solid #f1c40f; }
 .toast.warning i { color: #f1c40f; }
 
-/* خط فاصل صغير */
+
 .toast::after {
     content: '';
     position: absolute;
@@ -55,10 +55,10 @@ body {
     width: 100%;
     height: 3px;
     background: rgba(0,0,0,0.05);
-    animation: timeOut 4s linear forwards; /* شريط الوقت */
+    animation: timeOut 4s linear forwards; 
 }
 
-/* حركات الأنيميشن */
+
 @keyframes slideIn {
     100% { transform: translateX(0); }
 }
@@ -67,7 +67,7 @@ body {
     100% { width: 0; }
 }
 
-/* عند الإخفاء */
+
 .toast.hide {
     animation: slideOut 0.5s forwards;
 }
@@ -84,7 +84,7 @@ body {
     min-height: 60vh;
 }
 
-/* Page Header */
+
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -101,7 +101,7 @@ body {
     padding-right: 15px;
 }
 
-/* Stats Cards */
+
 .stats-row {
     display: flex;
     gap: 15px;
@@ -125,7 +125,7 @@ body {
 .stat-label { font-size: 0.8rem; color: #777; }
 .stat-value { font-size: 1.2rem; font-weight: bold; color: #232f3e; }
 
-/* Filters */
+
 .filters-container {
     margin-bottom: 20px;
     display: flex;
@@ -152,7 +152,7 @@ body {
     border-color: #232f3e;
 }
 
-/* Table Styles */
+
 .table-container {
     background: #fff;
     border-radius: 15px;
@@ -187,7 +187,7 @@ body {
     background-color: #fcfcfc;
 }
 
-/* Status Badges */
+
 .status-badge {
     padding: 5px 12px;
     border-radius: 15px;
@@ -201,7 +201,7 @@ body {
 .status-completed, .status-delivered { background: #d4edda; color: #155724; }
 .status-cancelled, .status-refused { background: #f8d7da; color: #721c24; }
 
-/* Action Buttons in Table */
+
 .action-btn {
     border: none;
     width: 32px;
@@ -224,7 +224,7 @@ body {
 .btn-refuse { background: #f8d7da; color: #721c24; }
 .btn-refuse:hover { background: #f5c6cb; transform: scale(1.1); }
 
-/* MODAL STYLES */
+
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -300,7 +300,7 @@ body {
     padding-bottom: 5px;
 }
 
-/* Order Items in Modal */
+
 .order-item-card {
     display: flex;
     align-items: center;
@@ -333,7 +333,7 @@ body {
 .total-row { font-size: 1.1rem; font-weight: bold; }
 .price-text { color: #232f3e; margin-right: 5px; }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .page-header { flex-direction: column; align-items: flex-start; }
     .filters-container { flex-wrap: nowrap; }

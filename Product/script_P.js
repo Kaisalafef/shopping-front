@@ -1,21 +1,18 @@
-/* ============================================================
-   Product Page Script
-   Compatible with Laravel API response
-   ============================================================ */
+
 
 const API_BASE = "http://127.0.0.1:8000/api";
 
-  /* ========== TOAST ========== */
   
-  // 1. دالة عرض الإشعارات (Toast)
+  
+  
   function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
 
-    // إنشاء العنصر
+    
     let toast = document.createElement("div");
     toast.classList.add("toast", type);
 
-    // تحديد الأيقونة بناءً على النوع
+    
     let icon = "";
     if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
     if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
@@ -24,20 +21,18 @@ const API_BASE = "http://127.0.0.1:8000/api";
 
     toast.innerHTML = `${icon} ${msg}`;
 
-    // إضافته للصفحة
+    
     toastBox.appendChild(toast);
 
-    // حذفه بعد 4 ثواني
+    
     setTimeout(() => {
-      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.classList.add("hide"); 
       toast.addEventListener("animationend", () => {
-        toast.remove(); // الحذف الفعلي من الـ DOM
+        toast.remove(); 
       });
     }, 4000);
   }
-/* ---------------------------
-   Read product ID
----------------------------- */
+
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
@@ -45,9 +40,7 @@ if (!productId) {
   showToast("لم يتم تحديد المنتج", "warning");
 }
 
-/* ---------------------------
-   DOM Elements
----------------------------- */
+
 const titleEl = document.getElementById("pw-title");
 const priceEl = document.getElementById("pw-price");
 const descEl = document.getElementById("pw-description");
@@ -65,26 +58,20 @@ const btnDec = document.getElementById("pw-qty-dec");
 
 const addBtn = document.getElementById("pw-add-btn");
 
-/* Lightbox */
+
 const lightbox = document.getElementById("pw-lightbox");
 const lightboxImg = document.getElementById("pw-lightbox-img");
 const lightboxClose = document.getElementById("pw-lightbox-close");
 
-/* ---------------------------
-   Review Elements
----------------------------- */
+
 const reviewRatingValue = document.getElementById("review-rating-value");
 const reviewComment = document.getElementById("review-text");
 const reviewBtn = document.querySelector("#review-form .submit-btn");
 
-/* ---------------------------
-   State
----------------------------- */
+
 let selectedColor = null;
 
-/* ---------------------------
-   Load Product
----------------------------- */
+
 async function loadProduct() {
   try {
     const res = await fetch(`${API_BASE}/products/${productId}`);
@@ -97,18 +84,16 @@ async function loadProduct() {
     showToast("تعذر تحميل بيانات المنتج", "error");
   }
 }
-/* ---------------------------
-   Calculate Discounted Price
----------------------------- */
+
 function calcDiscountedPrice(price, offer) {
   if (!offer) return price;
 
-  // خصم بالنسبة المئوية
+  
   if (offer.discount_percentage) {
     return Math.round(price - price * (offer.discount_percentage / 100));
   }
 
-  // خصم بقيمة ثابتة
+  
   if (offer.discount_price) {
     return price - offer.discount_price;
   }
@@ -116,9 +101,7 @@ function calcDiscountedPrice(price, offer) {
   return price;
 }
 
-/* ---------------------------
-   Render Product
----------------------------- */
+
 function renderProduct(product) {
   console.log("PRODUCT DATA 👉", product);
 
@@ -126,7 +109,7 @@ function renderProduct(product) {
   descEl.textContent = product.description;
   imageEl.src = product.image_url;
 
-  /* السعر */
+  
   const price = Number(product.price);
   const discount = Number(product.discount_percentage || 0);
 
@@ -141,17 +124,15 @@ function renderProduct(product) {
     priceEl.innerHTML = `<span class="new-price">${price} SYP</span>`;
   }
 
-  /* ✅ عرض الألوان */
+  
   renderColors(product.images || []);
 
-  /* ✅ عرض المقاسات */
+  
   renderSizes(product.sizes || []);
 }
 
 
-/* ---------------------------
-   Colors
----------------------------- */
+
 function renderColors(images) {
   if (!images.length) {
     colorGroup.classList.add("pw--hidden");
@@ -192,9 +173,7 @@ function renderColors(images) {
   });
 }
 
-/* ---------------------------
-   Sizes
----------------------------- */
+
 function renderSizes(sizes) {
   if (!sizes.length) {
     sizeGroup.classList.add("pw--hidden");
@@ -212,9 +191,7 @@ function renderSizes(sizes) {
   });
 }
 
-/* ---------------------------
-   Quantity Controls
----------------------------- */
+
 btnInc.addEventListener("click", () => {
   qtyInput.value = parseInt(qtyInput.value || 1) + 1;
 });
@@ -224,9 +201,7 @@ btnDec.addEventListener("click", () => {
   if (value > 1) qtyInput.value = value - 1;
 });
 
-/* ---------------------------
-   Add to Cart
----------------------------- */
+
 addBtn.addEventListener("click", () => {
   const quantity = parseInt(qtyInput.value || 1);
 
@@ -283,9 +258,7 @@ addBtn.addEventListener("click", () => {
     });
 });
 
-/* ---------------------------
-   Submit Review
----------------------------- */
+
 reviewBtn.addEventListener("click", (e) => {
   e.preventDefault();
 
@@ -336,7 +309,7 @@ reviewBtn.addEventListener("click", (e) => {
         .querySelectorAll("#rating-input .star")
         .forEach((s) => (s.textContent = "☆"));
 
-      // تحديث التعليقات بعد الإرسال
+      
       loadReviews();
     })
     .catch((err) => {
@@ -345,9 +318,7 @@ reviewBtn.addEventListener("click", (e) => {
     });
 });
 
-/* ---------------------------
-   Star Rating UI
----------------------------- */
+
 document.addEventListener("DOMContentLoaded", () => {
   const stars = document.querySelectorAll("#rating-input .star");
   stars.forEach((star) => {
@@ -362,16 +333,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // تحميل المنتج
+  
   loadProduct();
 
-  // تحميل التعليقات
+  
   loadReviews();
 });
 
-/* ---------------------------
-   Reviews
----------------------------- */
+
 const reviewsApi = () => `${API_BASE}/reviews/product/${productId}`;
 
 async function loadReviews() {
@@ -401,13 +370,13 @@ function renderAverageRating(reviews) {
   const total = reviews.reduce((sum, r) => sum + Number(r.rating), 0);
   const avg = (total / reviews.length).toFixed(1);
 
-  // عرض الرقم فقط بدون النجوم
+  
   document.getElementById("average-rating").textContent = "التقييم :" + avg;
 
-  // إزالة عرض النجوم
+  
   document.getElementById("average-stars").textContent = "";
 
-  // إزالة نص عدد التقييمات
+  
   document.getElementById("reviews-count").textContent = "";
 }
 

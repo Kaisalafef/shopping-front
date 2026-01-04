@@ -1,4 +1,4 @@
-/* style_dashboard.css - Animated Version */
+
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
 :root {
@@ -25,13 +25,11 @@ body {
     color: var(--text-main);
     direction: rtl;
     overflow-x: hidden;
-    /* تأثير ظهور الصفحة بالكامل */
+    
     animation: fadeInPage 0.8s ease-out;
 }
 
-/* =========================================
-   Animations Keyframes
-   ========================================= */
+
 @keyframes fadeInPage {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -64,9 +62,7 @@ body {
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* =========================================
-   التنسيقات الأساسية
-   ========================================= */
+
 
 .dashboard-container {
     display: flex;
@@ -89,19 +85,17 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* انميشن للعنوان */
+    
     animation: slideInRight 0.8s ease-out;
 }
 
-/* =========================================
-   نظام التمرير الأفقي (Scroll System)
-   ========================================= */
+
 .horizontal-scroll-wrapper {
     display: flex;
     overflow-x: auto;
     overflow-y: hidden;
-    gap: 30px; /* زيادة المسافة قليلاً للراحة البصرية */
-    padding: 20px 10px; /* زيادة الحشو لعدم قص الظلال */
+    gap: 30px; 
+    padding: 20px 10px; 
     scroll-behavior: smooth;
     scrollbar-width: thin; 
     scrollbar-color: var(--accent-gold) #f1f1f1;
@@ -119,9 +113,7 @@ body {
     background-color: #f1f1f1;
 }
 
-/* =========================================
-   تنسيق الأقسام (Categories) - المتحركة
-   ========================================= */
+
 .pdf-categories-grid {
     display: flex;
     flex-wrap: nowrap;
@@ -136,12 +128,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة مطاطية */
-    /* انميشن مبدئي */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    
     animation: popIn 0.6s ease-out backwards;
 }
 
-/* تأخير زمني لكل عنصر لعمل تأثير التتابع */
+
 .pdf-card:nth-child(1) { animation-delay: 0.1s; }
 .pdf-card:nth-child(2) { animation-delay: 0.15s; }
 .pdf-card:nth-child(3) { animation-delay: 0.2s; }
@@ -189,7 +181,7 @@ body {
 
 .pdf-card:hover .pdf-card-inner i {
     color: var(--white);
-    transform: rotateY(360deg); /* تدوير الأيقونة */
+    transform: rotateY(360deg); 
 }
 
 .pdf-card-title {
@@ -202,9 +194,7 @@ body {
     color: var(--blue-btn);
 }
 
-/* =========================================
-   قسم الإعلانات (Ads)
-   ========================================= */
+
 .ads-section { margin: 30px 0; }
 
 .ad-banner {
@@ -221,10 +211,10 @@ body {
     display: flex;
     align-items: center;
     
-    /* Animation Properties */
+    
     transition: transform 0.4s ease, box-shadow 0.4s ease;
-    opacity: 0; /* يبدأ مخفي */
-    animation: fadeInUp 0.8s ease forwards; /* سيتم تفعيل الانميشن عند الحقن */
+    opacity: 0; 
+    animation: fadeInUp 0.8s ease forwards; 
 }
 
 .ad-banner:hover {
@@ -279,9 +269,7 @@ body {
     transform: scale(1.05);
 }
 
-/* =========================================
-   العروض اليومية (Daily Offers)
-   ========================================= */
+
 .daily-offers-section {
     overflow-y: hidden;
     margin-bottom: 40px;
@@ -297,7 +285,7 @@ body {
     position: relative;
     display: inline-block;
 }
-/* خط زخرفي تحت العنوان */
+
 .offers-title::after {
     content: '';
     position: absolute;
@@ -344,10 +332,10 @@ body {
     padding: 15px;
     border: 1px solid rgba(0,0,0,0.02);
     
-    /* Animation */
+    
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     opacity: 0; 
-    animation: fadeInUp 0.6s ease forwards; /* الانميشن الفعلي عند الاضافة */
+    animation: fadeInUp 0.6s ease forwards; 
 }
 
 .offer-white-card:hover {
@@ -435,16 +423,14 @@ body {
     font-size: 0.9rem;
 }
 
-/* =========================================
-   Admin Actions (Edit/Delete Buttons)
-   ========================================= */
 
-/* Make the card a flex container to push buttons to bottom */
+
+
 .offer-white-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding-bottom: 10px; /* Space for buttons */
+    padding-bottom: 10px; 
 }
 
 .admin-actions {
@@ -474,7 +460,7 @@ body {
 }
 
 .btn-edit {
-    background-color: #f0c14b; /* Amazon Yellow */
+    background-color: #f0c14b; 
     color: #111;
 }
 
@@ -483,17 +469,15 @@ body {
 }
 
 .btn-delete {
-    background-color: #fee2e2; /* Light Red */
-    color: #dc2626; /* Dark Red */
+    background-color: #fee2e2; 
+    color: #dc2626; 
 }
 
 .btn-delete:hover {
     background-color: #fecaca;
     color: #b91c1c;
 }
-/* =========================================
-   Responsive Adjustments (Mobile)
-   ========================================= */
+
 @media (max-width: 768px) {
     .dashboard-container { flex-direction: column; padding: 10px; }
     .sidebar { width: 100%; border: none; padding: 10px; margin-bottom: 10px; }
@@ -507,11 +491,11 @@ body {
     .pdf-card-inner { width: 60px; height: 60px; }
     
     .ad-banner {
-        min-width: 85%; /* تكبير عرض الاعلان في الموبايل */
+        min-width: 85%; 
         height: 160px;
     }
     .offer-white-card {
-        height: auto; /* Let height grow with buttons */
+        height: auto; 
         min-height: 280px;
     }
     .offers-inner-grid {

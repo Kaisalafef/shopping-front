@@ -30,7 +30,7 @@ body {
     padding: 2rem 1rem;
 }
 
-/* Header & Search */
+
 .page-header {
     display: flex;
     flex-wrap: wrap;
@@ -62,14 +62,14 @@ body {
     color: var(--text-muted);
 }
 
-/* Grid Layout */
+
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
 }
 
-/* Product Card */
+
 .prod-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -86,7 +86,7 @@ body {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* Discount Badge on Card */
+
 .discount-badge {
     position: absolute;
     top: 10px;
@@ -102,7 +102,7 @@ body {
 .prod-img {
     width: 100%;
     height: 180px;
-    object-fit: contain; /* لتظهر الصورة كاملة */
+    object-fit: contain; 
     background: #f9fafb;
     border-radius: 6px;
     margin-bottom: 0.5rem;
@@ -124,9 +124,9 @@ body {
     justify-content: space-between;
 }
 
-/* Price Styling */
+
 .price-row {
-    margin-top: auto; /* Push to bottom if content varies */
+    margin-top: auto; 
     display: flex;
     align-items: center;
     gap: 10px;
@@ -163,7 +163,7 @@ body {
 .btn-danger-outline { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: auto;}
 .btn-danger-outline:hover { background: var(--danger); color: white; }
 
-/* Modal Styles */
+
 .modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -256,13 +256,13 @@ body {
 
 .hidden { display: none !important; }
 
-/* Toast */
 
-/* حاوية الإشعارات - تظهر في أعلى اليسار */
+
+
 #toast-box {
     position: fixed;
     top: 30px;
-    left: 30px; /* لليسار لأن الموقع عربي RTL */
+    left: 30px; 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -270,7 +270,7 @@ body {
     z-index: 9999;
 }
 
-/* تصميم الإشعار الواحد */
+
 .toast {
     width: 350px;
     height: 70px;
@@ -281,32 +281,32 @@ body {
     display: flex;
     align-items: center;
     position: relative;
-    transform: translateX(-100%); /* البداية خارج الشاشة */
-    animation: slideIn 0.5s forwards; /* حركة الدخول */
+    transform: translateX(-100%); 
+    animation: slideIn 0.5s forwards; 
     border-radius: 8px;
     overflow: hidden;
     font-family: 'Cairo', sans-serif;
 }
 
-/* الأيقونة واللون حسب نوع الإشعار */
+
 .toast i {
     font-size: 24px;
     margin: 0 15px;
 }
 
-/* نجاح */
+
 .toast.success { border-right: 6px solid #2ecc71; }
 .toast.success i { color: #2ecc71; }
 
-/* خطأ */
+
 .toast.error { border-right: 6px solid #e74c3c; }
 .toast.error i { color: #e74c3c; }
 
-/* تحذير */
+
 .toast.warning { border-right: 6px solid #f1c40f; }
 .toast.warning i { color: #f1c40f; }
 
-/* خط فاصل صغير */
+
 .toast::after {
     content: '';
     position: absolute;
@@ -315,10 +315,10 @@ body {
     width: 100%;
     height: 3px;
     background: rgba(0,0,0,0.05);
-    animation: timeOut 4s linear forwards; /* شريط الوقت */
+    animation: timeOut 4s linear forwards; 
 }
 
-/* حركات الأنيميشن */
+
 @keyframes slideIn {
     100% { transform: translateX(0); }
 }
@@ -327,7 +327,7 @@ body {
     100% { width: 0; }
 }
 
-/* عند الإخفاء */
+
 .toast.hide {
     animation: slideOut 0.5s forwards;
 }

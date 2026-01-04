@@ -17,15 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentUserId = null;
 
    
-  // 1. دالة عرض الإشعارات (Toast)
+  
   function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
 
-    // إنشاء العنصر
+    
     let toast = document.createElement("div");
     toast.classList.add("toast", type);
 
-    // تحديد الأيقونة بناءً على النوع
+    
     let icon = "";
     if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
     if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
@@ -34,20 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toast.innerHTML = `${icon} ${msg}`;
 
-    // إضافته للصفحة
+    
     toastBox.appendChild(toast);
 
-    // حذفه بعد 4 ثواني
+    
     setTimeout(() => {
-      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.classList.add("hide"); 
       toast.addEventListener("animationend", () => {
-        toast.remove(); // الحذف الفعلي من الـ DOM
+        toast.remove(); 
       });
     }, 4000);
   }
-  /* ===============================
-     1. PROFILE
-  ================================ */
+  
   async function fetchUserProfile() {
     try {
       const res = await fetch(`${API_BASE_URL}/profile`, {
@@ -80,9 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ===============================
-     2. CHECK ROLE (SMART WAY)
-  ================================ */
+  
   async function checkAdminOrUser() {
     try {
       const res = await fetch(`${API_BASE_URL}/orders/user`, {
@@ -91,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) throw new Error();
 
-      // ✅ أدمن
+      
       roleBadge.innerText = "مدير النظام";
       roleBadge.style.background = "#e74c3c";
 
@@ -100,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       fetchAllOrdersForAdmin();
     } catch {
-      // ✅ مستخدم
+      
       roleBadge.innerText = "زبون";
 
       adminSection.style.display = "none";
@@ -110,9 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ===============================
-     3. USER ORDERS
-  ================================ */
+  
   async function fetchCustomerOrders() {
     const tbody = document.getElementById("customer-orders-body");
     tbody.innerHTML = "";
@@ -143,9 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ===============================
-     4. ADMIN ORDERS
-  ================================ */
+  
   async function fetchAllOrdersForAdmin() {
     const tbody = document.getElementById("admin-orders-body");
     tbody.innerHTML = "";
@@ -189,9 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fetchUserProfile();
 
-  /* ===============================
-   EDIT MODE
-================================ */
+  
   function toggleEditMode(isEditing) {
     const infoTexts = document.querySelectorAll(".info-item p");
     const inputs = document.querySelectorAll(".edit-input");
@@ -211,13 +201,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* زر تعديل */
+  
   editBtn.addEventListener("click", () => {
     toggleEditMode(true);
   });
 
 
-  /* زر حفظ */
+  
   saveBtn.addEventListener("click", async () => {
   const password = document.getElementById("edit-pass").value.trim();
   const passwordConfirm = document.getElementById("edit-pass-confirm").value.trim();
