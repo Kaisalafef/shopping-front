@@ -66,7 +66,33 @@ document.addEventListener("DOMContentLoaded", () => {
       backLink.href = "/Home/admin_dashboard.html";
     }
   }
+function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
   /* =========================
        جلب المنتجات
     ========================= */
@@ -228,13 +254,13 @@ window.deleteProduct = async (id) => {
     });
 
     if (response.ok) {
-      alert("تم حذف المنتج بنجاح");
+      ("تم حذف المنتج بنجاح");
       location.reload();
     } else {
-      alert("فشل الحذف");
+      showToast("فشل الحذف","error");
     }
   } catch (error) {
     console.error(error);
-    alert("حدث خطأ في النظام");
+    showToast("حدث خطأ في النظام","error");
   }
 };

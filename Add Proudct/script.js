@@ -21,6 +21,18 @@ const getAuthHeaders = () => ({
     { label: "رمادي", value: "gray" },
     { label: "بيج", value: "beige" },
     { label: "بني", value: "brown" },
+    { label: "وردي", value: "pink" },
+    { label: "بنفسجي", value: "purple" },
+    { label: "برتقالي", value: "orange" },
+    { label: "زيتي", value: "olive" },
+    { label: "فضي", value: "silver" },
+    { label: "ذهبي", value: "gold" },
+    { label: " تركوازي", value: "turquoise" },
+    { label: "كحلي", value: "navy" },
+    { label: "لافندر", value: "lavender" },
+    { label: "زمردي", value: "emerald" },
+    { label: "عنابي", value: "maroon" },
+    { label: "كستنائي", value: "chestnut" },
   ];
   /* ========== CATEGORIES DATA ========== */
   const categoryTitles = {
@@ -74,7 +86,7 @@ const getAuthHeaders = () => ({
   };
 
   /* ========== TOAST ========== */
-  
+
   // 1. دالة عرض الإشعارات (Toast)
   function showToast(msg, type = "success") {
     let toastBox = document.getElementById("toast-box");
@@ -247,17 +259,17 @@ const getAuthHeaders = () => ({
   /* ========== SAVE ========== */
   const saveProduct = async () => {
     if (!localStorage.getItem("token")) {
-      showToast("يرجى تسجيل الدخول", 'warning');
+      showToast("يرجى تسجيل الدخول", "warning");
       return;
     }
 
     if (!els.title.value || !els.price.value || !els.category.value) {
-      showToast("يرجى ملء الحقول الأساسية", 'warning');
+      showToast("يرجى ملء الحقول الأساسية", "warning");
       return;
     }
 
     if (!state.colors.length) {
-      showToast("أضف لونًا واحدًا على الأقل مع صورة", 'warning');
+      showToast("أضف لونًا واحدًا على الأقل مع صورة", "warning");
       return;
     }
 
@@ -300,18 +312,17 @@ const getAuthHeaders = () => ({
       } else {
         const err = await res.json();
         console.error("Laravel Validation Error:", err);
-        showToast('حدث خطأ أثناء إضافة المنتج', 'error');
+        showToast("حدث خطأ أثناء إضافة المنتج", "error");
         if (err.errors) {
           const firstError = Object.values(err.errors)[0][0];
         } else {
-          showToast("خطأ غير متوقع", 'error');
+          showToast("خطأ غير متوقع", "error");
         }
       }
     } catch (e) {
-      
       // ❌ خطأ في الاتصال
-        console.error(err);
-        showToast('فشل الاتصال بالسيرفر!', 'error');
+      console.error(err);
+      showToast("فشل الاتصال بالسيرفر!", "error");
     }
   };
 
