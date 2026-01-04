@@ -5,6 +5,36 @@ document.addEventListener("DOMContentLoaded", () => {
     // Redirect if not logged in
 
 
+  /* ========== TOAST ========== */
+  
+  // 1. دالة عرض الإشعارات (Toast)
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
     const tableBody = document.getElementById("orders-table-body");
     const loadingSpinner = document.getElementById("loading-spinner");
     const noOrdersMsg = document.getElementById("no-orders-msg");
@@ -125,13 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 filterOrders(activeFilter);
                 updateStats(allOrders);
 
-                alert("تم تحديث الحالة بنجاح");
+                showToast("تم تحديث الحالة بنجاح", "success");
             } else {
-                alert(data.message || "فشل تحديث الحالة");
+                showToast(data.message || "فشل تحديث الحالة", "error");
             }
         } catch (error) {
             console.error(error);
-            alert("حدث خطأ في الاتصال بالخادم");
+            showToast("حدث خطأ في الاتصال بالخادم", "error");
         }
     };
 

@@ -5,6 +5,36 @@
 
 const API_BASE = "http://127.0.0.1:8000/api";
 
+  /* ========== TOAST ========== */
+  
+  // 1. دالة عرض الإشعارات (Toast)
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
 /* ---------------------------
    Read product ID
 ---------------------------- */
@@ -12,7 +42,7 @@ const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
 if (!productId) {
-  alert("لم يتم تحديد المنتج");
+  showToast("لم يتم تحديد المنتج", "warning");
 }
 
 /* ---------------------------
@@ -64,7 +94,7 @@ async function loadProduct() {
     renderProduct(json.data);
   } catch (err) {
     console.error(err);
-    alert("تعذر تحميل بيانات المنتج");
+    showToast("تعذر تحميل بيانات المنتج", "error");
   }
 }
 /* ---------------------------
@@ -201,17 +231,17 @@ addBtn.addEventListener("click", () => {
   const quantity = parseInt(qtyInput.value || 1);
 
   if (!quantity || quantity < 1) {
-    alert("يرجى إدخال كمية صحيحة");
+    showToast("يرجى إدخال كمية صحيحة","warning");
     return;
   }
 
   if (!colorGroup.classList.contains("pw--hidden") && !selectedColor) {
-    alert("يرجى اختيار اللون");
+    showToast("يرجى اختيار اللون", "warning");
     return;
   }
 
   if (!sizeGroup.classList.contains("pw--hidden") && !sizeSelect.value) {
-    alert("يرجى اختيار المقاس");
+    showToast("يرجى اختيار المقاس", "warning");
     return;
   }
 
@@ -245,11 +275,11 @@ addBtn.addEventListener("click", () => {
     .then((res) => res.json())
     .then((item) => {
       console.log("تمت إضافة المنتج:", item);
-      alert("تمت إضافة المنتج إلى السلة بنجاح ✅");
+      showToast("تمت إضافة المنتج إلى السلة بنجاح ✅", "success");
     })
     .catch((err) => {
       console.error(err);
-      alert("حدث خطأ أثناء إضافة المنتج أو الحصول على السلة");
+      showToast("حدث خطأ أثناء إضافة المنتج أو الحصول على السلة", "error");
     });
 });
 
@@ -261,12 +291,12 @@ reviewBtn.addEventListener("click", (e) => {
 
   const token = localStorage.getItem("token");
   if (!token) {
-    alert("يجب تسجيل الدخول لإضافة تقييم");
+    showToast("يجب تسجيل الدخول لإضافة تقييم", "warning");
     return;
   }
 
   if (!productId) {
-    alert("لا يمكن إضافة تقييم: المنتج غير محدد");
+    showToast("لا يمكن إضافة تقييم: المنتج غير محدد", "warning");
     return;
   }
 
@@ -274,7 +304,7 @@ reviewBtn.addEventListener("click", (e) => {
   const comment = reviewComment.value.trim();
 
   if (!rating || rating < 1 || rating > 5) {
-    alert("الرجاء إدخال تقييم بين 1 و 5");
+    showToast("الرجاء إدخال تقييم بين 1 و 5", "warning");
     return;
   }
 
@@ -299,7 +329,7 @@ reviewBtn.addEventListener("click", (e) => {
     })
     .then((data) => {
       console.log("تم إرسال التقييم:", data);
-      alert("تم إرسال التقييم بنجاح ✅");
+      showToast("تم إرسال التقييم بنجاح ✅","success");
       reviewRatingValue.value = "";
       reviewComment.value = "";
       document

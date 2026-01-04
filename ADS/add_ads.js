@@ -9,7 +9,38 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/Auth/Login.html";
     return;
   }
+ 
+  
+  /* ========== TOAST ========== */
+  
+  // 1. دالة عرض الإشعارات (Toast)
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
   /* ===============================
        1. عناصر الإدخال
     ================================ */
@@ -59,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     if (!imageInput.files.length) {
-      alert("يرجى اختيار صورة للإعلان");
+      showToast("يرجى اختيار صورة للإعلان", "warning");
       return;
     }
 
@@ -81,14 +112,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
 
       if (response.ok) {
-        alert("تم نشر الإعلان بنجاح");
+        showToast("تم نشر الإعلان بنجاح", "success");
         window.location.href = "Add_ADS.html";
       } else {
-        alert(result.message || "حدث خطأ أثناء الحفظ");
+        showToast(result.message || "حدث خطأ أثناء الحفظ", "error");
       }
     } catch (error) {
       console.error(error);
-      alert("خطأ في الاتصال بالخادم");
+      showToast("خطأ في الاتصال بالخادم", "error");
     }
   });
 });
