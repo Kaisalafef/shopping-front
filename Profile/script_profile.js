@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  const adminLinks = document.querySelectorAll(".admin-only");
 
   async function checkAdminOrUser() {
     if (role === "admin") {
