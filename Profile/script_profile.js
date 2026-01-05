@@ -104,9 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
       '<tr><td colspan="5" style="text-align:center;">جاري التحميل...</td></tr>';
 
     try {
-      if (!currentUserId) return;
 
-      const res = await fetch(`${API_BASE_URL}/orders/user/${currentUserId}`, {
+      const res = await fetch(`${API_BASE_URL}/orders/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
