@@ -141,24 +141,18 @@
         </section>
 
         <section id="admin-section" class="role-section" style="display: none;">
-          <div class="section-header">
-            <h3><i class="fas fa-users-cog"></i> لوحة الإدارة (جميع
-              الطلبات)</h3>
-          </div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>رقم الطلب</th>
-                <th>المشتري</th>
-                <th>التاريخ</th>
-                <th>المبلغ</th>
-                <th>الحالة</th>
-              </tr>
-            </thead>
-            <tbody id="admin-orders-body">
-            </tbody>
-          </table>
-        </section>
+  <div class="section-header">
+    <h3><i class="fas fa-user-shield"></i> لوحة المشرف</h3>
+    <button class="btn-primary" onclick="window.location.href='/Home/admin_dashboard.html'">
+      <i class="fas fa-tachometer-alt"></i> الذهاب للوحة التحكم
+    </button>
+  </div>
+  <div class="info-grid">
+    <div class="info-item">
+      <p>مرحباً بك في لوحة الإدارة. يمكنك الوصول لخصائص الإدارة من القائمة العلوية.</p>
+    </div>
+  </div>
+</section>
       </main>
       
     <footer class="main-footer">
@@ -216,6 +210,30 @@
             <p>جميع الحقوق محفوظة &copy; <span id="year"></span> لمتجرنا الإلكتروني.</p>
         </div>
     </footer>
+    <div id="order-modal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modal-order-id">تفاصيل الطلب</h3>
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="customer-info-box">
+        <p><strong><i class="fas fa-map-marker-alt"></i> عنوان التوصيل:</strong> <span id="modal-address">-</span></p>
+        <p><strong><i class="fas fa-calendar-alt"></i> تاريخ الطلب:</strong> <span id="modal-date">-</span></p>
+      </div>
+      
+      <h4 class="items-title">المنتجات المشتراة:</h4>
+      <div class="order-items-list" id="modal-items-list">
+        </div>
+    </div>
+    <div class="modal-footer">
+      <div class="total-row">
+        <span>الإجمالي النهائي:</span>
+        <span id="modal-total-price" class="price-text">0</span>
+      </div>
+    </div>
+  </div>
+</div>
             <script src="/Auth/auth_guard.js"></script>
       <script
         src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
