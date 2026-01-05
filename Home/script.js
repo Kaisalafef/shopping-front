@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             adsContainer.innerHTML = "";
-
+            const isAdmin = isAdminUser();
             ads.forEach((ad, index) => {
                 const img = ad.image
                     ? `${BASE_URL}/storage/${ad.image}`
@@ -142,16 +142,29 @@ document.addEventListener("DOMContentLoaded", () => {
                 const delay = index * 0.2;
 
                 adsContainer.insertAdjacentHTML("beforeend", `
-                    <div class="ad-banner"
-                        style="background-image:url('${img}'); animation-delay: ${delay}s;">
-                        <div class="ad-overlay"></div>
-                        <div class="ad-content">
-                            <h3>${ad.title}</h3>
-                            <p>${ad.description || ""}</p>
-                            ${ad.link ? `<button onclick="location.href='${ad.link}'">تصفح العرض</button>` : ''}
-                        </div>
-                    </div>
-                `);
+    <div class="ad-banner"
+         data-ad-id="${ad.id}"
+         style="background-image:url('${img}'); animation-delay: ${delay}s;">
+        ${
+              isAdmin
+                ? `<button class="delete-ad-btn" onclick="deleteAd(${ad.id}, event)">
+                      <i class="fas fa-trash"></i> حذف
+                   </button>`
+                : ""
+            }
+        <div class="ad-overlay"></div>
+
+        <div class="ad-content">
+            <h3>${ad.title}</h3>
+            <p>${ad.description || ""}</p>
+
+            ${ad.link ? `<button onclick="location.href='${ad.link}'">تصفح العرض</button>` : ''}
+
+            
+        </div>
+    </div>
+`);
+
             });
 
         } catch (err) {
@@ -159,6 +172,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+window.deleteAd = async (adId, event) => {
+    event.stopPropagation();
+
+    if (!confirm("هل أنت متأكد من حذف الإعلان؟")) return;
+
+    try {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(
+            `http://127.0.0.1:8000/api/ads/${adId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Accept": "application/json",
+                },
+            }
+        );
+
+        if (response.ok) {
+            alert("تم حذف الإعلان بنجاح");
+            loadAds(); // إعادة تحميل الإعلانات
+        } else {
+            alert("فشل حذف الإعلان");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("خطأ في الاتصال بالخادم");
+    }
+};
 
 
 window.deleteOffer = async (offerId, event) => {
