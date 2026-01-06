@@ -193,7 +193,7 @@ window.deleteAd = async (adId, event) => {
 
         if (response.ok) {
             alert("تم حذف الإعلان بنجاح");
-            loadAds(); // إعادة تحميل الإعلانات
+            loadAds(); 
         } else {
             alert("فشل حذف الإعلان");
         }
