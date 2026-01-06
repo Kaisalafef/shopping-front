@@ -104,9 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
       '<tr><td colspan="5" style="text-align:center;">جاري التحميل...</td></tr>';
 
     try {
-      if (!currentUserId) return;
 
-      const res = await fetch(`${API_BASE_URL}/orders/user/${currentUserId}`, {
+      const res = await fetch(`${API_BASE_URL}/orders/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -189,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     itemsContainer.innerHTML = "";
 
     if (order.order_item && order.order_item.length > 0) {
-      order.order_item.forEach((item) => {
+  order.order_item.forEach((item) => {
         const prodName = item.product ? item.product.name : "منتج غير متوفر";
         const prodImg = item.product
           ? item.product.image_url
@@ -197,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         itemsContainer.innerHTML += `
                 <div class="order-item-card" style="display:flex; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                    <img src="${prodImg}" alt="${prodName}" style="width:50px; height:50px; border-radius:5px; object-fit:cover; margin-left:10px;">
+                    <img src="${prodImg}" alt="${prodName}" style=" height:50px; border-radius:5px; object-fit:cover; margin-left:10px;">
                     <div class="item-details">
                         <h5 style="margin:0 0 5px 0;">${prodName}</h5>
                         <div style="font-size:0.85rem; color:#777;">
