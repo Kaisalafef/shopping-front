@@ -1331,3 +1331,118 @@ body {
   font-size: 12px;
   margin-right: 8px;
 }
+/* =========================================
+   Mobile Responsive Rules (Product Page)
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+
+    /* 1. الحاوية العامة */
+    .dashboard-container {
+        padding: 10px;
+        flex-direction: column; /* جعل السايد بار والمحتوى فوق بعضهم */
+    }
+
+    /* 2. تحسين الهيدر (Header) */
+    .header-container {
+        flex-wrap: wrap; /* السماح للعناصر بالنزول لسطر جديد */
+        gap: 10px;
+        padding: 10px;
+    }
+
+    /* ترتيب العناصر: اللوجو والأيقونات في الأعلى، البحث في الأسفل */
+    .logo-link {
+        order: 1;
+        flex-grow: 1; /* اللوجو يأخذ مساحة */
+    }
+
+    .profile-menu {
+        order: 2;
+    }
+
+    .search-box {
+        order: 3;
+        width: 100%; /* البحث يأخذ عرض الشاشة بالكامل */
+        margin-top: 5px;
+        display: flex;
+    }
+
+    .search-box input {
+        width: 100%; /* توسيع حقل الإدخال */
+    }
+
+    /* 3. القائمة الجانبية / الفلاتر (Sidebar) */
+    /* نفترض أن كلاس الفلاتر هو .sidebar أو .filters حسب المعتاد */
+    .sidebar, .filters-container {
+        width: 100%;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+    }
+
+    /* 4. شبكة المنتجات (Products Grid) */
+    .products-grid {
+        display: grid;
+        /* عرض منتجين بجانب بعض في التابلت، ومنتج واحد في الموبايل الصغير */
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+        gap: 10px;
+    }
+
+    /* 5. كرت المنتج (Product Card) */
+    .product-card {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product-card img {
+        height: 150px; /* تقليل ارتفاع الصورة لتناسب الشاشة */
+        object-fit: cover;
+    }
+
+    .product-name {
+        font-size: 1rem; /* تصغير الخط قليلاً */
+        margin: 8px 0;
+    }
+
+    .product-price {
+        font-size: 1.1rem;
+        color: #27ae60;
+    }
+
+    /* 6. أزرار الكرت (إضافة للسلة) */
+    .product-actions {
+        flex-direction: column; /* الأزرار فوق بعضها */
+        gap: 5px;
+    }
+
+    .btn-add-cart, .btn-details {
+        width: 100%; /* الأزرار بعرض كامل */
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    /* 7. الفوتر (Footer) */
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-row {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .footer-col {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+/* للموبايل الصغير جداً (أقل من 480px) */
+@media screen and (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr; /* عمود واحد فقط للموبايل الصغير لوضوح أفضل */
+    }
+}
