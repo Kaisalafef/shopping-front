@@ -1,139 +1,283 @@
-// 1. Configuration & Data
-const STORAGE_KEY = 'marketProducts';
-const defaultProducts = [
-    { id: "1", name: "سماعات بلوتوث", price: "50", currency: "ر.س", img: "/Market/images/ELC.png", category: "electronics" },
-    { id: "2", name: "ساعة ذكية", price: "120", currency: "ر.س", img: "/Market/images/ELC.png", category: "electronics" },
-    { id: "3", name: "أرز بسمتي 5كيلو", price: "45", currency: "ر.س", img: "/Market/images/FOOD.png", category: "food" },
-    { id: "4", name: "زيت طهي", price: "20", currency: "ر.س", img: "/Market/images/FOOD.png", category: "food" },
-    { id: "5", name: "أحمر شفاه", price: "35", currency: "ر.س", img: "/Market/images/MAKEUP.png", category: "makeup" },
-    { id: "6", name: "تيشيرت رجالي", price: "60", currency: "ر.س", img: "/Market/images/CLOS.png", category: "men" },
-    { id: "7", name: "فستان صيفي", price: "150", currency: "ر.س", img: "/Market/images/CLOSW.jpg", category: "women" },
-];
+function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
-const categoryTitles = {
-    'electronics': 'الإلكترونيات',
-    'food': 'المواد الغذائية',
-    'meals': 'المأكولات',
-    'makeup': 'مستحضرات التجميل',
-    'men': 'أزياء رجالية',
-    'women': 'أزياء نسائية',
-    'perfume': 'العطور',
-    'cleaning': 'المنظفات',
-    'furniture': 'المفروشات',
-    'sweets': 'الحلويات'
-};
-
-// 2. Data Access Layer
-function getProducts() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
-        return defaultProducts;
-    }
-    return JSON.parse(stored);
-}
-
-// 3. Core Logic
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const selectedCategory = urlParams.get('cat');
-    const isAdmin = urlParams.get('role') === 'admin';
     
-    const container = document.getElementById('productsContainer');
-    const titleElement = document.getElementById('pageTitle');
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
 
-    let allProducts = getProducts();
+    
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
 
-    // Set Title
-    if (selectedCategory && categoryTitles[selectedCategory]) {
-        titleElement.textContent = categoryTitles[selectedCategory];
+    toast.innerHTML = `${icon} ${msg}`;
+
+    
+    toastBox.appendChild(toast);
+
+    
+    setTimeout(() => {
+      toast.classList.add("hide"); 
+      toast.addEventListener("animationend", () => {
+        toast.remove(); 
+      });
+    }, 4000);
+  }
+  
+
+
+const API_BASE_URL = "http://127.0.0.1:8000";
+
+const API_URLS = {
+  GET_ALL_PRODUCTS: `${API_BASE_URL}/api/products`,
+  GET_PRODUCTS_BY_CATEGORY: (category) =>
+    `${API_BASE_URL}/api/products/category/${category}`,
+  DELETE_PRODUCT: (id) => `${API_BASE_URL}/api/products/${id}`,
+};
+
+function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    
+    toastBox.appendChild(toast);
+
+    
+    setTimeout(() => {
+      toast.classList.add("hide"); 
+      toast.addEventListener("animationend", () => {
+        toast.remove(); 
+      });
+    }, 4000);
+  }
+  
+const getCsrfToken = () =>
+  document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+
+
+const getImageUrl = (path) => {
+  if (!path) return "/images/default.png";
+  if (path.startsWith("http")) return path;
+  return `http://127.0.0.1:8000/storage/${path}`;
+};
+
+let allProducts = [];
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const selectedCategory = urlParams.get("cat"); 
+  const role = urlParams.get("role");
+  const isAdmin = role === "admin";
+
+  const container = document.getElementById("productsContainer");
+  const titleElement = document.getElementById("pageTitle");
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+
+  
+  const categoryTitles = {
+    electronics: "الإلكترونيات",
+    food: "المواد الغذائية",
+    meals: "المأكولات",
+    makeup: "مستحضرات التجميل",
+    men: "أزياء رجالية",
+    women: "أزياء نسائية",
+    perfume: "العطور",
+    cleaning: "المنظفات",
+    furniture: "المفروشات",
+    sweets: "الحلويات",
+    clothes: "الملابس",
+  };
+
+  if (selectedCategory && categoryTitles[selectedCategory]) {
+    titleElement.textContent = categoryTitles[selectedCategory];
+
+    const backLink = document.querySelector(".section-header a");
+    if (backLink && isAdmin) {
+      backLink.href = "/Home/admin_dashboard.html";
+    }
+  }
+  async function fetchProducts() {
+    container.innerHTML =
+      '<div style="grid-column:1/-1;text-align:center;padding:20px;">جاري تحميل المنتجات...</div>';
+
+    try {
+      const url = selectedCategory
+        ? API_URLS.GET_PRODUCTS_BY_CATEGORY(selectedCategory)
+        : API_URLS.GET_ALL_PRODUCTS;
+
+      const response = await fetch(url, {
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error("فشل في جلب المنتجات");
+      }
+
+      const result = await response.json();
+      const data = result.data; 
+
+      allProducts = data.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        discount: item.discount_percentage, 
+        finalPrice: item.final_price, 
+
+        currency: "SYP",
+        img: item.image_url,
+        category: item.category,
+      }));
+
+      renderProducts(allProducts);
+    } catch (error) {
+      console.error(error);
+      container.innerHTML = `
+                <div class="no-results" style="color:red">
+                    حدث خطأ أثناء جلب البيانات
+                </div>`;
+    }
+  }
+
+  
+  const renderProducts = (products) => {
+    if (!products || products.length === 0) {
+      container.innerHTML =
+        '<div class="no-results">لا توجد منتجات في هذا القسم.</div>';
+      return;
     }
 
-    // Function to render filtered items
-    const render = (filterText = '') => {
-        let filtered = allProducts;
+    container.innerHTML = products
+      .map((product) => createProductCard(product, isAdmin))
+      .join("");
+  };
 
-        // Apply Category Filter
-        if (selectedCategory && selectedCategory !== 'all') {
-            filtered = filtered.filter(p => p.category === selectedCategory);
-        }
+  
+  const handleSearch = () => {
+    const term = searchInput.value.trim().toLowerCase();
+    const filtered = allProducts.filter((p) =>
+      p.name.toLowerCase().includes(term)
+    );
+    renderProducts(filtered);
+  };
 
-        // Apply Search Filter
-        if (filterText) {
-            filtered = filtered.filter(p => 
-                p.name.toLowerCase().includes(filterText.toLowerCase())
-            );
-        }
-
-        if (filtered.length === 0) {
-            container.innerHTML = `<div class="no-results">لا توجد منتجات تطابق بحثك.</div>`;
-            return;
-        }
-
-        container.innerHTML = filtered.map(product => createProductCard(product, isAdmin)).join('');
-    };
-
-    // Initial Render
-    render();
-
-    // Search Event
-    searchBtn.addEventListener('click', () => render(searchInput.value));
-    searchInput.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') render(searchInput.value);
+  if (searchBtn) searchBtn.addEventListener("click", handleSearch);
+  if (searchInput)
+    searchInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") handleSearch();
     });
-});
-function createProductCard(product, isAdmin) {
-    // أزرار التحكم للأدمن أو للمستخدم العادي
-    const actionButtons = isAdmin ? `
-        <div class="admin-actions">
-            <button class="btn-edit" onclick="goToEditPage('${product.id}')">
-                <i class="fas fa-edit"></i> تعديل
-            </button>
-            <button class="btn-delete" onclick="deleteProduct('${product.id}')">
-                <i class="fas fa-trash"></i> حذف
-            </button>
-        </div>
-    ` : `
-        <div class="product-actions">
-            <button class="btn-cart" onclick="addToCart('${product.id}')">
-                <i class="fas fa-cart-plus"></i> أضف للسلة
-            </button>
-        </div>
-    `;
 
-    // جعل الكارت قابلاً للضغط للانتقال لصفحة المنتج
-    return `
+  fetchProducts();
+});
+
+
+
+function createProductCard(product, isAdmin) {
+  const priceFormatted = new Intl.NumberFormat("en-US").format(product.price);
+  const finalPriceVal = product.finalPrice ?? product.price;
+  const finalFormatted = new Intl.NumberFormat("en-US").format(finalPriceVal);
+
+  let priceHtml = product.discount > 0
+    ? `
+      <div class="price-container">
+        <span class="new-price">${finalFormatted} SYP</span>
+        <span class="old-price">${priceFormatted} SYP</span>
+      </div>
+    `
+    : `<span class="regular-price">${priceFormatted} SYP</span>`;
+
+  const discountBadge = product.discount > 0
+    ? `<span class="discount-badge">-${product.discount}%</span>`
+    : "";
+
+  const adminActions = isAdmin
+    ? `
+      <div class="admin-actions">
+  <button class="admin-btn edit-btn" onclick="goToEditPage(${product.id})">
+    <i class="fa fa-edit"></i>
+    <span>تعديل</span>
+  </button>
+
+  <button class="admin-btn delete-btn" onclick="deleteProduct(${product.id})">
+    <i class="fa fa-trash"></i>
+    <span>حذف</span>
+  </button>
+</div>
+
+    `
+    : "";
+
+  return `
     <div class="product-card">
-        <a href="/Market/Product/Product.html?id=${product.id}" style="text-decoration:none; color:inherit;">
-            <div class="product-img-wrapper">
-                <img src="${product.img || '/Market/images/logo.png'}" alt="${product.name}" class="product-image">
-            </div>
-            <div class="product-info">
-                <div class="product-title">${product.name}</div>
-                <div class="product-price">${product.price} <small>${product.currency || 'ر.س'}</small></div>
-            </div>
-        </a>
-        ${actionButtons}
+
+      <a href="/Product/Product.html?id=${product.id}" class="card-link-wrapper">
+        <div class="product-img-wrapper">
+          ${discountBadge}
+          <img src="${product.img}" alt="${product.name}">
+        </div>
+
+        <div class="product-info">
+          <div class="product-title">${product.name}</div>
+          <div class="product-price">${priceHtml}</div>
+        </div>
+      </a>
+
+      ${adminActions}
     </div>
-    `;
+  `;
 }
 
-// 5. Global Actions
+
 window.goToEditPage = (id) => {
-    window.location.href = `/Market/Add Proudct/add_Proudct.html?editId=${id}`;
+  window.location.href = `/Edit_Product/Edit_Product.html?editId=${id}`;
 };
 
-window.deleteProduct = (id) => {
-    if(confirm('هل أنت متأكد من حذف هذا المنتج نهائياً؟')) {
-        let products = getProducts().filter(p => p.id !== id);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+window.deleteProduct = async (id) => {
+  
+  if (!confirm("هل أنت متأكد من حذف المنتج؟")) return;
+
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json", 
+        "Accept": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (response.ok) {
+      
+      showToast("تم حذف المنتج بنجاح", "success");
+
+      
+      setTimeout(() => {
         location.reload();
+      }, 1000); 
+      
+    } else {
+      
+      const errorData = await response.json();
+      showToast(errorData.message || "فشل الحذف", "error");
     }
-};
-
-window.addToCart = (id) => {
-    alert(`تم إضافة المنتج ${id} إلى السلة!`);
-    // Here you would typically update a cart localStorage object
+  } catch (error) {
+    console.error("Error details:", error);
+    showToast("حدث خطأ في الاتصال بالسيرفر", "error");
+  }
 };

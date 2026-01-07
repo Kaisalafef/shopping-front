@@ -1,199 +1,182 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="stylesheet" href="/Market/Wedgit/style_header.css">
-        <link rel="stylesheet" href="style.css">
-        <script src="/Market/Wedgit/script_header.js"></script>
-        <title>Document</title>
-    </head>
-    <body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/Wedgit/style_header.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/Wedgit/style_footer.css">
+    <script src="/Wedgit/script_header.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="header-container">
+         <div class="profile-menu">
+          <button
+            class="icon-btn"
+            id="profileBtn"
+            type="button"
+            title="فتح القائمة"
+          >
+            <i class="fas fa-user"></i>
+          </button>
 
-        <header class="main-header">
-            <div class="header-container">
-                <a href="/Market/Home/client_dashboard.html" class="logo-link">
-                    <img src="/Market/images/logo.png" class="logo" alt="Logo">
-                </a>
-
-                <div class="profile-menu">
-                    <button class="icon-btn" id="profileBtn" type="button"
-                        title="فتح القائمة">
-                        <i class="fas fa-user"></i>
-                    </button>
-
-                    <ul class="dropdown" id="desktopDropdown">
-                        <li><a href="#"><i class="fas fa-user-circle"></i>
-                                حسابي</a></li>
-                        <li><a href="#"><i class="fas fa-shopping-cart"></i>
-                                سلتي</a></li>
-                        <li><a href="#"><i class="fas fa-cog"></i>
-                                الإعدادات</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>
-                                خروج</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="search-wrapper">
-                <div class="search-box">
-                    <input type="text" placeholder="ابحث عن منتجات...">
-                    <button class="search-btn" type="submit" title="بحث"><i
-                            class="fas fa-search"></i></button>
-                </div>
-            </div>
-        </header>
-
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#">الرئيسية</a>
-            <a href="#">حسابي</a>
-            <a href="#">سلتي</a>
-            <a href="#">الإعدادات</a>
-            <a href="#">تسجيل خروج</a>
-        </div>
-
-        <div class="dashboard-container">
-            <main class="main-content">
-                <div class="section-header">
-                    <h2>سلتي </h2>
-                    <select class="sort-select" title="ترتيب المنتجات">
-                        <option>ترتيب حسب: </option>
-                        <option>التاريخ: من الأحدث للاقدم</option>
-                        <option>التاريخ: من الاقدم للأحدث</option>
-                    </select>
-                </div>
-
-                <div class="products-grid">
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=Headphones"
-                            alt="Product" class="product-image">
-                        <div class="product-title">سماعات رأس لاسلكية عازلة
-                            للضوضاء بتقنية بلوتوث 5.0 - أسود</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="far fa-star"></i> (1,240)
-                        </div>
-                        <div class="product-price">199.00 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=Monitor"
-                            alt="Product" class="product-image">
-                        <div class="product-title">شاشة ألعاب منحنية 27 بوصة
-                            144Hz استجابة 1ms</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i> (500)
-                        </div>
-                        <div class="product-price">350.00 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=Coffee"
-                            alt="Product" class="product-image">
-                        <div class="product-title">ماكينة تحضير قهوة إسبريسو
-                            أوتوماتيكية للمنزل والمطبخ</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="far fa-star"></i><i
-                                class="far fa-star"></i> (85)
-                        </div>
-                        <div class="product-price">120.50 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img
-                            src="https://via.placeholder.com/300x300?text=T-Shirt"
-                            alt="Product" class="product-image">
-                        <div class="product-title">تيشيرت قطني رجالي كلاسيك -
-                            ألوان متعددة</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star-half-alt"></i> (320)
-                        </div>
-                        <div class="product-price">25.00 <small>$</small></div>
-                        <div class="product-actions">
-                            <button class="btn-cart"> شراء</button>
-                            <button class="btn-cart">حذف</button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </body>
-    <script>
-    function loadCart() {
-    const cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
-    const container = document.querySelector('.products-grid');
+                 <ul class="dropdown" id="desktopDropdown">
+    <li><a href="/Profile/Profile.html"><i class="fas fa-user-circle"></i> حسابي</a></li>
     
-    if (cartItems.length === 0) {
-        container.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-shopping-basket" style="font-size: 3rem; display: block; margin-bottom: 15px;"></i>
-                السلة فارغة حالياً.. ابدأ بالتسوق الآن!
-            </div>`;
-        return;
-    }
+    <li class="admin-only" style="display: none;"><a href="/ADS/Add_ADS.html"><i class="fas fa-bullhorn"></i> إضافة إعلانات</a></li>
+    <li class="admin-only" style="display: none;"><a href="/Discount/Add_Discount.html"><i class="fas fa-tags"></i> إضافة خصومات</a></li>
+    <li class="admin-only" style="display: none;"><a href="/Add Proudct/add_Proudct.html"><i class="fas fa-add"></i> إضافة منتجات</a></li>
+    <li class="admin-only" style="display: none;"><a href="/Orders/Orders.html"><i class="fas fa-book"></i> سجل الطلبات</a></li>
 
-    container.innerHTML = cartItems.map((item, index) => `
-        <div class="product-card">
-            <div>
-                <img src="${item.img}" alt="${item.name}" class="product-image">
-                <div class="product-title">${item.name}</div>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                </div>
-                <div class="product-price">${item.price} <small>${item.currency || '$'}</small></div>
-            </div>
+    <li id="cart-link"><a href="/Cart/Cart.html"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
+    
+    <li><a href="/Wedgit/About.html"><i class="fas fa-info-circle"></i> حول</a></li>
+    <li class="divider"></li>
+    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</a></li>
+</ul>
+        </div>
+<div class="search-box">
+    <input type="text" id="globalSearchInput" placeholder="ابحث عن منتجات..." autocomplete="off">
+    
+    <button class="search-btn" type="submit" title="بحث">
+        <i class="fas fa-search"></i>
+    </button>
+    
+    <div id="searchResults" class="search-results-dropdown"></div>
+</div><a href="/Home/client_dashboard.html" class="logo-link">
+          <img src="/images/logo.webp" class="logo" alt="Logo" />
+        </a>
+       
+      </div>
+
+      
+    </header>
+<div id="toast-box"></div>
+    <div class="dashboard-container">
+      <main class="main-content">
+        <div class="section-header">
+          <h2>سلتي</h2>
+
+          <div class="header-controls">
+            <button
+              id="buyAllBtn"
+              onclick="checkoutAll()"
+              class="btn-buy-all"
+              style="display: none"
+            >
+              <i class="fas fa-check-double"></i> إتمام شراء الكل
+            </button>
+
             
-            <div class="product-actions">
-                <button class="btn-buy" onclick="checkoutItem(${index})">
-                    <i class="fas fa-bolt"></i> شراء الآن
-                </button>
-                <button class="btn-delete" onclick="removeFromCart(${index})" title="حذف">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
+          </div>
+        </div>
+
+        <div class="products-grid"></div>
+        <div class="cart-summary">
+          <h3>
+            الإجمالي:
+            <span id="cartTotal">0 ₪</span>
+          </h3>
+        </div>
+      </main>
+    </div>
+    
+    <footer class="main-footer">
+        
+
+        <div class="footer-container">
+            <div class="footer-row">
+                
+                <div class="footer-col footer-about">
+                    <a href="#" class="footer-logo-link">
+                        <img src="/images/logoo.webp" alt="Logo" class="footer-logo">
+                    </a>
+                    <p class="footer-desc">
+                        متجرك الرقمي الأول لتسوق أحدث المنتجات بأفضل الأسعار. 
+                        نجمع بين الجودة، السرعة، والأمان لضمان تجربة تسوق لا تُنسى.
+                    </p>
+                </div>
+
+                <div class="footer-col footer-links">
+                    <h3>روابط هامة</h3>
+                    <ul id="footerLinksList">
+                        <li><a href="/Wedgit/About.html"><i class="fas fa-angle-left"></i> من نحن</a></li>
+                        
+                        <li class="client-link" style="display: none;"><a href="/Home/client_dashboard.html"><i class="fas fa-angle-left"></i> الرئيسية</a></li>
+                        <li class="client-link" style="display: none;"><a href="/Profile/Profile.html"><i class="fas fa-angle-left"></i> حسابي</a></li>
+                        <li class="client-link" style="display: none;"><a href="/Cart/Cart.html"><i class="fas fa-angle-left"></i> سلة المشتريات</a></li>
+
+                        <li class="admin-link" style="display: none;"><a href="/Home/admin_dashboard.html"><i class="fas fa-angle-left"></i> لوحة التحكم</a></li>
+                        <li class="admin-link" style="display: none;"><a href="/ADS/Add_ADS.html"><i class="fas fa-angle-left"></i> إدارة الإعلانات</a></li>
+                        <li class="admin-link" style="display: none;"><a href="/Add Proudct/add_Proudct.html"><i class="fas fa-angle-left"></i> إدارة المنتجات</a></li>
+                        <li class="admin-link" style="display: none;"><a href="/Discount/Add_Discount.html"><i class="fas fa-angle-left"></i> إدارة الخصومات</a></li>
+                                           <li class="admin-link" style="display: none;"><a href="/Orders/Orders.html"><i class="fas fa-angle-left"></i> سجل الطلبات </a></li>
+
+                      </ul>
+                </div>
+
+                <div class="footer-col footer-contact">
+                    <h3>تواصل معنا</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" class="social-btn twitter"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> support@store.com</p>
+                        <p><i class="fas fa-phone"></i> +963 999 999 999</p>
+                    </div>
+                </div>
+
             </div>
         </div>
-    `).join('');
-}
 
-    function removeFromCart(index) {
-        let cartItems = JSON.parse(localStorage.getItem('marketCart') || '[]');
-        cartItems.splice(index, 1);
-        localStorage.setItem('marketCart', JSON.stringify(cartItems));
-        loadCart(); // إعادة تحميل العرض
-    }
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة &copy; <span id="year"></span> لمتجرنا الإلكتروني.</p>
+        </div>
+    </footer>
+    <div id="checkoutModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeCheckoutModal()" type="button" title="إغلاق">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>تفاصيل التوصيل</h3>
+            </div>
 
-    window.onload = loadCart;
-</script>
+            <form id="checkoutForm" onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label for="orderAddress">العنوان / الموقع بالتفصيل</label>
+                    <textarea 
+                        id="orderAddress" 
+                        rows="4" 
+                        placeholder="المدينة، الحي، الشارع، رقم المبنى..." 
+                        required></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeCheckoutModal()">إلغاء</button>
+                    <button type="submit" class="btn-confirm-order">
+                        <i class="fas fa-paper-plane"></i> إرسال الطلب
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+            <script src="/Auth/auth_guard.js"></script>
+     <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   <script src="/Wedgit/script_footer.js"></script>
+
+            <script src="Cart.js"></script>
+  </body>
 </html>

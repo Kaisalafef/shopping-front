@@ -1,290 +1,411 @@
-(function () {
-  "use strict";
 
-  const dom = {
-    productImage: document.getElementById("pw-product-image"),
-    imageTrigger: document.getElementById("pw-image-trigger"),
-    title: document.getElementById("pw-title"),
-    price: document.getElementById("pw-price"),
-    description: document.getElementById("pw-description"),
 
-    // New Groups
-    colorGroup: document.getElementById("pw-color-group"),
-    colorOptionsContainer: document.getElementById("pw-color-options"),
-    colorError: document.getElementById("pw-color-error"),
+const API_BASE = "http://127.0.0.1:8000/api";
 
-    sizeGroup: document.getElementById("pw-size-group"),
-    sizeSelect: document.getElementById("pw-size-select"),
-    sizeError: document.getElementById("pw-size-error"),
+  
+  
+  
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
-    quantityInput: document.getElementById("pw-quantity"),
-    qtyDecBtn: document.getElementById("pw-qty-dec"),
-    qtyIncBtn: document.getElementById("pw-qty-inc"),
-    qtyError: document.getElementById("pw-qty-error"),
-    addBtn: document.getElementById("pw-add-btn"),
-    btnText: document.getElementById("pw-btn-text"),
-    addStatus: document.getElementById("pw-add-status"),
-    lightbox: document.getElementById("pw-lightbox"),
-    lightboxImg: document.getElementById("pw-lightbox-img"),
-    lightboxClose: document.getElementById("pw-lightbox-close"),
-    reviewForm: document.getElementById("review-form"),
-    reviewerName: document.getElementById("reviewer-name"),
-    ratingInputContainer: document.getElementById("rating-input"),
-    ratingValue: document.getElementById("review-rating-value"),
-    reviewText: document.getElementById("review-text"),
-    reviewsList: document.getElementById("reviews-list"),
-  };
+    
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
 
-  let productData = null;
-  let isAdding = false;
+    
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
 
-  // State for selected options
-  let selectedState = {
-    color: null, // Stores the entire color object
-    size: null, // Stores the entire size object
-  };
+    toast.innerHTML = `${icon} ${msg}`;
 
-  function formatPrice(price, currency) {
-    try {
-      return new Intl.NumberFormat(undefined, {
-        style: "currency",
-        currency,
-      }).format(price);
-    } catch (err) {
-      return `${currency} ${price}`;
-    }
+    
+    toastBox.appendChild(toast);
+
+    
+    setTimeout(() => {
+      toast.classList.add("hide"); 
+      toast.addEventListener("animationend", () => {
+        toast.remove(); 
+      });
+    }, 4000);
   }
 
-  function getMaxQuantity() {
-    return 10; 
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+if (!productId) {
+  showToast("لم يتم تحديد المنتج", "warning");
+}
+
+
+const titleEl = document.getElementById("pw-title");
+const priceEl = document.getElementById("pw-price");
+const descEl = document.getElementById("pw-description");
+const imageEl = document.getElementById("pw-product-image");
+
+const colorGroup = document.getElementById("pw-color-group");
+const colorContainer = document.getElementById("pw-color-options");
+
+const sizeGroup = document.getElementById("pw-size-group");
+const sizeSelect = document.getElementById("pw-size-select");
+
+const qtyInput = document.getElementById("pw-quantity");
+const btnInc = document.getElementById("pw-qty-inc");
+const btnDec = document.getElementById("pw-qty-dec");
+
+const addBtn = document.getElementById("pw-add-btn");
+
+
+const lightbox = document.getElementById("pw-lightbox");
+const lightboxImg = document.getElementById("pw-lightbox-img");
+const lightboxClose = document.getElementById("pw-lightbox-close");
+
+
+const reviewRatingValue = document.getElementById("review-rating-value");
+const reviewComment = document.getElementById("review-text");
+const reviewBtn = document.querySelector("#review-form .submit-btn");
+
+
+let selectedColor = null;
+
+
+async function loadProduct() {
+  try {
+    const res = await fetch(`${API_BASE}/products/${productId}`);
+    if (!res.ok) throw new Error("Product not found");
+
+    const json = await res.json();
+    renderProduct(json.data);
+  } catch (err) {
+    console.error(err);
+    showToast("تعذر تحميل بيانات المنتج", "error");
+  }
+}
+
+function calcDiscountedPrice(price, offer) {
+  if (!offer) return price;
+
+  
+  if (offer.discount_percentage) {
+    return Math.round(price - price * (offer.discount_percentage / 100));
   }
 
-  function updateQuantityButtons() {
-    const qty = parseInt(dom.quantityInput.value, 10) || 1;
-    const max = getMaxQuantity();
-    dom.qtyDecBtn.disabled = qty <= 1;
-    dom.qtyIncBtn.disabled = qty >= max;
+  
+  if (offer.discount_price) {
+    return price - offer.discount_price;
   }
 
-  function showError(element, message) {
-    element.textContent = message || "";
-    element.style.display = message ? "block" : "none";
+  return price;
+}
+
+
+function renderProduct(product) {
+  console.log("PRODUCT DATA 👉", product);
+
+  titleEl.textContent = product.name;
+  descEl.textContent = product.description;
+  imageEl.src = product.image_url;
+
+  
+  const price = Number(product.price);
+  const discount = Number(product.discount_percentage || 0);
+
+  if (discount > 0) {
+    const finalPrice = Math.round(price - price * (discount / 100));
+    priceEl.innerHTML = `
+      <span class="old-price">${price} SYP</span>
+      <span class="new-price">${finalPrice} SYP</span>
+      <span class="discount-badge">-${discount}%</span>
+    `;
+  } else {
+    priceEl.innerHTML = `<span class="new-price">${price} SYP</span>`;
   }
 
-  function validateInputs() {
-    let valid = true;
-    const qty = parseInt(dom.quantityInput.value, 10);
-    const max = getMaxQuantity();
-    if (Number.isNaN(qty) || qty < 1 || qty > max) {
-      showError(dom.qtyError, `الرجاء إدخال كمية بين 1 و ${max}`);
-      valid = false;
-    } else {
-      showError(dom.qtyError, "");
-    }
+  
+  renderColors(product.images || []);
 
-    const hasColors = productData.options.some((o) => o.type === "color");
-    if (hasColors && !selectedState.color) {
-      showError(dom.colorError, "الرجاء اختيار اللون");
-      valid = false;
-    } else {
-      showError(dom.colorError, "");
-    }
+  
+  renderSizes(product.sizes || []);
+}
 
-    const hasSizes = productData.options.some((o) => o.type === "size");
-    if (hasSizes && !dom.sizeSelect.value) {
-      showError(dom.sizeError, "الرجاء اختيار القياس");
-      valid = false;
-    } else {
-      showError(dom.sizeError, "");
-      if (hasSizes) {
-        selectedState.size = productData.options.find(
-          (o) => o.type === "size" && o.value === dom.sizeSelect.value
-        );
+
+
+function renderColors(images) {
+  if (!images.length) {
+    colorGroup.classList.add("pw--hidden");
+    return;
+  }
+
+  colorGroup.classList.remove("pw--hidden");
+  colorContainer.innerHTML = "";
+
+  images.forEach((img, index) => {
+    const swatch = document.createElement("div");
+    swatch.className = "pw__color-swatch";
+    swatch.style.background = img.color;
+
+    swatch.addEventListener("click", () => {
+      document
+        .querySelectorAll(".pw__color-swatch")
+        .forEach((el) => el.classList.remove("selected"));
+
+      swatch.classList.add("selected");
+      selectedColor = img.color;
+
+      if (img.url) {
+        imageEl.src = img.url;
+      }
+    });
+
+    if (index === 0) {
+      swatch.classList.add("selected");
+      selectedColor = img.color;
+
+      if (img.url) {
+        imageEl.src = img.url;
       }
     }
-    return valid;
-  }
 
-  /* -----------------------------------------------------------
-     تعديل دالة الإضافة للسلة لتقوم بالحفظ الفعلي في LocalStorage
-     ----------------------------------------------------------- */
-  async function handleAddToCart() {
-    if (isAdding || !productData) return;
-    if (!validateInputs()) return;
-
-    isAdding = true;
-    dom.addBtn.disabled = true;
-    dom.btnText.innerHTML = '<span class="pw__spinner"></span> جاري الإضافة...';
-
-    const quantity = parseInt(dom.quantityInput.value, 10);
-
-    // تجهيز بيانات المنتج المختار
-    const payload = {
-      id: productData.id,
-      name: productData.title, // نستخدم name ليتوافق مع صفحة السلة والمنتجات
-      price: productData.price,
-      currency: productData.currency,
-      quantity,
-      color: selectedState.color ? selectedState.color.value : null,
-      size: dom.sizeSelect.value || null,
-      img: selectedState.color && selectedState.color.image 
-             ? selectedState.color.image 
-             : productData.image,
-      addedAt: new Date().toISOString()
-    };
-
-    // --- منطق الحفظ في السلة ---
-    let cart = JSON.parse(localStorage.getItem('marketCart') || '[]');
-    
-    // التحقق مما إذا كان المنتج (بنفس الخيارات) موجوداً مسبقاً لزيادة الكمية فقط
-    const existingIndex = cart.findIndex(item => 
-        item.id === payload.id && 
-        item.color === payload.color && 
-        item.size === payload.size
-    );
-
-    if (existingIndex > -1) {
-        cart[existingIndex].quantity += payload.quantity;
-    } else {
-        cart.push(payload);
-    }
-
-    // حفظ السلة المحدثة
-    localStorage.setItem('marketCart', JSON.stringify(cart));
-
-    // محاكاة تأخير بسيط للجمالية
-    await new Promise((resolve) => setTimeout(resolve, 600));
-
-    console.log("تم الحفظ في السلة بنجاح:", payload);
-
-    dom.btnText.textContent = "تمت الإضافة!";
-    
-    // تحديث عداد السلة في الهيدر إذا كان موجوداً
-    updateCartBadge();
-
-    setTimeout(() => {
-      dom.btnText.textContent = "اضف الى السلة";
-      dom.addBtn.disabled = false;
-      isAdding = false;
-    }, 1500);
-  }
-
-  // دالة لتحديث رقم السلة في الهيدر (اختياري)
-  function updateCartBadge() {
-      const cart = JSON.parse(localStorage.getItem('marketCart') || '[]');
-      const badge = document.querySelector('.fa-shopping-cart + span') || document.querySelector('.cart-count');
-      if (badge) badge.textContent = cart.length;
-  }
-
-  /* ---------------------------
-      باقي دوال النظام (الصور والتهيئه)
-     --------------------------- */
-  function openLightbox() {
-    dom.lightbox.classList.add("pw--active");
-    dom.lightboxImg.src = dom.productImage.src;
-    dom.lightboxClose.focus();
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeLightbox() {
-    dom.lightbox.classList.remove("pw--active");
-    dom.imageTrigger.focus();
-    document.body.style.overflow = "";
-  }
-
-  function initProductWidget(product) {
-    if (!product || !product.id) return;
-
-    productData = {
-      id: product.id,
-      title: product.title,
-      price: typeof product.price === "object" ? product.price.amount : product.price,
-      currency: typeof product.price === "object" ? product.price.currency : product.currency || "SYP",
-      image: product.image || "",
-      description: product.description || "",
-      options: Array.isArray(product.options) ? product.options : [],
-    };
-
-    dom.title.textContent = productData.title;
-    dom.price.textContent = formatPrice(productData.price, productData.currency);
-    dom.description.innerHTML = productData.description;
-    dom.productImage.src = productData.image;
-
-    // Render Colors & Sizes (نفس منطقك الأصلي)
-    renderOptions();
-    updateQuantityButtons();
-  }
-
-  function renderOptions() {
-    const colors = productData.options.filter((o) => o.type === "color");
-    const sizes = productData.options.filter((o) => o.type === "size");
-
-    if (colors.length > 0) {
-      dom.colorGroup.classList.remove("pw--hidden");
-      dom.colorOptionsContainer.innerHTML = "";
-      colors.forEach((colorObj) => {
-        const swatch = document.createElement("div");
-        swatch.className = "pw__color-swatch";
-        swatch.style.backgroundColor = colorObj.value;
-        swatch.addEventListener("click", () => {
-          document.querySelectorAll(".pw__color-swatch").forEach((el) => el.classList.remove("selected"));
-          swatch.classList.add("selected");
-          selectedState.color = colorObj;
-          if (colorObj.image) dom.productImage.src = colorObj.image;
-        });
-        dom.colorOptionsContainer.appendChild(swatch);
-      });
-    }
-
-    if (sizes.length > 0) {
-      dom.sizeGroup.classList.remove("pw--hidden");
-      dom.sizeSelect.innerHTML = '<option value="">اختر القياس...</option>';
-      sizes.forEach((sizeObj) => {
-        const opt = document.createElement("option");
-        opt.value = sizeObj.value;
-        opt.textContent = sizeObj.value;
-        dom.sizeSelect.appendChild(opt);
-      });
-    }
-  }
-
-  // Bindings
-  dom.imageTrigger.addEventListener("click", openLightbox);
-  dom.lightboxClose.addEventListener("click", closeLightbox);
-  dom.qtyDecBtn.addEventListener("click", () => {
-    let val = parseInt(dom.quantityInput.value, 10) || 1;
-    if (val > 1) { dom.quantityInput.value = val - 1; updateQuantityButtons(); }
+    colorContainer.appendChild(swatch);
   });
-  dom.qtyIncBtn.addEventListener("click", () => {
-    let val = parseInt(dom.quantityInput.value, 10) || 1;
-    if (val < getMaxQuantity()) { dom.quantityInput.value = val + 1; updateQuantityButtons(); }
-  });
-  dom.addBtn.addEventListener("click", handleAddToCart);
+}
 
-  // Load product from LocalStorage based on URL ID
-  function loadProductFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
-    const storedProducts = JSON.parse(localStorage.getItem('marketProducts') || '[]');
-    const product = storedProducts.find(p => p.id === productId);
 
-    if (product) {
-        initProductWidget({
-            id: product.id,
-            title: product.name,
-            price: product.price,
-            currency: product.currency,
-            image: product.img,
-            description: product.description,
-            options: product.options
-        });
-    }
+function renderSizes(sizes) {
+  if (!sizes.length) {
+    sizeGroup.classList.add("pw--hidden");
+    return;
   }
 
-  loadProductFromUrl();
+  sizeGroup.classList.remove("pw--hidden");
+  sizeSelect.innerHTML = `<option value="">اختر المقاس</option>`;
 
-  /* ---------------------------
-     نظام التقييمات (نفس كودك السابق)
-     --------------------------- */
-  // ... (احتفظ بكود التقييمات هنا كما هو)
-})();
+  sizes.forEach((size) => {
+    const opt = document.createElement("option");
+    opt.value = size.size;
+    opt.textContent = size.size;
+    sizeSelect.appendChild(opt);
+  });
+}
+
+
+btnInc.addEventListener("click", () => {
+  qtyInput.value = parseInt(qtyInput.value || 1) + 1;
+});
+
+btnDec.addEventListener("click", () => {
+  const value = parseInt(qtyInput.value || 1);
+  if (value > 1) qtyInput.value = value - 1;
+});
+
+
+addBtn.addEventListener("click", () => {
+  const quantity = parseInt(qtyInput.value || 1);
+
+  if (!quantity || quantity < 1) {
+    showToast("يرجى إدخال كمية صحيحة","warning");
+    return;
+  }
+
+  if (!colorGroup.classList.contains("pw--hidden") && !selectedColor) {
+    showToast("يرجى اختيار اللون", "warning");
+    return;
+  }
+
+  if (!sizeGroup.classList.contains("pw--hidden") && !sizeSelect.value) {
+    showToast("يرجى اختيار المقاس", "warning");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  fetch(`${API_BASE}/my-cart`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((cart) => {
+      const cartId = cart.id;
+      const payload = {
+        product_id: productId,
+        quantity,
+        color: selectedColor,
+        size: sizeSelect.value || null,
+      };
+
+      return fetch(`${API_BASE}/carts/${cartId}/items`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+    })
+    .then((res) => res.json())
+    .then((item) => {
+      console.log("تمت إضافة المنتج:", item);
+      showToast("تمت إضافة المنتج إلى السلة بنجاح ✅", "success");
+    })
+    .catch((err) => {
+      console.error(err);
+      showToast("حدث خطأ أثناء إضافة المنتج أو الحصول على السلة", "error");
+    });
+});
+
+
+reviewBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    showToast("يجب تسجيل الدخول لإضافة تقييم", "warning");
+    return;
+  }
+
+  if (!productId) {
+    showToast("لا يمكن إضافة تقييم: المنتج غير محدد", "warning");
+    return;
+  }
+
+  const rating = parseFloat(reviewRatingValue.value);
+  const comment = reviewComment.value.trim();
+
+  if (!rating || rating < 1 || rating > 5) {
+    showToast("الرجاء إدخال تقييم بين 1 و 5", "warning");
+    return;
+  }
+
+  const payload = {
+    product_id: productId,
+    rating,
+    comment,
+  };
+
+  fetch(`${API_BASE}/reviews`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("تعذر إرسال التقييم");
+      return res.json();
+    })
+    .then((data) => {
+      console.log("تم إرسال التقييم:", data);
+      showToast("تم إرسال التقييم بنجاح ✅","success");
+      reviewRatingValue.value = "";
+      reviewComment.value = "";
+      document
+        .querySelectorAll("#rating-input .star")
+        .forEach((s) => (s.textContent = "☆"));
+
+      
+      loadReviews();
+    })
+    .catch((err) => {
+      console.error(err);
+      alert(err.message);
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const stars = document.querySelectorAll("#rating-input .star");
+  stars.forEach((star) => {
+    star.addEventListener("click", () => {
+      const rating = star.dataset.value;
+      reviewRatingValue.value = rating;
+
+      stars.forEach((s) => (s.textContent = "☆"));
+      for (let i = 0; i < rating; i++) {
+        stars[i].textContent = "★";
+      }
+    });
+  });
+
+  
+  loadProduct();
+
+  
+  loadReviews();
+});
+
+
+const reviewsApi = () => `${API_BASE}/reviews/product/${productId}`;
+
+async function loadReviews() {
+  if (!productId) return;
+
+  try {
+    const res = await fetch(reviewsApi());
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById("reviews-list").innerHTML =
+        "<p>لا توجد تقييمات بعد</p>";
+      document.getElementById("average-rating").textContent = "0.0";
+      document.getElementById("average-stars").textContent = "☆☆☆☆☆";
+      document.getElementById("reviews-count").textContent = "0 تقييم";
+      return;
+    }
+
+    renderAverageRating(data);
+    renderReviews(data);
+  } catch (err) {
+    console.error("خطأ في تحميل التقييمات", err);
+  }
+}
+
+function renderAverageRating(reviews) {
+  const total = reviews.reduce((sum, r) => sum + Number(r.rating), 0);
+  const avg = (total / reviews.length).toFixed(1);
+
+  
+  document.getElementById("average-rating").textContent = "التقييم :" + avg;
+
+  
+  document.getElementById("average-stars").textContent = "";
+
+  
+  document.getElementById("reviews-count").textContent = "";
+}
+
+function generateStars(value) {
+  let stars = "";
+  const full = Math.floor(value);
+  for (let i = 1; i <= 5; i++) {
+    stars += i <= full ? "★" : "☆";
+  }
+  return stars;
+}
+
+function renderReviews(reviews) {
+  const container = document.getElementById("reviews-list");
+  container.innerHTML = "";
+
+  reviews.forEach((review) => {
+    const div = document.createElement("div");
+    div.className = "review-item";
+
+    div.innerHTML = `
+      <div class="review-stars">
+        ${generateStars(review.rating)}
+      </div>
+      <div class="review-comment">
+        ${review.comment}
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}

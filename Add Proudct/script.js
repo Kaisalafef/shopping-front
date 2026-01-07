@@ -1,318 +1,307 @@
-/**
- * Product Management Script (Edit & Save Mode)
- */
+
+const getAuthHeaders = () => ({
+  Accept: "application/json",
+  Authorization: `Bearer ${localStorage.getItem("token")}`,
+});
 
 (function () {
   "use strict";
 
-  // ================= State =================
-  const state = {
-    options: [],
-    mainImage: null,
-    lastId: 0,
-    isEditMode: false
+  const COLORS = [
+    { label: "أسود", value: "black" },
+    { label: "أبيض", value: "white" },
+    { label: "أحمر", value: "red" },
+    { label: "أزرق", value: "blue" },
+    { label: "أخضر", value: "green" },
+    { label: "أصفر", value: "yellow" },
+    { label: "رمادي", value: "gray" },
+    { label: "بيج", value: "beige" },
+    { label: "بني", value: "brown" },
+    { label: "وردي", value: "pink" },
+    { label: "بنفسجي", value: "purple" },
+    { label: "برتقالي", value: "orange" },
+    { label: "زيتي", value: "olive" },
+    { label: "فضي", value: "silver" },
+    { label: "ذهبي", value: "gold" },
+    { label: " تركوازي", value: "turquoise" },
+    { label: "كحلي", value: "navy" },
+    { label: "لافندر", value: "lavender" },
+    { label: "زمردي", value: "emerald" },
+    { label: "عنابي", value: "maroon" },
+    { label: "كستنائي", value: "chestnut" },
+  ];
+  const categoryTitles = {
+    electronics: "الإلكترونيات",
+    food: "المواد الغذائية",
+    meals: "المأكولات",
+    makeup: "مستحضرات التجميل",
+    men: "أزياء رجالية",
+    women: "أزياء نسائية",
+    perfume: "العطور",
+    cleaning: "المنظفات",
+    furniture: "المفروشات",
+    sweets: "الحلويات",
   };
 
-  // ================= DOM Elements =================
+  const categorySelect = document.getElementById("category");
+
+  if (categorySelect) {
+    Object.entries(categoryTitles).forEach(([key, label]) => {
+      const option = document.createElement("option");
+      option.value = key; 
+      option.textContent = label; 
+      categorySelect.appendChild(option);
+    });
+  }
+  const state = {
+    colors: [],
+    sizes: [],
+    colorId: 0,
+    sizeId: 0,
+    isEdit: false,
+    productId: null,
+  };
+
   const els = {
-    form: document.getElementById("productForm"),
-    idInput: document.getElementById("prodId"),
-    regenBtn: document.getElementById("regenBtn"),
     title: document.getElementById("title"),
     price: document.getElementById("price"),
-    currency: document.getElementById("currency"),
     description: document.getElementById("description"),
     category: document.getElementById("category"),
     brand: document.getElementById("brand"),
-    imageFile: document.getElementById("imageFile"),
-    mainPreview: document.getElementById("mainPreview"),
-    clearImageBtn: document.getElementById("clearImage"),
-    optionsList: document.getElementById("optionsList"),
-    addOptionBtn: document.getElementById("addOptionBtn"),
+    colorsList: document.getElementById("colorsList"),
+    sizesList: document.getElementById("sizesList"),
+    addColorBtn: document.getElementById("addColorBtn"),
+    addSizeBtn: document.getElementById("addSizeBtn"),
     saveBtn: document.getElementById("saveBtn"),
-    resetBtn: document.getElementById("resetBtn"),
-    toast: document.getElementById("toast"),
-    pageTitle: document.querySelector('.page-header h1'), // To change title to "Edit Product"
-    submitBtnText: document.getElementById("saveBtn")
+    pageTitle: document.querySelector(".page-header h1"),
   };
 
-  // ================= Storage Helpers =================
-  const getStoredProducts = () => JSON.parse(localStorage.getItem('marketProducts') || '[]');
-  const saveStoredProducts = (data) => localStorage.setItem('marketProducts', JSON.stringify(data));
-  
 
-  // ================= UI Helpers =================
-  const showToast = (message, type = "success") => {
-    els.toast.textContent = message;
-    els.toast.style.backgroundColor = type === "error" ? "#ef4444" : "#1f2937";
-    els.toast.classList.remove("hidden");
-    setTimeout(() => els.toast.classList.add("hidden"), 3000);
-  };
+  function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
-  const renderImagePreview = (src) => {
-    els.mainPreview.innerHTML = "";
-    if (src) {
-      const img = document.createElement("img");
-      img.src = src;
-      img.style.maxWidth = "100%";
-      img.style.maxHeight = "100%";
-      els.mainPreview.appendChild(img);
-      els.clearImageBtn.hidden = false;
-    } else {
-      els.mainPreview.innerHTML = '<div class="placeholder-text">معاينة الصورة</div>';
-      els.clearImageBtn.hidden = true;
-    }
-  };
+ 
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
 
-  // ================= Option Logic (Identical to before) =================
-  const addOptionRow = (data = {}) => {
-    state.lastId++;
-    const rowId = `opt-row-${state.lastId}`;
-    
-    // Default or Existing Data
-    const optionData = {
-      uid: rowId,
-      type: data.type || "size",
-      value: data.value || "",
-      desc: data.description || "", // Note: changed from 'desc' to 'description' to match saved object
-      image: data.image || null,
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    toastBox.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("hide"); 
+      toast.addEventListener("animationend", () => {
+        toast.remove(); 
+      });
+    }, 4000);
+  }
+
+  const addColorRow = (data = {}) => {
+    const id = ++state.colorId;
+
+    const initialImage = data.image || "";
+    const shouldShowImage = initialImage !== "";
+
+    const color = {
+      id,
+      value: data.color || "",
+      file: null,
+      image: initialImage,
     };
 
-    state.options.push(optionData);
+    state.colors.push(color);
 
     const row = document.createElement("div");
     row.className = "option-item";
-    row.id = rowId;
-    row.style.display = "flex";
-    row.style.flexDirection = "column";
 
-    // HTML Structure
-    const htmlValueInput = getValueInputHtml(optionData.type, optionData.value, optionData.image, rowId);
-    
     row.innerHTML = `
-      <div style="display:flex; gap:0.5rem; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <select class="opt-type form-select" style="width: auto; padding: 4px 8px;">
-              <option value="size" ${optionData.type === "size" ? "selected" : ""}>قياس (Size)</option>
-              <option value="color" ${optionData.type === "color" ? "selected" : ""}>لون (Color)</option>
-          </select>
-          <button type="button" class="btn-remove-opt" title="حذف">&times;</button>
+      <select class="form-select" style="margin-bottom: 0.5rem ;">
+          <option value="">اختر لون</option>
+          ${COLORS.map(
+            (c) => `<option value="${c.value}">${c.label}</option>`
+          ).join("")}
+      </select>
+      
+      <div class="preview-container" style="text-align: center; margin-bottom: 10px;">
+          <img class="img-preview" 
+               src="${initialImage}" 
+               alt="معاينة الصورة" 
+               style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; border: 1px solid #e5e7eb; padding: 4px; display: ${
+                 shouldShowImage ? "block" : "none"
+               };">
       </div>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: flex-start;">
-          <div class="value-input-container" style="flex:1; min-width: 160px;">${htmlValueInput}</div>
-          <input type="text" class="opt-desc form-input" placeholder="وصف" value="${optionData.desc}" style="flex:2; min-width: 120px;">
-      </div>
-    `;
 
-    els.optionsList.appendChild(row);
+      <label class="custom-file-upload">
+          <input type="file" accept="image/*">
+          <i class="${
+            shouldShowImage ? "fas fa-check-circle" : "fas fa-cloud-upload-alt"
+          }"></i>
+          <span class="upload-text">${
+            shouldShowImage ? "تغيير الصورة" : "اختر صورة للون"
+          }</span>
+      </label>
 
-    // Event Listeners for this row
-    const typeSelect = row.querySelector(".opt-type");
-    const descInput = row.querySelector(".opt-desc");
-    const removeBtn = row.querySelector(".btn-remove-opt");
-    const valContainer = row.querySelector(".value-input-container");
+      <button type="button" class="btn-remove" style="position: absolute; left: 10px; top: 10px;">&times;</button>
+  `;
 
-    const attachValueListeners = () => {
-        const valInput = valContainer.querySelector(".val-input");
-        if (valInput) valInput.addEventListener("input", (e) => updateState(rowId, "value", e.target.value));
-        
-        const fileInput = valContainer.querySelector(".opt-file-input");
-        if (fileInput) {
-            fileInput.addEventListener("change", (e) => {
-                const file = e.target.files[0];
-                if(file) {
-                    const reader = new FileReader();
-                    reader.onload = (evt) => {
-                        updateState(rowId, "image", evt.target.result);
-                        const preview = valContainer.querySelector(`#preview-${rowId}`);
-                        if(preview) { preview.src = evt.target.result; preview.hidden = false; }
-                        valContainer.querySelector(".upload-text").textContent = "تغيير";
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-    };
-    attachValueListeners();
+    const select = row.querySelector("select");
+    const fileInput = row.querySelector("input[type=file]");
+    const uploadLabel = row.querySelector(".custom-file-upload");
+    const uploadText = row.querySelector(".upload-text");
+    const uploadIcon = row.querySelector(".custom-file-upload i");
+    const imgPreview = row.querySelector(".img-preview"); 
+    const remove = row.querySelector(".btn-remove");
 
-    typeSelect.addEventListener("change", (e) => {
-        const newType = e.target.value;
-        valContainer.innerHTML = getValueInputHtml(newType, "", null, rowId);
-        updateState(rowId, "type", newType);
-        updateState(rowId, "value", "");
-        updateState(rowId, "image", null);
-        attachValueListeners();
-    });
+    select.value = color.value;
 
-    descInput.addEventListener("input", (e) => updateState(rowId, "description", e.target.value));
+    select.onchange = (e) => (color.value = e.target.value);
 
-    removeBtn.addEventListener("click", () => {
-        row.remove();
-        state.options = state.options.filter(o => o.uid !== rowId);
-    });
-  };
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      color.file = file;
 
-  function getValueInputHtml(type, value, imageSrc, uid) {
-    if (type === "color") {
-        const hasImage = !!imageSrc;
-        return `
-            <div class="color-opt-wrapper">
-                <input type="color" class="val-input color-picker-input" value="${value || "#000000"}">
-                <div class="divider-vertical"></div>
-                <label for="file-${uid}" class="mini-img-upload">
-                    <i class="fas fa-image"></i> <span class="upload-text">${hasImage ? "تغيير" : "صورة"}</span>
-                </label>
-                <input type="file" id="file-${uid}" class="opt-file-input" hidden accept="image/*">
-                <img id="preview-${uid}" src="${imageSrc || ''}" class="mini-img-preview" ${hasImage ? '' : 'hidden'}>
-            </div>`;
-    }
-    return `<input type="text" class="form-input val-input" placeholder="القيمة (XL)" value="${value || ''}">`;
-  }
-
-  function updateState(uid, key, val) {
-    const idx = state.options.findIndex(o => o.uid === uid);
-    if (idx > -1) state.options[idx][key] = val;
-  }
-
-  // ================= LOAD DATA (EDIT MODE) =================
-  const checkForEditMode = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const editId = urlParams.get('editId');
-
-      if (editId) {
-          state.isEditMode = true;
-          els.pageTitle.textContent = "تعديل المنتج";
-          els.saveBtn.textContent = "حفظ التعديلات";
-          els.regenBtn.style.display = 'none'; // Cannot change ID during edit
-
-          // Find product
-          const products = getStoredProducts();
-          const product = products.find(p => p.id === editId);
-
-          if (product) {
-              // Fill Form
-              els.idInput.value = product.id;
-              els.title.value = product.name || product.title;
-              els.price.value = product.price;
-              els.currency.value = product.currency || "SYP";
-              els.description.value = product.description || "";
-              els.category.value = product.category || "";
-              els.brand.value = product.brand || ""; // Ensure saved object has brand
-
-              // Main Image
-              if (product.img || product.image) {
-                  state.mainImage = product.img || product.image;
-                  renderImagePreview(state.mainImage);
-              }
-
-              // Options
-              if (product.options && Array.isArray(product.options)) {
-                  product.options.forEach(opt => addOptionRow(opt));
-              }
-          } else {
-              showToast("المنتج غير موجود", "error");
-          }
-      } else {
-          // New Product Mode
-          els.idInput.value = "PROD-" + Date.now().toString().slice(-6);
-          addOptionRow({ type: "size", value: "M", description: "متوفر" });
-      }
-  };
-
-  // ================= SAVE DATA =================
-  const handleSave = () => {
-    // جلب العناصر للتأكد من قيمها
-    const titleVal = els.title.value.trim();
-    const priceVal = els.price.value;
-    const categoryVal = els.category.value; // هنا سيجلب electronics مثلاً
-
-    // 1. التحقق من المدخلات الأساسية
-    if (!titleVal || !priceVal || !categoryVal) {
-        alert("يرجى ملء الحقول الأساسية: الاسم، السعر، والفئة");
-        console.error("Missing fields:", { titleVal, priceVal, categoryVal });
-        return;
-    }
-
-    // 2. تجهيز بيانات المنتج
-    const productData = {
-        id: els.idInput.value || Date.now().toString(), // توليد ID إذا لم يوجد
-        name: titleVal,
-        price: priceVal,
-        currency: els.currency.value,
-        description: els.description.value,
-        category: categoryVal, // القيمة الإنجليزية للفرز
-        brand: els.brand.value,
-        img: state.mainImage || "/Market/images/logo.png",
-        options: state.options
-    };
-
-    // 3. جلب المنتجات الحالية وحفظ المنتج الجديد
-    let products = getStoredProducts();
-    
-    if (state.isEditMode) {
-        const index = products.findIndex(p => p.id === productData.id);
-        if (index !== -1) products[index] = productData;
-    } else {
-        products.push(productData);
-    }
-try {
-    localStorage.setItem('marketProducts', JSON.stringify(products));
-    showToast("تم حفظ المنتج بنجاح", "success");
-} catch (error) {
-    if (error.name === 'QuotaExceededError') {
-        alert("فشل الحفظ: ذاكرة المتصفح ممتلئة! يرجى حذف بعض المنتجات القديمة أو استخدام صور بحجم أصغر.");
-    } else {
-        console.error("خطأ أثناء الحفظ:", error);
-    }
-} // التوجيه لصفحة العرض للتأكد
-};
-
-  // ================= Init =================
-  const init = () => {
-    // Event: Main Image
-   els.imageFile.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) {
+      if (file) {
         const reader = new FileReader();
-        reader.onload = (evt) => {
-            const img = new Image();
-            img.src = evt.target.result;
-            img.onload = () => {
-                // إنشاء Canvas لتصغير الصورة
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                // تحديد أبعاد صغيرة (مثلاً 300 بكسل) لتقليل حجم البيانات
-                const maxWidth = 300;
-                const scale = maxWidth / img.width;
-                canvas.width = maxWidth;
-                canvas.height = img.height * scale;
 
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                
-                // تحويل الصورة بجودة منخفضة (0.6) لتقليل الحجم جداً
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-                
-                state.mainImage = compressedBase64;
-                renderImagePreview(state.mainImage);
-            };
+        reader.onload = function (e) {
+          imgPreview.src = e.target.result; 
+          imgPreview.style.display = "block";
         };
-        reader.readAsDataURL(file);
-    }
-});
-    els.clearImageBtn.addEventListener("click", () => {
-        state.mainImage = null;
-        renderImagePreview(null);
-        els.imageFile.value = "";
-    });
 
-    // Event: Buttons
-    els.addOptionBtn.addEventListener("click", () => addOptionRow());
-    els.saveBtn.addEventListener("click", handleSave);
-    els.regenBtn.addEventListener("click", () => els.idInput.value = "PROD-" + Date.now().toString().slice(-6));
+        reader.readAsDataURL(file); 
 
-    // Start
-    checkForEditMode();
+        uploadLabel.classList.add("uploaded");
+        uploadText.textContent =
+          file.name.length > 20
+            ? file.name.substring(0, 20) + "..."
+            : file.name;
+        uploadIcon.className = "fas fa-check-circle";
+      } else {
+        if (!initialImage) {
+          imgPreview.style.display = "none";
+          uploadLabel.classList.remove("uploaded");
+          uploadText.textContent = "اختر صورة للون";
+          uploadIcon.className = "fas fa-cloud-upload-alt";
+        }
+      }
+    };
+
+    remove.onclick = () => {
+      row.remove();
+      state.colors = state.colors.filter((c) => c.id !== id);
+    };
+
+    els.colorsList.appendChild(row);
   };
 
-  init();
+  const addSizeRow = (value = "") => {
+    const id = ++state.sizeId;
+
+    const size = { id, value };
+    state.sizes.push(size);
+
+    const row = document.createElement("div");
+    row.className = "option-item";
+
+    row.innerHTML = `
+           <label>  
+            <input type="text" class="form-input" placeholder="مثال: XL">
+            <button type="button" class="btn-remove">&times;</button>
+            </label>
+        `;
+
+    const input = row.querySelector("input");
+    const remove = row.querySelector(".btn-remove");
+
+    input.value = value;
+    input.oninput = (e) => (size.value = e.target.value);
+
+    remove.onclick = () => {
+      row.remove();
+      state.sizes = state.sizes.filter((s) => s.id !== id);
+    };
+
+    els.sizesList.appendChild(row);
+  };
+
+  const saveProduct = async () => {
+    if (!localStorage.getItem("token")) {
+      showToast("يرجى تسجيل الدخول", "warning");
+      return;
+    }
+
+    if (!els.title.value || !els.price.value || !els.category.value) {
+      showToast("يرجى ملء الحقول الأساسية", "warning");
+      return;
+    }
+
+    if (!state.colors.length) {
+      showToast("أضف لونًا واحدًا على الأقل مع صورة", "warning");
+      return;
+    }
+
+    const fd = new FormData();
+
+    fd.append("name", els.title.value);
+    fd.append("description", els.description.value);
+    fd.append("price", els.price.value);
+    fd.append("category", els.category.value);
+    fd.append("brand", els.brand.value || "");
+
+    state.sizes.forEach((s, i) => {
+      if (s.value) fd.append(`sizes[${i}][size]`, s.value);
+    });
+
+    state.colors.forEach((c, i) => {
+      fd.append(`images[${i}][color]`, c.value);
+      fd.append(`images[${i}][file]`, c.file);
+    });
+
+    let url = "http://127.0.0.1:8000/api/products";
+    if (state.isEdit) {
+      url += `/${state.productId}`;
+      fd.append("_method", "PUT");
+    }
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: fd,
+      });
+
+      if (res.ok) {
+        showToast("تمت إضافة المنتج بنجاح!", "success");
+        setTimeout(() => location.reload(), 1500);
+      } else {
+        const err = await res.json();
+        console.error("Laravel Validation Error:", err);
+        showToast("حدث خطأ أثناء إضافة المنتج", "error");
+        if (err.errors) {
+          const firstError = Object.values(err.errors)[0][0];
+        } else {
+          showToast("خطأ غير متوقع", "error");
+        }
+      }
+    } catch (e) {
+      console.error(err);
+      showToast("فشل الاتصال بالسيرفر!", "error");
+    }
+  };
+
+  els.addColorBtn.onclick = () => addColorRow();
+  els.addSizeBtn.onclick = () => addSizeRow();
+  els.saveBtn.onclick = saveProduct;
+
+  addColorRow(); 
+  addSizeRow(); 
 })();

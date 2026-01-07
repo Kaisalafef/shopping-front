@@ -1,268 +1,381 @@
-(function () {
-    "use strict";
-
-    // 1. بيانات وهمية للمنتجات (تحاكي قاعدة البيانات)
-    let products = [
-        {
-            id: "PROD-001",
-            title: "سماعات رأس لاسلكية احترافية",
-            basePrice: 50000,
-            currency: "SYP",
-            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
-            discount: null // لا يوجد خصم
-        },
-        {
-            id: "PROD-002",
-            title: "قميص قطني صيفي أزرق",
-            basePrice: 75000,
-            currency: "SYP",
-            image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
-            discount: { type: "percent", value: 20 } // خصم 20%
-        },
-        {
-            id: "PROD-003",
-            title: "حذاء رياضي للمشي",
-            basePrice: 120000,
-            currency: "SYP",
-            image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
-            discount: { type: "fixed", value: 10000 } // خصم 10,000 ليرة
-        },
-        {
-            id: "PROD-004",
-            title: "ساعة ذكية رياضية",
-            basePrice: 250000,
-            currency: "SYP",
-            image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
-            discount: null
-        }
-    ];
-
-    // عناصر الواجهة
-    const els = {
-        grid: document.getElementById('productsGrid'),
-        search: document.getElementById('searchInput'),
-        modal: document.getElementById('discountModal'),
-        modalForm: document.getElementById('discountForm'),
-        // عناصر داخل المودال
-        mTitle: document.getElementById('modalTitle'),
-        mImg: document.getElementById('modalImg'),
-        mBasePrice: document.getElementById('modalBasePrice'),
-        mCurrency: document.getElementById('modalCurrency'),
-        mId: document.getElementById('modalProdId'),
-        mInputVal: document.getElementById('discountValue'),
-        mNewPrice: document.getElementById('newPriceDisplay'),
-        mRemoveBtn: document.getElementById('removeDiscountBtn'),
-        mSuffix: document.getElementById('valueSuffix'),
-        radios: document.getElementsByName('discountType'),
-        toast: document.getElementById('toast')
-    };
-
-    // --- الوظائف المساعدة ---
-
-    // تنسيق الأرقام كعملة
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('en-US').format(amount);
-    };
-
-    // حساب السعر بعد الخصم
-    const calculatePrice = (base, type, value) => {
-        let final = base;
-        if (type === 'percent') {
-            final = base - (base * (value / 100));
-        } else {
-            final = base - value;
-        }
-        return Math.max(0, final); // عدم السماح بالسالب
-    };
-
-    // --- عرض المنتجات ---
-    const renderProducts = (list = products) => {
-        els.grid.innerHTML = '';
-        
-        if(list.length === 0) {
-            els.grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:2rem;">لا توجد منتجات مطابقة</div>';
-            return;
-        }
-
-        list.forEach(prod => {
-            // حساب السعر الحالي
-            let currentPrice = prod.basePrice;
-            let hasDiscount = false;
-            let discountBadge = '';
-
-            if (prod.discount && prod.discount.value > 0) {
-                hasDiscount = true;
-                currentPrice = calculatePrice(prod.basePrice, prod.discount.type, prod.discount.value);
-                
-                // نص الشارة
-                const badgeText = prod.discount.type === 'percent' 
-                    ? `-${prod.discount.value}%` 
-                    : 'خصم خاص';
-                discountBadge = `<span class="discount-badge">${badgeText}</span>`;
-            }
-
-            // إنشاء بطاقة HTML
-            const card = document.createElement('div');
-            card.className = 'prod-card';
-            card.innerHTML = `
-                ${discountBadge}
-                <img src="${prod.image}" alt="${prod.title}" class="prod-img">
-                <h3 class="prod-title" title="${prod.title}">${prod.title}</h3>
-                
-                <div class="prod-meta">
-                    <span>${prod.id}</span>
-                </div>
-
-                <div class="price-row">
-                    ${hasDiscount 
-                        ? `<span class="current-price active-discount-price">${formatCurrency(currentPrice)} ${prod.currency}</span>
-                           <span class="old-price">${formatCurrency(prod.basePrice)}</span>`
-                        : `<span class="current-price">${formatCurrency(prod.basePrice)} ${prod.currency}</span>`
-                    }
-                </div>
-
-                <button class="btn btn-primary open-discount-btn" data-id="${prod.id}">
-                    <i class="fas fa-tag"></i> ${hasDiscount ? 'تعديل الخصم' : 'إضافة خصم'}
-                </button>
-            `;
-            els.grid.appendChild(card);
-        });
-
-        // ربط أزرار البطاقات
-        document.querySelectorAll('.open-discount-btn').forEach(btn => {
-            btn.addEventListener('click', () => openModal(btn.dataset.id));
-        });
-    };
-
-    // --- منطق المودال (النافذة المنبثقة) ---
-
-    const openModal = (id) => {
-        const prod = products.find(p => p.id === id);
-        if (!prod) return;
-
-        // تعبئة البيانات الأساسية
-        els.mId.value = prod.id;
-        els.mTitle.textContent = prod.title;
-        els.mImg.src = prod.image;
-        els.mBasePrice.textContent = formatCurrency(prod.basePrice);
-        els.mBasePrice.dataset.raw = prod.basePrice; // تخزين الرقم الخام للحساب
-        els.mCurrency.textContent = prod.currency;
-
-        // تعبئة حالة الخصم الحالية
-        if (prod.discount) {
-    const radio = [...els.radios].find(r => r.value === prod.discount.type);
-    if (radio) radio.checked = true;
-
-    els.mInputVal.value = prod.discount.value;
-    els.mRemoveBtn.classList.remove('hidden');
-} else {
-    els.radios[0].checked = true;
-    els.mInputVal.value = '';
-    els.mRemoveBtn.classList.add('hidden');
+function getAuthToken() {
+  return localStorage.getItem("token");
 }
 
 
-        updateModalCalculations();
-        els.modal.classList.add('visible');
-    };
-const closeModal = () => {
-    els.modal.classList.remove('visible');
-    els.modalForm.reset();
-    els.mNewPrice.textContent = '--';
-};
+/**
+ * Discount Management Script
+ * Connected to Laravel Offers API
+ */
+(function () {
+  "use strict";
 
+  /* ================= CONFIG ================= */
 
-    // تحديث الحسابات داخل المودال
-    const updateModalCalculations = () => {
-        const base = parseFloat(els.mBasePrice.dataset.raw);
-        const type = [...els.radios].find(r => r.checked).value;
-        const val = parseFloat(els.mInputVal.value) || 0;
+  const API_BASE = "http://127.0.0.1:8000";
 
-        // تحديث اللاحقة (Suffix)
-        els.mSuffix.textContent = type === 'percent' ? '%' : els.mCurrency.textContent;
+  const API_URLS = {
+    GET_PRODUCTS: `${API_BASE}/api/products`,
+    CREATE_OFFER: `${API_BASE}/api/offers`,
+    UPDATE_OFFER: (id) => `${API_BASE}/api/offers/${id}`,
+    DELETE_OFFER: (id) => `${API_BASE}/api/offers/${id}`,
+  };
 
-        // حساب السعر الجديد
-        const final = calculatePrice(base, type, val);
-        els.mNewPrice.textContent = `${formatCurrency(final)} ${els.mCurrency.textContent}`;
-    };
+  const state = {
+    products: [],
+  };
 
-    // --- معالجة الأحداث ---
+  /* ================= DOM ================= */
 
-    // 1. عند تغيير نوع الخصم أو القيمة
-    els.modalForm.addEventListener('input', updateModalCalculations);
-    els.radios.forEach(r => r.addEventListener('change', updateModalCalculations));
+  const els = {
+    grid: document.getElementById("productsGrid"),
+    search: document.getElementById("searchInput"),
 
-    // 2. إغلاق المودال
-    document.querySelectorAll('.close-modal').forEach(el => {
-        el.addEventListener('click', closeModal);
-    });
+    modal: document.getElementById("discountModal"),
+    form: document.getElementById("discountForm"),
 
-    // 3. حفظ الخصم
-   els.modalForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+    mId: document.getElementById("modalProdId"),
+    mTitle: document.getElementById("modalTitle"),
+    mImg: document.getElementById("modalImg"),
+    mBasePrice: document.getElementById("modalBasePrice"),
+    mCurrency: document.getElementById("modalCurrency"),
+    mValue: document.getElementById("discountValue"),
+    mNewPrice: document.getElementById("newPriceDisplay"),
+    mRemoveBtn: document.getElementById("removeDiscountBtn"),
+    radios: document.getElementsByName("discountType"),
+    suffix: document.getElementById("valueSuffix"),
 
-    const id = els.mId.value;
-    const type = [...els.radios].find(r => r.checked).value;
-    const value = parseFloat(els.mInputVal.value);
-    const base = parseFloat(els.mBasePrice.dataset.raw);
+    closeBtns: document.querySelectorAll(".close-modal"),
+  };
 
-    if (isNaN(value) || value <= 0) {
-        alert('يرجى إدخال قيمة صحيحة');
-        return;
+  /* ================= HELPERS ================= */
+    function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    // إنشاء العنصر
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    // تحديد الأيقونة بناءً على النوع
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    // إضافته للصفحة
+    toastBox.appendChild(toast);
+
+    // حذفه بعد 4 ثواني
+    setTimeout(() => {
+      toast.classList.add("hide"); // تشغيل انيميشن الخروج
+      toast.addEventListener("animationend", () => {
+        toast.remove(); // الحذف الفعلي من الـ DOM
+      });
+    }, 4000);
+  }
+  const getCsrfToken = () =>
+    document.querySelector('meta[name="csrf-token"]')?.content || "";
+
+  const format = (n) => new Intl.NumberFormat("en-US").format(n);
+
+  
+  const calcPrice = (base, type, value) => {
+    if (type === "percent") {
+      return Math.max(0, base - base * (value / 100));
     }
+    return Math.max(0, base - value);
+  };
 
-    if (type === 'percent' && value > 100) {
-        alert('النسبة لا يمكن أن تتجاوز 100%');
-        return;
-    }
+  /* ================= API ================= */
 
-    if (type === 'fixed' && value >= base) {
-        alert('قيمة الخصم أكبر من سعر المنتج');
-        return;
-    }
+  async function fetchProducts() {
+    els.grid.innerHTML = `<div class="loading-spinner">جاري التحميل...</div>`;
 
-    const prodIndex = products.findIndex(p => p.id === id);
-    if (prodIndex > -1) {
-        products[prodIndex].discount = { type, value };
-        showToast('تم حفظ الخصم بنجاح');
-        closeModal();
-        renderProducts();
-    }
-});
+    try {
+      const res = await fetch(API_URLS.GET_PRODUCTS, {
+        headers: { Accept: "application/json" },
+      });
 
+      if (!res.ok) throw new Error("API Error");
 
-    // 4. حذف الخصم
-    els.mRemoveBtn.addEventListener('click', () => {
-        if(confirm('هل أنت متأكد من إزالة الخصم عن هذا المنتج؟')) {
-            const id = els.mId.value;
-            const prodIndex = products.findIndex(p => p.id === id);
-            if (prodIndex > -1) {
-                products[prodIndex].discount = null;
-                showToast('تمت إزالة الخصم');
-                closeModal();
-                renderProducts();
+      const resData = await res.json();
+      const products = resData.data ?? resData;
+
+      state.products = products.map((p) => ({
+        id: p.id,
+        title: p.name,
+        basePrice: Number(p.price),
+        currency: "SYP",
+        image:
+          p.image_url ||
+          p.images?.[0]?.url ||
+          "https://via.placeholder.com/400",
+
+        discount: p.offer
+          ? {
+              offerId: p.offer.id,
+              type: p.offer.discount_percentage ? "percent" : "fixed",
+              value: p.offer.discount_percentage ?? p.offer.discount_price,
             }
-        }
-    });
+          : null,
+      }));
 
-    // 5. البحث
-    els.search.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = products.filter(p => 
-            p.title.toLowerCase().includes(term) || 
-            p.id.toLowerCase().includes(term)
-        );
-        renderProducts(filtered);
-    });
+      render(state.products);
+    } catch (err) {
+      console.error(err);
+      els.grid.innerHTML = `<div style="color:red">فشل تحميل البيانات</div>`;
+    }
+  }
 
-    // إظهار التوست
-    const showToast = (msg) => {
-        els.toast.textContent = msg;
-        els.toast.classList.remove('hidden');
-        setTimeout(() => els.toast.classList.add('hidden'), 3000);
+  async function saveDiscount(productId, type, value) {
+    const product = state.products.find((p) => p.id == productId);
+    const hasOffer = !!product.discount;
+
+    const payload = {
+        product_id: productId,
+        discount_percentage: type === "percent" ? value : null,
+        discount_price: type === "fixed" ? value : null,
+        is_active: true,
     };
 
-    // تشغيل مبدئي
-    renderProducts();
+    const url = hasOffer
+        ? API_URLS.UPDATE_OFFER(product.discount.offerId)
+        : API_URLS.CREATE_OFFER;
 
+    const method = hasOffer ? "PUT" : "POST";
+
+    try {
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${getAuthToken()}`,
+            },
+            body: JSON.stringify(payload),
+        });
+
+        // تحويل الرد إلى JSON لقراءة رسالة الخطأ
+        const data = await res.json();
+
+        if (!res.ok) {
+            // حالة 403: ليس لديه صلاحيات أدمن
+            if (res.status === 403) {
+                return showToast("عذراً، لا تملك صلاحيات مسؤول للقيام بهذا الإجراء", "error");
+            }
+            // حالة 422: أخطاء التحقق (مثلاً المنتج عليه خصم مسبقاً)
+            if (res.status === 422) {
+                return showToast(data.message || "المنتج يمتلك عرضاً نشطاً بالفعل", "error");
+            }
+            // حالة 401: غير مسجل دخول
+            if (res.status === 401) {
+                return showToast("يرجى تسجيل الدخول أولاً", "error");
+            }
+            
+            throw new Error(data.message || "فشل حفظ الخصم");
+        }
+
+        showToast("تم حفظ الخصم بنجاح", 'success');
+        closeModal();
+        fetchProducts();
+    } catch (err) {
+        showToast(err.message || "حدث خطأ غير متوقع", "error");
+    }
+}
+
+  async function removeDiscount(productId) {
+    const product = state.products.find((p) => p.id == productId);
+    if (!product?.discount) return;
+
+    try {
+      await fetch(API_URLS.DELETE_OFFER(product.discount.offerId), {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      });
+
+      showToast("تم حذف الخصم", "success");
+      closeModal();
+      fetchProducts();
+    } catch {
+      showToast("فشل حذف الخصم", "error");
+    }
+  }
+
+  /* ================= RENDER ================= */
+
+  function render(list) {
+    els.grid.innerHTML = "";
+
+    if (!list.length) {
+      els.grid.innerHTML = `<div>لا توجد منتجات</div>`;
+      return;
+    }
+
+    list.forEach((p) => {
+      const hasDiscount = !!p.discount;
+      const finalPrice = hasDiscount
+        ? calcPrice(p.basePrice, p.discount.type, p.discount.value)
+        : p.basePrice;
+
+      const card = document.createElement("div");
+      card.className = "prod-card";
+      card.innerHTML = `
+                ${hasDiscount ? `<span class="discount-badge">خصم</span>` : ""}
+                <img src="${p.image}" class="prod-img">
+                <h3>${p.title}</h3>
+                <div class="price-row">
+                    <span class="current-price">${format(finalPrice)} ${
+        p.currency
+      }</span>
+                    ${
+                      hasDiscount
+                        ? `<span class="old-price">${format(
+                            p.basePrice
+                          )}</span>`
+                        : ""
+                    }
+                </div>
+                <button class="btn btn-primary" data-id="${p.id}">
+                    ${hasDiscount ? "تعديل الخصم" : "إضافة خصم"}
+                </button>
+            `;
+      card
+        .querySelector("button")
+        .addEventListener("click", () => openModal(p.id));
+      els.grid.appendChild(card);
+    });
+  }
+
+  /* ================= MODAL ================= */
+
+  function openModal(id) {
+    const p = state.products.find((x) => x.id == id);
+    if (!p) return;
+
+    els.mId.value = p.id;
+    els.mTitle.textContent = p.title;
+    els.mImg.src = p.image;
+    els.mBasePrice.textContent = format(p.basePrice);
+    els.mBasePrice.dataset.raw = p.basePrice;
+    els.mCurrency.textContent = p.currency;
+
+    if (p.discount) {
+      [...els.radios].find((r) => r.value === p.discount.type).checked = true;
+      els.mValue.value = p.discount.value;
+      els.mRemoveBtn.classList.remove("hidden");
+    } else {
+      els.radios[0].checked = true;
+      els.mValue.value = "";
+      els.mRemoveBtn.classList.add("hidden");
+    }
+
+    updateCalc();
+    els.modal.classList.add("visible");
+  }
+
+  function closeModal() {
+    els.modal.classList.remove("visible");
+    els.form.reset();
+    els.mNewPrice.textContent = "--";
+  }
+
+  function updateCalc() {
+    const base = Number(els.mBasePrice.dataset.raw);
+    const type = [...els.radios].find((r) => r.checked).value;
+    const val = Number(els.mValue.value);
+
+    els.suffix.textContent =
+      type === "percent" ? "%" : els.mCurrency.textContent;
+
+    if (val > 0) {
+      els.mNewPrice.textContent =
+        format(calcPrice(base, type, val)) + " " + els.mCurrency.textContent;
+    } else {
+      els.mNewPrice.textContent = "--";
+    }
+  }
+
+  /* ================= EVENTS ================= */
+
+  els.form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id = els.mId.value;
+    const type = [...els.radios].find((r) => r.checked).value;
+    const value = Number(els.mValue.value);
+
+    if (value <= 0) return showToast("قيمة غير صحيحة", "error");
+    if (type === "percent" && value > 100)
+      return showToast("النسبة لا تتجاوز 100%", "error");
+
+    saveDiscount(id, type, value);
+  });
+
+  els.mRemoveBtn.addEventListener("click", () => {
+    if (confirm("هل أنت متأكد؟")) {
+      removeDiscount(els.mId.value);
+    }
+  });
+
+  els.radios.forEach((r) => r.addEventListener("change", updateCalc));
+  els.form.addEventListener("input", updateCalc);
+  els.closeBtns.forEach((b) => b.addEventListener("click", closeModal));
+
+  els.search.addEventListener("input", (e) => {
+    const q = e.target.value.toLowerCase();
+    render(
+      state.products.filter(
+        (p) => p.title.toLowerCase().includes(q) || p.id.toString().includes(q)
+      )
+    );
+  });
+
+  /* ================= INIT ================= */
+
+  fetchProducts();
 })();
+
+async function loadDailyOffers() {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/products");
+    const response = await res.json();
+
+    // ✅ هذا السطر هو الحل
+    const products = response.data ?? response;
+
+    const offers = products.filter((p) => p.offer);
+
+    const container = document.getElementById("offersContainer");
+    container.innerHTML = "";
+
+    if (!offers.length) {
+      container.innerHTML = "<p>لا توجد عروض حالياً</p>";
+      return;
+    }
+
+    offers.forEach((p) => {
+      const offer = p.offer;
+
+      const discountText = offer.discount_percentage
+        ? `خصم ${offer.discount_percentage}%`
+        : `خصم ${offer.discount_price} SYP`;
+
+      container.innerHTML += `
+        <div class="offer-card">
+          <img src="${p.image_url || p.images?.[0]?.url || 'https://via.placeholder.com/400'}">
+          <h4>${p.name}</h4>
+          <p>${discountText}</p>
+        </div>
+      `;
+    });
+  } catch (e) {
+    console.error("خطأ تحميل العروض:", e);
+  }
+}
+
+loadDailyOffers();

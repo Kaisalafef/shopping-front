@@ -3,86 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>footer</title>
 
-        <title>المنتجات</title>
-
-    <!-- Icons -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-        <!-- Styles -->
-        <link rel="stylesheet" href="/Wedgit/style_header.css">
-        <link rel="stylesheet" href="products_styl.css">
-        <link rel="stylesheet" href="/Home/style_dashboard.css">
-                    <link rel="stylesheet" href="/Wedgit/style_footer.css">
-
-    </head>
-
-    <body>
-
-<!-- ================= HEADER ================= -->
-<header class="main-header">
-      <div class="header-container">
-
-        <div class="profile-menu">
-          <button class="icon-btn" id="profileBtn" type="button"
-            title="القائمة الشخصية">
-            <i class="fas fa-user"></i>
-          </button>
-
-         <ul class="dropdown" id="desktopDropdown">
-    <li><a href="/Profile/Profile.html"><i class="fas fa-user-circle"></i> حسابي</a></li>
-    
-    <li class="admin-only" style="display: none;"><a href="/ADS/Add_ADS.html"><i class="fas fa-bullhorn"></i> إضافة إعلانات</a></li>
-    <li class="admin-only" style="display: none;"><a href="/Discount/Add_Discount.html"><i class="fas fa-tags"></i> إضافة خصومات</a></li>
-    <li class="admin-only" style="display: none;"><a href="/Add Proudct/add_Proudct.html"><i class="fas fa-user-plus"></i> إضافة منتجات</a></li>
-    <li class="admin-only" style="display: none;"><a href="/Orders/Orders.html"><i class="fas fa-book"></i> سجل الطلبات</a></li>
-
-    <li id="cart-link"><a href="/Cart/Cart.html"><i class="fas fa-shopping-cart"></i> سلتي</a></li>
-    
-    <li><a href="/Wedgit/About.html"><i class="fas fa-info-circle"></i> حول</a></li>
-    <li class="divider"></li>
-    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</a></li>
-</ul>
-        </div>
-
-        <div class="search-box">
-          <input type="text" id="globalSearchInput"
-            placeholder="ابحث عن منتج، ماركة، أو فئة..." autocomplete="off">
-          <button class="search-btn" type="submit" title="بحث">
-            <i class="fas fa-search"></i>
-          </button>
-          <div id="searchResults" class="search-results-dropdown"></div>
-        </div>
-        <a href="#" class="logo-link">
-          <img src="/images/logo.webp" class="logo" alt="Logo">
-        </a>
-
-      </div>
-    </header>
-
- 
-
-<div id="toast-box"></div>
-
-
-<div class="dashboard-container">
-    <main class="main-content">
-
-        <div class="section-header">
-            <h2 id="pageTitle">جميع المنتجات</h2>
-
-            
-        </div>
-
-        <!-- Products Grid -->
-        <div class="products-grid" id="productsContainer">
-            <!-- المنتجات تُحقن هنا عبر JS -->
-        </div>
-
-    </main>
-</div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style_footer.css">
+</head>
+<body>
 
     <footer class="main-footer">
         
@@ -112,6 +38,7 @@
                         <li class="admin-link" style="display: none;"><a href="/Home/admin_dashboard.html"><i class="fas fa-angle-left"></i> لوحة التحكم</a></li>
                         <li class="admin-link" style="display: none;"><a href="/ADS/Add_ADS.html"><i class="fas fa-angle-left"></i> إدارة الإعلانات</a></li>
                         <li class="admin-link" style="display: none;"><a href="/Add Proudct/add_Proudct.html"><i class="fas fa-angle-left"></i> إدارة المنتجات</a></li>
+
                         <li class="admin-link" style="display: none;"><a href="/Discount/Add_Discount.html"><i class="fas fa-angle-left"></i> إدارة الخصومات</a></li>
                                             <li class="admin-link" style="display: none;"><a href="/Orders/Orders.html"><i class="fas fa-angle-left"></i> سجل الطلبات </a></li>
 
@@ -139,11 +66,7 @@
             <p>جميع الحقوق محفوظة &copy; <span id="year"></span> لمتجرنا الإلكتروني.</p>
         </div>
     </footer>
-<!-- ================= SCRIPTS ================= -->
-         <script src="/Auth/auth_guard.js"></script>
- <script src="/Wedgit/script_footer.js"></script>
-<script src="/Wedgit/script_header.js"></script>
-<script src="products_logic.js"></script>
 
+    <script src="script_footer.js"></script>
 </body>
 </html>

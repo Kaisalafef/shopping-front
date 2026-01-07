@@ -1,4 +1,4 @@
-/* style.css */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cairo:wght@400;700&display=swap');
 
 :root {
@@ -13,12 +13,7 @@
     --warning: #f1c40f;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Cairo', 'Poppins', sans-serif;
-}
+
 
 body {
     min-height: 100vh;
@@ -29,7 +24,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Animation Blob */
+
 .background-blob {
     position: absolute;
     width: 500px;
@@ -95,20 +90,23 @@ h2 {
     font-size: 0.9rem;
 }
 
+
 .input-group {
     margin-bottom: 20px;
-    position: relative;
+    text-align: right;
+    width: 100%;
 }
 
 .input-group label {
+    
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
-    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
 input {
-    width: 100%;
+    width: 90%;
     padding: 12px 16px;
     border: 2px solid #dfe6e9;
     border-radius: 12px;
@@ -121,17 +119,46 @@ input:focus {
     box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
 }
 
-.toggle-password {
+
+.toggle-password, .toggle-password-2 {
     position: absolute;
-    left: 15px;
-    /* RTL fix */
+    left: 15px; 
+    right: auto; 
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: var(--text-muted);
+    font-size: 1.1rem;
+    z-index: 10;
+    transition: color 0.3s ease;
 }
 
-/* Password Strength Meter */
+.toggle-password:hover, .toggle-password-2:hover {
+    color: var(--primary-color);
+}
+
+.input-wrapper, .password-container {
+    position: relative; 
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input, .password-container input {
+    width: 100%;
+    padding: 12px 15px;
+    padding-left: 45px; 
+     border: 2px solid #dfe6e9;
+    border-radius: 12px;
+    outline: none;
+    font-family: 'Cairo', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.input-wrapper input:focus, .password-container input:focus {
+    border-color: var(--primary-color);
+}
+
 .strength-meter {
     height: 5px;
     width: 100%;
@@ -182,4 +209,47 @@ input.invalid {
     color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
+}
+
+
+
+.general-error {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: var(--error);
+    background-color: rgba(214, 48, 49, 0.1); 
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--error);
+    display: none; 
+}
+
+
+.error-msg {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none; 
+    font-weight: 600;
+}
+@media (max-width: 700px) {
+    .body{
+        display: block;
+        align-items: center;
+    }
+    .background-blob {
+        display: none;
+    animation: none;}
+    .container {
+        display: block;
+        height: 89%;
+        width: 100%;
+        border-radius: 15px;
+    }
+
+    .logo {
+        width: 80px;
+    }
 }

@@ -1,88 +1,178 @@
-/* auth.js - متوافق مع Laravel */
 
-const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-// --- 1. التحقق من قوة كلمة المرور ---
-const passwordInput = document.getElementById('password');
-const strengthBar = document.getElementById('strengthBar');
-const strengthMeter = document.getElementById('strengthMeter');
+const CSRF_TOKEN = document
+  .querySelector('meta[name="csrf-token"]')
+  ?.getAttribute("content");
 
-if (passwordInput && strengthBar) {
-    passwordInput.addEventListener('input', () => {
-        const val = passwordInput.value;
-        strengthMeter.style.display = 'block';
-        let strength = 0;
 
-        if (val.length > 6) strength += 25;
-        if (val.match(/[a-z]/) && val.match(/[A-Z]/)) strength += 25;
-        if (val.match(/\d/)) strength += 25;
-        if (val.match(/[^a-zA-Z\d]/)) strength += 25;
-
-        strengthBar.style.width = strength + '%';
-        
-        // تغيير الألوان بناءً على القوة
-        if (strength <= 25) strengthBar.style.background = '#d63031'; // ضعيفة
-        else if (strength <= 50) strengthBar.style.background = '#f1c40f'; // متوسطة
-        else strengthBar.style.background = '#00b894'; // قوية
-    });
-}
-
-// --- 2. إظهار وإخفاء كلمة المرور ---
-document.querySelectorAll(".toggle-password").forEach(icon => {
-    icon.addEventListener("click", function() {
-        const input = this.parentElement.querySelector("input");
-        input.type = input.type === "password" ? "text" : "password";
-        this.classList.toggle("fa-eye-slash");
-    });
-});
-
-// --- 3. وظيفة عرض الأخطاء ---
-function showError(inputId, message) {
-    const input = document.getElementById(inputId);
-    const errorMsg = input.closest('.input-group').querySelector('.error-msg');
-    input.classList.add('invalid');
-    errorMsg.innerText = message;
-    errorMsg.style.display = 'block';
-}
-
-function clearErrors() {
-    document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
-}
-
-// --- 4. إرسال البيانات لـ Laravel ---
-async function handleSignup(e) {
+const loginForm = document.getElementById("loginForm");
+const generalError = document.getElementById("generalError");
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    clearErrors();
 
-    const formData = new FormData();
-    formData.append('name', document.getElementById('fullname').value);
-    formData.append('email', document.getElementById('email').value);
-    formData.append('password', document.getElementById('password').value);
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (password.length < 6) {
+      errorMsg.textContent = "Password too short";
+
+      return;
+    }
+    
+    generalError.style.display = "none";
+    generalError.textContent = "";
+
+    
+    if (!email || !password) {
+      showError("الرجاء إدخال البريد الإلكتروني وكلمة المرور");
+      return;
+    }
 
     try {
-        const response = await fetch('/register', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': CSRF_TOKEN,
-                'Accept': 'application/json'
-            },
-            body: formData
-        });
+      const res = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-        const data = await response.json();
+      const data = await res.json();
 
-        if (response.ok) {
-            window.location.href = data.redirect || '/home';
-        } else if (response.status === 422) {
-            // معالجة أخطاء الـ Validation القادمة من Laravel
-            Object.keys(data.errors).forEach(key => {
-                showError(key === 'name' ? 'fullname' : key, data.errors[key][0]);
-            });
+      if (res.ok && data.token) {
+        
+        localStorage.clear();
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("auth_role", data.user.role);
+        localStorage.setItem("auth_user", JSON.stringify(data.user));
+
+        if (data.user.role === "admin") {
+          window.location.replace("/Home/admin_dashboard.html");
+        } else {
+          window.location.replace("/Home/client_dashboard.html");
         }
-    } catch (error) {
-        console.error("Error:", error);
+      } else {
+        const msg =
+          data.message || "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+        showError(msg);
+      }
+    } catch (err) {
+      console.error(err);
+      showError(
+        "عذراً، يوجد مشكلة في الاتصال بالسيرفر. تأكد من تشغيل الـ Backend."
+      );
     }
+  });
 }
 
-document.getElementById('signupForm')?.addEventListener('submit', handleSignup);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const signupForm = document.getElementById("signupForm");
+
+  if (!signupForm) return;
+
+  signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (signupError) {
+      signupError.style.display = "none";
+      signupError.textContent = "";
+    }
+    const name = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const passwordcomf = document.getElementById("passwordcomf").value;
+    const phone = document.getElementById("phone").value;
+    if (!name || !email || !password || !phone) {
+      showSignupError("الرجاء ملء جميع الحقول المطلوبة");
+      return;
+    }
+    if (password !== passwordcomf) {
+      showSignupError("كلمتا المرور غير متطابقتين");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/register", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          password_confirmation: passwordcomf,
+          phone,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        
+        localStorage.clear();
+
+        
+        localStorage.setItem("token", data.token);
+        localStorage.setItem(
+          "auth_role",
+          data.user.role || "user" 
+        );
+        localStorage.setItem("auth_user", JSON.stringify(data.user));
+
+        window.location.href = "/Home/client_dashboard.html";
+      } else {
+        
+        
+        let msg = data.message || "فشل إنشاء الحساب، يرجى المحاولة مرة أخرى";
+
+        
+        if (data.errors) {
+          
+          msg = Object.values(data.errors).flat()[0];
+        }
+        showSignupError(msg);
+      }
+    } catch (err) {
+      console.error(err);
+      showSignupError("عذراً، لا يمكن الاتصال بالسيرفر حالياً");
+    }
+  });
+});
+
+document.querySelectorAll(".toggle-password").forEach((icon) => {
+  icon.addEventListener("click", function () {
+    
+    const input = this.parentElement.querySelector("input");
+
+    if (input.type === "password") {
+      input.type = "text";
+      this.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+      input.type = "password";
+      this.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  });
+});
+function showSignupError(message) {
+  if (signupError) {
+    signupError.textContent = message;
+    signupError.style.display = "block";
+  } else {
+    alert(message);
+  }
+}
+
+function showError(message) {
+  if (generalError) {
+    generalError.textContent = message;
+    generalError.style.display = "block"; 
+    generalError.style.color = "#d63031"; 
+  } else {
+    alert(message); 
+  }
+}
