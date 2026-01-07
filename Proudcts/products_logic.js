@@ -37,6 +37,34 @@ const API_URLS = {
   DELETE_PRODUCT: (id) => `${API_BASE_URL}/api/products/${id}`,
 };
 
+function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
+
+    
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    
+    toastBox.appendChild(toast);
+
+    
+    setTimeout(() => {
+      toast.classList.add("hide"); 
+      toast.addEventListener("animationend", () => {
+        toast.remove(); 
+      });
+    }, 4000);
+  }
+  
 const getCsrfToken = () =>
   document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
 
@@ -85,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
       backLink.href = "/Home/admin_dashboard.html";
     }
   }
-
   async function fetchProducts() {
     container.innerHTML =
       '<div style="grid-column:1/-1;text-align:center;padding:20px;">جاري تحميل المنتجات...</div>';
