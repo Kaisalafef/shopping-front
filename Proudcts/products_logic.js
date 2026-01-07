@@ -1,4 +1,31 @@
+function showToast(msg, type = "success") {
+    let toastBox = document.getElementById("toast-box");
 
+    
+    let toast = document.createElement("div");
+    toast.classList.add("toast", type);
+
+    
+    let icon = "";
+    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+    if (type === "warning")
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+    toast.innerHTML = `${icon} ${msg}`;
+
+    
+    toastBox.appendChild(toast);
+
+    
+    setTimeout(() => {
+      toast.classList.add("hide"); 
+      toast.addEventListener("animationend", () => {
+        toast.remove(); 
+      });
+    }, 4000);
+  }
+  
 
 
 const API_BASE_URL = "http://127.0.0.1:8000";

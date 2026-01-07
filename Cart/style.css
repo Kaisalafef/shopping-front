@@ -496,3 +496,126 @@ body {
     0% { transform: translateX(0); }
     100% { transform: translateX(-200%); opacity: 0; }
 }
+/* =========================================
+   Mobile Responsive Adjustments
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+
+    /* 1. ضبط الحاوية الرئيسية */
+    .dashboard-container {
+        padding: 15px; /* تقليل الهوامش الجانبية */
+        padding-bottom: 140px; /* زيادة الهامش السفلي لضمان عدم تغطية الشريط السفلي للمحتوى */
+    }
+
+    /* 2. رأس الصفحة وزر شراء الكل */
+    .section-header {
+        flex-direction: column; /* جعل العنوان والزر فوق بعضهما */
+        gap: 15px;
+        align-items: stretch; /* جعل العناصر تأخذ العرض الكامل */
+        padding: 15px;
+        text-align: center;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn-buy-all {
+        width: 100%; /* الزر يأخذ العرض الكامل لسهولة الضغط */
+        justify-content: center;
+        padding: 15px;
+    }
+
+    /* 3. شبكة المنتجات */
+    .products-grid {
+        grid-template-columns: 1fr; /* عمود واحد فقط في الموبايل */
+        gap: 15px;
+    }
+
+    /* 4. كرت المنتج */
+    .product-card {
+        padding: 20px;
+    }
+
+    .product-details {
+        gap: 20px;
+    }
+
+    .info-top {
+        text-align: center; /* توسيط النصوص داخل الكرت */
+    }
+
+    .product-name {
+        font-size: 1.1rem;
+    }
+
+    /* 5. أدوات التحكم (الكمية والحذف) */
+    .actions-bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .quantity-control {
+        margin: 0 auto; /* توسيط أزرار الكمية */
+        width: 100%;
+        justify-content: center;
+        padding: 8px;
+    }
+    
+    .quantity-control input {
+        width: 60px; /* توسيع حقل الرقم قليلاً */
+    }
+
+    .btn-remove {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+    }
+
+    /* 6. شريط الإجمالي السفلي */
+    .cart-summary {
+        padding: 15px;
+        flex-direction: column; /* ترتيب العناصر عمودياً */
+        gap: 10px;
+        text-align: center;
+    }
+
+    .cart-summary h3 {
+        font-size: 1.2rem;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* 7. النافذة المنبثقة (Modal) */
+    .modal-content {
+        width: 95%; /* توسيع النافذة لتناسب عرض الموبايل */
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse; /* جعل زر الإلغاء في الأسفل */
+    }
+
+    .btn-confirm-order, .btn-cancel {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* 8. التنبيهات (Toast Notifications) */
+    #toast-box {
+        left: 50%;
+        transform: translateX(-50%); /* توسيط الصندوق */
+        top: 20px;
+        width: 90%; /* عرض مرن */
+        align-items: center;
+    }
+
+    .toast {
+        width: 100%; /* التنبيه يأخذ عرض الصندوق */
+        font-size: 0.9rem;
+    }
+}
