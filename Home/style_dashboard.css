@@ -200,7 +200,7 @@ body {
 .ad-banner {
     position: relative;
     min-width: 55%;
-    height: 180px;
+    height: 250px;
     border-radius: 20px;
     overflow: hidden;
     flex-shrink: 0;

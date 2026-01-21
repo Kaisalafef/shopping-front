@@ -79,7 +79,7 @@ function renderCartItems(items) {
     if (!items || items.length === 0) {
         grid.innerHTML = `<div class="empty-cart">السلة فارغة، ابدأ التسوق الآن</div>`;
         document.getElementById("buyAllBtn").style.display = "none";
-        document.getElementById("cartTotal").innerText = "0 ₪";
+        document.getElementById("cartTotal").innerText = "0 SYP";
         return;
     }
 
@@ -91,7 +91,7 @@ function renderCartItems(items) {
             <div class="product-details">
                 <div class="info-top">
                     <h3 class="product-name">${item.product?.name ?? "منتج بدون اسم"}</h3>
-                    <p class="product-price">السعر: <span>${item.unit_price} ₪</span></p>
+                    <p class="product-price">السعر: <span>${item.unit_price} SYP</span></p>
                 </div>
 
                 <div class="actions-bottom">
@@ -164,7 +164,7 @@ async function removeItem(itemId) {
 
 
 function updateTotal(total) {
-    document.getElementById("cartTotal").innerText = `${total} ₪`;
+    document.getElementById("cartTotal").innerText = `${total} SYP`;
 }
 
 
