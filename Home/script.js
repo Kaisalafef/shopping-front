@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="ad-overlay"></div>
 
         <div class="ad-content">
-            <h3>${ad.title}</h3>
+            <h3>${ad.title || ""}</h3>
             <p>${ad.description || ""}</p>
 
             ${ad.link ? `<button onclick="location.href='${ad.link}'">تصفح العرض</button>` : ''}
