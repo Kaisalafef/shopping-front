@@ -30,7 +30,7 @@ if (loginForm) {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/login", {
+      const res = await fetch("https://shopping-production-48b2.up.railway.app/api/login", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/register", {
+      const res = await fetch("https://shopping-production-48b2.up.railway.app/api/register", {
         method: "POST",
         headers: {
           Accept: "application/json",

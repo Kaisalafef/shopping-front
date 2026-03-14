@@ -24,7 +24,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const BASE_URL = "http://127.0.0.1:8000";
+    const BASE_URL = "https://shopping-production-48b2.up.railway.app";
 
   function isAdminUser() {
     const token = localStorage.getItem("token");
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     offersContainer.innerHTML = '<div style="padding:20px; width:100%; text-align:center;">جاري تحميل العروض...</div>';
 
     try {
-        const res = await fetch(`http://127.0.0.1:8000/api/offers`);
+        const res = await fetch(`https://shopping-production-48b2.up.railway.app/api/offers`);
         const json = await res.json();
         const offers = json.offers || [];
 
@@ -181,7 +181,7 @@ window.deleteAd = async (adId, event) => {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-            `http://127.0.0.1:8000/api/ads/${adId}`,
+            `https://shopping-production-48b2.up.railway.app/api/ads/${adId}`,
             {
                 method: "DELETE",
                 headers: {
@@ -211,7 +211,7 @@ window.deleteOffer = async (offerId, event) => {
 
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`http://127.0.0.1:8000/api/offers/${offerId}`, {
+        const response = await fetch(`https://shopping-production-48b2.up.railway.app/api/offers/${offerId}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`,

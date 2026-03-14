@@ -28,7 +28,7 @@ function showToast(msg, type = "success") {
   
 
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://shopping-production-48b2.up.railway.app";
 
 const API_URLS = {
   GET_ALL_PRODUCTS: `${API_BASE_URL}/api/products`,
@@ -72,7 +72,7 @@ const getCsrfToken = () =>
 const getImageUrl = (path) => {
   if (!path) return "/images/default.png";
   if (path.startsWith("http")) return path;
-  return `http://127.0.0.1:8000/storage/${path}`;
+  return `https://shopping-production-48b2.up.railway.app/storage/${path}`;
 };
 
 let allProducts = [];
@@ -253,7 +253,7 @@ window.deleteProduct = async (id) => {
   if (!confirm("هل أنت متأكد من حذف المنتج؟")) return;
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
+    const response = await fetch(`https://shopping-production-48b2.up.railway.app/api/products/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json", 

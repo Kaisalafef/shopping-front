@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f0c14b, #ce5813);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    direction: rtl;
+    margin: 0;
+}
+
+.payment-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option {
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.option:hover {
+    border-color: #f0c14b;
+    background: #f5f9ff;
+}
+
+.option input {
+    margin-left: 10px;
+}
+
+button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    background: #f0c14b;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1e3c72;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    width: 350px;
+    position: relative;
+    animation: pop 0.3s ease;
+}
+
+.modal-content img {
+    width: 200px;
+    margin-top: 20px;
+}
+
+#closeModal {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+#donePayment {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #28a745;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+#donePayment:hover {
+    background: #218838;
+}

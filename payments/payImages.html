@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>رفع أكواد QR</title>
+
+<style>
+body{
+    margin:0;
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(135deg,#e5e903,#d36b09);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:white;
+    width:800px;
+    border-radius:20px;
+    padding:40px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.2);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:40px;
+    color:#2a5298;
+}
+
+.qr-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.upload-box{
+    border:2px dashed #ccc;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    cursor:pointer;
+    transition:0.3s;
+    position:relative;
+}
+
+.upload-box:hover{
+    border-color:#2a5298;
+    background:#f4f8ff;
+}
+
+.upload-box input{
+    display:none;
+}
+
+.preview{
+    margin-top:15px;
+}
+
+.preview img{
+    width:150px;
+    height:150px;
+    object-fit:cover;
+    border-radius:10px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.15);
+}
+
+.save-btn{
+    margin-top:40px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#2a5298;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.save-btn:hover{
+    background:#1e3c72;
+}
+.success{
+    text-align:center;
+    color:green;
+    margin-top:20px;
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>رفع صور QR لطرق الدفع</h1>
+
+    <div class="qr-grid">
+
+        <label class="upload-box">
+            <strong>QR شام كاش</strong>
+            <input type="file" id="shamcashInput" accept="image/*">
+            <div class="preview" id="shamPreview"></div>
+        </label>
+
+        <label class="upload-box">
+            <strong>QR USDT</strong>
+            <input type="file" id="usdtInput" accept="image/*">
+            <div class="preview" id="usdtPreview"></div>
+        </label>
+
+    </div>
+
+    <button class="save-btn" onclick="saveQR()">حفظ الصور</button>
+    <div class="success" id="successMsg">تم حفظ الصور بنجاح ✔</div>
+</div>
+
+<script>
+const shamInput = document.getElementById("shamcashInput");
+const usdtInput = document.getElementById("usdtInput");
+
+const shamPreview = document.getElementById("shamPreview");
+const usdtPreview = document.getElementById("usdtPreview");
+
+function previewImage(input, previewContainer){
+    const file = input.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        previewContainer.innerHTML = `<img src="${e.target.result}">`;
+    }
+    reader.readAsDataURL(file);
+}
+
+shamInput.addEventListener("change", ()=> previewImage(shamInput, shamPreview));
+usdtInput.addEventListener("change", ()=> previewImage(usdtInput, usdtPreview));
+
+async function saveQR(){
+
+    const token = localStorage.getItem("token");
+
+    if(!token){
+        alert("غير مصرح");
+        return;
+    }
+
+    const formData = new FormData();
+
+    if(shamInput.files[0]){
+        formData.append("shamcash_qr", shamInput.files[0]);
+    }
+
+    if(usdtInput.files[0]){
+        formData.append("usdt_qr", usdtInput.files[0]);
+    }
+
+    try{
+
+        const response = await fetch("http://127.0.0.1:8000/api/upload-qr",{
+            method: "POST",
+            headers:{
+                "Authorization": `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if(!response.ok){
+            throw new Error(result.message);
+        }
+
+        alert("تم رفع الصور بنجاح ✔");
+
+    }catch(error){
+        console.error(error);
+        alert("حدث خطأ");
+    }
+}
+</script>
+
+</body>
+</html>

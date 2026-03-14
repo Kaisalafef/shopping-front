@@ -12,7 +12,7 @@ function getAuthToken() {
 
   /* ================= CONFIG ================= */
 
-  const API_BASE = "http://127.0.0.1:8000";
+  const API_BASE = "https://shopping-production-48b2.up.railway.app";
 
   const API_URLS = {
     GET_PRODUCTS: `${API_BASE}/api/products`,
@@ -342,7 +342,7 @@ function getAuthToken() {
 
 async function loadDailyOffers() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/products");
+    const res = await fetch("https://shopping-production-48b2.up.railway.app/api/products");
     const response = await res.json();
 
     // ✅ هذا السطر هو الحل

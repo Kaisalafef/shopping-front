@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
-  const API_BASE_URL = "http://127.0.0.1:8000/api";
+  const API_BASE_URL = "https://shopping-production-48b2.up.railway.app/api";
 
   if (!token) {
     window.location.href = "/Auth/Log_in.html";

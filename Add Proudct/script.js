@@ -263,7 +263,7 @@ const getAuthHeaders = () => ({
       fd.append(`images[${i}][file]`, c.file);
     });
 
-    let url = "http://127.0.0.1:8000/api/products";
+    let url = "https://shopping-production-48b2.up.railway.app/api/products";
     if (state.isEdit) {
       url += `/${state.productId}`;
       fd.append("_method", "PUT");

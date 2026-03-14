@@ -94,7 +94,7 @@ async function enableEditMode(id) {
 
     try {
         
-        const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
+        const response = await fetch(`https://shopping-production-48b2.up.railway.app/api/products/${id}`, {
             headers: {
                 'Accept': 'application/json',
                 

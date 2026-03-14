@@ -1,55 +1,55 @@
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
-    const API_BASE_URL = "http://127.0.0.1:8000/api";
-
-    
+    const API_BASE_URL = "https://shopping-production-48b2.up.railway.app/api";
 
 
-  
-  
-  
-  function showToast(msg, type = "success") {
-    let toastBox = document.getElementById("toast-box");
 
-    
-    let toast = document.createElement("div");
-    toast.classList.add("toast", type);
 
-    
-    let icon = "";
-    if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
-    if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
-    if (type === "warning")
-      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
 
-    toast.innerHTML = `${icon} ${msg}`;
 
-    
-    toastBox.appendChild(toast);
 
-    
-    setTimeout(() => {
-      toast.classList.add("hide"); 
-      toast.addEventListener("animationend", () => {
-        toast.remove(); 
-      });
-    }, 4000);
-  }
+    function showToast(msg, type = "success") {
+        let toastBox = document.getElementById("toast-box");
+
+
+        let toast = document.createElement("div");
+        toast.classList.add("toast", type);
+
+
+        let icon = "";
+        if (type === "success") icon = '<i class="fa-solid fa-circle-check"></i>';
+        if (type === "error") icon = '<i class="fa-solid fa-circle-xmark"></i>';
+        if (type === "warning")
+            icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+        toast.innerHTML = `${icon} ${msg}`;
+
+
+        toastBox.appendChild(toast);
+
+
+        setTimeout(() => {
+            toast.classList.add("hide");
+            toast.addEventListener("animationend", () => {
+                toast.remove();
+            });
+        }, 4000);
+    }
     const tableBody = document.getElementById("orders-table-body");
     const loadingSpinner = document.getElementById("loading-spinner");
     const noOrdersMsg = document.getElementById("no-orders-msg");
     const filterBtns = document.querySelectorAll(".filter-btn");
 
-    let allOrders = []; 
+    let allOrders = [];
 
-    
+
     async function fetchOrders() {
         loadingSpinner.style.display = "block";
         tableBody.innerHTML = "";
         noOrdersMsg.style.display = "none";
 
         try {
-            
+
             const res = await fetch(`${API_BASE_URL}/admin/orders`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -60,13 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!res.ok) throw new Error("Failed to fetch");
 
             const result = await res.json();
-            
+
             allOrders = result.data ? result.data : result;
 
-            
+
             updateStats(allOrders);
 
-            
+
             renderOrders(allOrders);
 
         } catch (error) {
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    
+
     function renderOrders(orders) {
         tableBody.innerHTML = "";
 
@@ -91,14 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
         orders.forEach(order => {
             const tr = document.createElement("tr");
 
-            
+
             let actionButtons = `
                 <button class="action-btn btn-view" onclick="openOrderModal(${order.id})" title="عرض التفاصيل">
                     <i class="fas fa-eye"></i>
                 </button>
             `;
 
-            
+
             if (order.status === 'pending') {
                 actionButtons += `
                     <button class="action-btn btn-accept" onclick="updateOrderStatus(${order.id}, 'processing')" title="قبول الطلب">
@@ -111,19 +111,20 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             tr.innerHTML = `
-                <td><strong>#${order.id}</strong></td>
-                <td>${order.user?.name || "زائر"}</td>
-                <td>${order.shipping_address || "غير محدد"}</td>
-                <td>${formatDate(order.created_at)}</td>
-                <td><strong>${Number(order.total_price).toLocaleString()} ل.س</strong></td>
-                <td>${getStatusBadge(order.status)}</td>
-                <td>${actionButtons}</td>
+                 <td><strong>#${order.id}</strong></td>
+             <td>${order.user?.name || "زائر"}</td>
+    <td>${order.shipping_address || "غير محدد"}</td>
+    <td>${formatDate(order.created_at)}</td>
+    <td><strong>${Number(order.total_price).toLocaleString()} ل.س</strong></td>
+    <td>${getStatusBadge(order.status)}</td>
+    <td>${getPaymentBadge(order.is_paid)}</td>
+    <td>${actionButtons}</td>
             `;
             tableBody.appendChild(tr);
         });
     }
 
-    
+
     window.updateOrderStatus = async function (orderId, newStatus) {
         if (!confirm(`هل أنت متأكد أنك تريد تغيير حالة الطلب إلى "${translateStatus(newStatus)}"?`)) return;
 
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    
+
     const modal = document.getElementById("order-modal");
     const closeModalBtn = document.getElementById("closeModalBtn");
 
@@ -167,21 +168,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const order = allOrders.find(o => o.id === orderId);
         if (!order) return;
 
-        
+
         document.getElementById("modal-order-id").innerText = `تفاصيل الطلب #${order.id}`;
         document.getElementById("modal-customer-name").innerText = order.user?.name || "غير معروف";
         document.getElementById("modal-customer-phone").innerText = order.user?.profile?.phone || "غير متوفر";
         document.getElementById("modal-address").innerText = order.shipping_address;
         document.getElementById("modal-total-price").innerText = Number(order.total_price).toLocaleString() + " ل.س";
 
-        
+
         const itemsContainer = document.getElementById("modal-items-list");
         itemsContainer.innerHTML = "";
 
         if (order.order_item && order.order_item.length > 0) {
             order.order_item.forEach(item => {
 
-                
+
                 const prodName = item.product ? item.product.name : "منتج محذوف";
                 const prodImg = item.product ? item.product.image_url : "/images/no-image.png";
                 const prodcol = item.color;
@@ -207,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
             itemsContainer.innerHTML = "<p>لا توجد منتجات في هذا الطلب.</p>";
         }
 
-        
+
         const modalActions = document.getElementById("modal-actions-container");
         modalActions.innerHTML = "";
         if (order.status === 'pending') {
@@ -221,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         }
 
-        
+
         modal.classList.add("active");
     };
 
@@ -234,14 +235,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target === modal) closeModal();
     });
 
-    
 
-    
+
+
     filterBtns.forEach(btn => {
         btn.addEventListener("click", () => {
-            
+
             filterBtns.forEach(b => b.classList.remove("active"));
-            
+
             btn.classList.add("active");
 
             filterOrders(btn.dataset.filter);
@@ -273,6 +274,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const className = `status-${status}`;
         return `<span class="status-badge ${className}">${text}</span>`;
     }
+    function getPaymentBadge(isPaid) {
+
+        if (isPaid == 1) {
+            return `<span class="payment-badge paid">تم الدفع إلكتروني</span>`;
+        } else {
+            return `<span class="payment-badge cash">دفع كاش</span>`;
+        }
+
+    }
     function translateStatus(status) {
         const map = {
             pending: "قيد الانتظار",
@@ -283,6 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    
+
     fetchOrders();
 });

@@ -1,5 +1,5 @@
 
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "https://shopping-production-48b2.up.railway.app/api";
 const token = localStorage.getItem("token");
 
 if (!token) {
@@ -194,55 +194,23 @@ window.onclick = function(event) {
 
 
 async function submitOrder(event) {
-    event.preventDefault(); 
-    
+    event.preventDefault();
+
     const address = document.getElementById("orderAddress").value;
-    const submitBtn = document.querySelector(".btn-confirm-order");
-    
-    
+
     if (!address.trim()) {
         showToast("يرجى إدخال العنوان","warning");
         return;
     }
 
-    
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-    submitBtn.disabled = true;
+    // نخزن العنوان مؤقتاً
+    localStorage.setItem("checkout_address", address);
 
-    try {
-        
-        
-        const res = await fetch(`${API_URL}/orders`, {
-            method: "POST",
-            headers,
-            body: JSON.stringify({
-                shipping_address: address,
-                
-            })
-        });
+    // نغلق المودال
+    closeCheckoutModal();
 
-        if (!res.ok) {
-            const errorData = await res.json();
-            throw new Error(errorData.message || "فشل إنشاء الطلب");
-        }
-
-        
-        showToast("تم استلام طلبك بنجاح! سيتم التواصل معك قريباً.","success");
-        closeCheckoutModal();
-        
-        
-        getUserCart(); 
-        
-
-    } catch (error) {
-        console.error(error);
-        showToast(error.message || "حدث خطأ أثناء إرسال الطلب","error");
-    } finally {
-        
-        submitBtn.innerHTML = originalBtnText;
-        submitBtn.disabled = false;
-    }
+    // ننتقل لصفحة الدفع
+    window.location.href = "/payments/pay.html";
 }
 
 document.addEventListener("DOMContentLoaded", () => {

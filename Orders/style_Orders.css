@@ -339,3 +339,19 @@ body {
     .filters-container { flex-wrap: nowrap; }
     .modal-footer { flex-direction: column; gap: 15px; align-items: stretch; }
 }
+.payment-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.payment-badge.paid {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.payment-badge.cash {
+    background-color: #fff3cd;
+    color: #856404;
+}
